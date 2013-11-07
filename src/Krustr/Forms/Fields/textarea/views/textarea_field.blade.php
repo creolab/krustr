@@ -5,6 +5,6 @@
 	</label>
 
 	<div class="control-field">
-		<textarea name="text" id="text" cols="30" rows="10" class="form-control" placeholder="{{ $field->placeholder }}">{{ $value }}</textarea>
+		<textarea name="{{ $field->name }}" id="txt-{{ $field->name }}" cols="30" rows="10" class="form-control" placeholder="{{ $field->placeholder }}">{{ $value }}</textarea>
 	</div>
 </div>

@@ -4,16 +4,25 @@ use Auth, Str;
 use Krustr\Models\Entry;
 use Krustr\Repositories\Collections\EntryCollection;
 use Krustr\Repositories\Entities\EntryEntity;
+use Krustr\Repositories\Interfaces\FieldRepositoryInterface;
 use Krustr\Services\Validation\EntryValidator;
 
 class EntryDbRepository extends Repository implements Interfaces\EntryRepositoryInterface {
 
 	/**
+	 * Repository for saving field data
+	 *
+	 * @var FieldRepositoryInterface
+	 */
+	protected $fields;
+
+	/**
 	 * Init dependecies
 	 */
-	public function __construct(EntryValidator $validation)
+	public function __construct(EntryValidator $validation, FieldRepositoryInterface $fields)
 	{
 		$this->validation = $validation;
+		$this->fields     = $fields;
 	}
 
 	/**
@@ -151,6 +160,9 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$entry->title  = array_get($data, 'title');
 		$entry->body   = array_get($data, 'body');
 		$entry->status = $this->inputStatus($data);
+
+		// Save custom fields
+		$this->fields->saveForEntry($id, $data);
 
 		return $entry->save();
 	}

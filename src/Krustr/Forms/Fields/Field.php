@@ -60,7 +60,7 @@ abstract class Field implements FieldInterface {
 	 *
 	 * @return mixed
 	 */
-	public function save($value)
+	public function save($value = null)
 	{
 		return $value;
 	}

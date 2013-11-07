@@ -2,7 +2,12 @@
 
 interface FieldRepositoryInterface {
 
-	public function all();
-	public function find($id);
+	public function all($entryId);
+	public function get($entryId, $key);
+	public function add($entryId, $key, $value);
+	public function update($entryId, $key, $value);
+	public function addOrUpdate($entryId, $key, $value);
+	public function exists($entryId, $key);
+	public function saveForEntry($entryId, $data);
 
 }

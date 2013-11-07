@@ -10,6 +10,8 @@ use View;
 
 interface FieldInterface {
 
-
+	public function render($value);
+	public function save($data);
+	public function definition();
 
 }

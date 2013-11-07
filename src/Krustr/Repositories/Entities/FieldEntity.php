@@ -43,10 +43,23 @@ class FieldEntity extends Entity {
 	public function render($value = null)
 	{
 		// Try to instantiate the field object
-		$this->object = new $this->definition->class($this, $value);
+		if ( ! $this->object) $this->object = new $this->definition->class($this, $value);
 
 		// If object was instantiated, run redering
 		if ($this->object) return $this->object->render($value);
+	}
+
+	/**
+	 * Save field value
+	 * @return boolean
+	 */
+	public function save($data = null)
+	{
+		// Try to instantiate the field object
+		if ( ! $this->object) $this->object = new $this->definition->class($this);
+
+		// If object was instantiated, run redering
+		if ($this->object) return $this->object->save($data);
 	}
 
 	/**

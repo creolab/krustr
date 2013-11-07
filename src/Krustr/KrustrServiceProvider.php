@@ -103,10 +103,10 @@ class KrustrServiceProvider extends ServiceProvider {
 	public function registerBindings()
 	{
 		// Register repositories
-		$this->app->bind('Krustr\Repositories\Interfaces\EntryRepositoryInterface',   'Krustr\Repositories\EntryDbRepository');
-		$this->app->bind('Krustr\Repositories\Interfaces\ChannelRepositoryInterface', 'Krustr\Repositories\ChannelConfigRepository');
-		$this->app->bind('Krustr\Repositories\Interfaces\FieldRepositoryInterface',   'Krustr\Repositories\FieldDbRepository');
-		$this->app->bind('Krustr\Repositories\Interfaces\UserRepositoryInterface',    'Krustr\Repositories\UserDbRepository');
+		$this->app->bind('Krustr\Repositories\Interfaces\EntryRepositoryInterface',        'Krustr\Repositories\EntryDbRepository');
+		$this->app->bind('Krustr\Repositories\Interfaces\ChannelRepositoryInterface',      'Krustr\Repositories\ChannelConfigRepository');
+		$this->app->bind('Krustr\Repositories\Interfaces\FieldRepositoryInterface',        'Krustr\Repositories\FieldDbRepository');
+		$this->app->bind('Krustr\Repositories\Interfaces\UserRepositoryInterface',         'Krustr\Repositories\UserDbRepository');
 
 		// Register backend navigation environment
 		$this->app->singleton('krustr.navigation', function($app)

@@ -5,6 +5,6 @@
 	</label>
 
 	<div class="control-field">
-		<textarea name="text" id="text" cols="30" rows="10" class="richtext form-control">{{ $value }}</textarea>
+		<textarea name="{{ $field->name }}" id="rich-{{ $field->name }}" cols="30" rows="10" class="richtext form-control">{{ $value }}</textarea>
 	</div>
 </div>
