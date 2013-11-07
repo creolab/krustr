@@ -1,21 +1,37 @@
 <?php namespace Krustr\Repositories;
 
+use Auth, Str;
 use Krustr\Models\Entry;
 use Krustr\Repositories\Collections\EntryCollection;
 use Krustr\Repositories\Entities\EntryEntity;
+use Krustr\Services\Validation\EntryValidator;
 
-class EntryDbRepository implements Interfaces\EntryRepositoryInterface{
+class EntryDbRepository extends Repository implements Interfaces\EntryRepositoryInterface {
+
+	/**
+	 * Init dependecies
+	 */
+	public function __construct(EntryValidator $validation)
+	{
+		$this->validation = $validation;
+	}
 
 	/**
 	 * Get all entries
 	 *
 	 * @return EntryCollection
 	 */
-	public function all()
+	public function all($status = null)
 	{
-		$entries = Entry::with(array('author', 'fields'))->get()->toArray();
+		$query = Entry::with(array('author', 'fields'))->orderBy('created_at', 'desc');
 
-		return new EntryCollection($entries);
+		// Status
+		if ($status) $query->where('status', $status);
+
+		// Run query
+		$entries = $query->get();
+
+		return new EntryCollection($entries->toArray());
 	}
 
 	/**
@@ -24,11 +40,17 @@ class EntryDbRepository implements Interfaces\EntryRepositoryInterface{
 	 * @param  string $channel
 	 * @return EntryCollection
 	 */
-	public function allInChannel($channel)
+	public function allInChannel($channel, $status = null)
 	{
-		$entries = Entry::with(array('author', 'fields'))->inChannel($channel)->get()->toArray();
+		$query = Entry::with(array('author', 'fields'))->inChannel($channel)->orderBy('created_at', 'desc');
 
-		return new EntryCollection($entries);
+		// Status
+		if ($status) $query->where('status', $status);
+
+		// Run query
+		$entries = $query->get();
+
+		return new EntryCollection($entries->toArray());
 	}
 
 	/**
@@ -38,9 +60,9 @@ class EntryDbRepository implements Interfaces\EntryRepositoryInterface{
 	 */
 	public function home()
 	{
-		$entry = Entry::with(array('author', 'fields'))->where('home', 1)->published()->firstOrFail()->toArray();
+		$entry = Entry::with(array('author', 'fields'))->where('home', 1)->published()->first();
 
-		return new EntryEntity($entry);
+		return new EntryEntity($entry->toArray());
 	}
 
 	/**
@@ -51,9 +73,9 @@ class EntryDbRepository implements Interfaces\EntryRepositoryInterface{
 	 */
 	public function find($id)
 	{
-		$entry = Entry::with(array('author', 'fields'))->where('id', $id)->published()->firstOrFail()->toArray();
+		$entry = Entry::with(array('author', 'fields'))->where('id', $id)->first();
 
-		return new EntryEntity($entry);
+		return new EntryEntity($entry->toArray());
 	}
 
 	/**
@@ -64,10 +86,10 @@ class EntryDbRepository implements Interfaces\EntryRepositoryInterface{
 	 */
 	public function findBySlug($slug, $channel = null)
 	{
-		if ($channel) $entry = Entry::with(array('author', 'fields'))->where('slug', $slug)->inChannel($channel)->published()->firstOrFail()->toArray();
-		else          $entry = Entry::with(array('author', 'fields'))->where('slug', $slug)->published()->firstOrFail()->toArray();
+		if ($channel) $entry = Entry::with(array('author', 'fields'))->where('slug', $slug)->inChannel($channel)->published()->first();
+		else          $entry = Entry::with(array('author', 'fields'))->where('slug', $slug)->published()->first();
 
-		return new EntryEntity($entry);
+		return new EntryEntity($entry->toArray());
 	}
 
 	/**
@@ -79,9 +101,17 @@ class EntryDbRepository implements Interfaces\EntryRepositoryInterface{
 	 */
 	public function update($id, $data = array())
 	{
+		// Set the data
 		$entry = Entry::find($id);
 		$entry->title = array_get($data, 'title');
 		$entry->body  = array_get($data, 'body');
+
+		// Publish?
+		if (isset($data['publish']))
+		{
+			if     ((int) array_get($data, 'publish') === 1) $entry->status = 'published';
+			elseif ((int) array_get($data, 'publish') === 0) $entry->status = 'draft';
+		}
 
 		return $entry->save();
 	}
@@ -94,7 +124,24 @@ class EntryDbRepository implements Interfaces\EntryRepositoryInterface{
 	 */
 	public function create($data)
 	{
-		return Entry::create($data);
+		// First validate the input
+		if ($this->validation->passes($data))
+		{
+			$entry = new Entry;
+			$entry->author_id = Auth::user()->id;
+			$entry->slug      = Str::slug(array_get($data, 'title'));
+			$entry->title     = array_get($data, 'title');
+			$entry->body      = array_get($data, 'body');
+			$entry->channel   = array_get($data, 'channel');
+			$entry->save();
+
+			return $entry->id;
+		}
+
+		// Set errors
+		$this->errors = $this->validation->errors;
+
+		return false;
 	}
 
 	/**

@@ -9,7 +9,19 @@ use Krustr\Repositories\Collections\EntryCollection;
  */
 class Entry extends Base {
 
+	/**
+	 * Database table
+	 *
+	 * @var string
+	 */
 	protected $table = 'entries';
+
+	/**
+	 * Fields gurded from mass assignment
+	 *
+	 * @var array
+	 */
+	protected $guarded = array('id');
 
 	/**
 	 * User relationship

@@ -51,19 +51,7 @@ class EntryController extends BaseController {
 	 */
 	public function index()
 	{
-		Alert::addSuccess("Saved");
-		Alert::addError("Not saved");
-		Alert::addError("Or maybe not saved");
-		Alert::addWarning("Your message is missing");
-
-		echo '<pre>'; print_r(var_dump(Alert::bag())); echo '</pre>';
-
-
-		echo Alert::render();
-
-		die();
-
-		// Find in database
+		// Find in repository
 		$entries = $this->repository->allInChannel($this->channel->name);
 
 		return View::make('krustr::entries.index', array('entries' => $entries));
@@ -88,9 +76,9 @@ class EntryController extends BaseController {
 	 */
 	public function store()
 	{
-		$this->repository->create(Input::all());
+		$id = $this->repository->create(Input::all());
 
-		return Redirect::route('backend.content.'.$this->channel->name.'.edit', array(1))->withAlertSucces("Saved.");
+		return Redirect::route('backend.content.'.$this->channel->name.'.edit', array($id))->withAlertSucces("Saved.");
 	}
 
 	/**
@@ -130,16 +118,12 @@ class EntryController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$validation = new EntryValidator;
-
-		if ($validation->passes())
+		if ($this->repository->update($id, Input::all()))
 		{
-			$this->repository->update($id, Input::all());
-
 			return Redirect::back()->withAlertSuccess('Saved.');
 		}
 
-		return Redirect::back()->withInput()->withErrors($validation->errors());
+		return Redirect::back()->withInput()->withErrors($this->repository->errors());
 	}
 
 	/**

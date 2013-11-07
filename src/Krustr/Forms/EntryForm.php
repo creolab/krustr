@@ -63,6 +63,9 @@ class EntryForm {
 		// Start
 		$html = $this->openForm();
 
+		// Hidden fields
+		$html .= $this->hiddenFields();
+
 		// Render each field
 		foreach ($this->channel->fields as $field)
 		{
@@ -95,6 +98,18 @@ class EntryForm {
 
 		// Generate the tag
 		$html = Form::open(array('class' => 'form-vertical entry-form', 'url' => $route, 'method' => $method));
+
+		return $html;
+	}
+
+	/**
+	 * Add hidden fields to form
+	 *
+	 * @return string
+	 */
+	public function hiddenFields()
+	{
+		$html = Form::hidden('channel', $this->channel->resource);
 
 		return $html;
 	}

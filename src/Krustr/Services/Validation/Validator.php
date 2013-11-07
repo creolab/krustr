@@ -32,6 +32,7 @@ abstract class Validator {
 
 	/**
 	 * Initialize new validator
+	 *
 	 * @param array $input
 	 */
 	public function __construct(array $input = null)
@@ -41,12 +42,36 @@ abstract class Validator {
 	}
 
 	/**
+	 * Return rules for validator
+	 *
+	 * @return array
+	 */
+	public function rules()
+	{
+		return static::$rules;
+	}
+
+	/**
+	 * Add new rule for a field
+	 *
+	 * @param  string $field
+	 * @param  string $rule
+	 * @return void
+	 */
+	public function addRule($field, $rule = 'required')
+	{
+
+	}
+
+	/**
 	 * Validate input against rules
 	 *
 	 * @return boolean
 	 */
-	public function passes()
+	public function passes($data = null)
 	{
+		if ($data) $this->input = $data;
+
 		// Make validator instance
 		$validation = \Validator::make($this->input, static::$rules);
 
