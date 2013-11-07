@@ -50,23 +50,25 @@ class Router {
 
 	/**
 	 * Initialize custom error views
+	 *
 	 * @return View
 	 */
 	public function initErrors()
 	{
 		// Custom error handlers
-		/*return App::error(function(\Exception $exception, $code)
+		return App::error(function(\Exception $exception, $code)
 		{
 			// 404 errors everywhere, other only in frontend
 			if ($code == 404 or Request::segment(1) != Config::get('krustr::backend_url'))
 			{
 				return $this->error($code, $exception);
 			}
-		});*/
+		});
 	}
 
 	/**
 	 * Custom error handler
+	 *
 	 * @param  integer   $code
 	 * @param  Exception $exception
 	 * @return mixed

@@ -26,7 +26,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$query = Entry::with(array('author', 'fields'))->orderBy('created_at', 'desc');
 
 		// Status
-		if ($status) $query->where('status', $status);
+		if ($status = array_get($options, 'status')) $query->where('status', $status);
 
 		// Run query
 		$entries = $query->get();
@@ -40,17 +40,28 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 * @param  string $channel
 	 * @return EntryCollection
 	 */
-	public function allInChannel($channel, $status = null)
+	public function allInChannel($channel, $options = array())
 	{
 		$query = Entry::with(array('author', 'fields'))->inChannel($channel)->orderBy('created_at', 'desc');
 
 		// Status
-		if ($status) $query->where('status', $status);
+		if ($status = array_get($options, 'status')) $query->where('status', $status);
 
 		// Run query
 		$entries = $query->get();
 
 		return new EntryCollection($entries->toArray());
+	}
+
+	/**
+	 * Return all published entries in channel
+	 *
+	 * @param  string $channel
+	 * @return EntryCollection
+	 */
+	public function allPublishedInChannel($channel)
+	{
+		return $this->allInChannel($channel, array('status' => 'published'));
 	}
 
 	/**
@@ -62,7 +73,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	{
 		$entry = Entry::with(array('author', 'fields'))->where('home', 1)->published()->first();
 
-		return new EntryEntity($entry->toArray());
+		if ($entry) return new EntryEntity($entry->toArray());
 	}
 
 	/**
@@ -71,11 +82,28 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 * @param  integer $id
 	 * @return EntryEntity
 	 */
-	public function find($id)
+	public function find($id, $options = array())
 	{
-		$entry = Entry::with(array('author', 'fields'))->where('id', $id)->first();
+		$query = Entry::with(array('author', 'fields'))->where('id', $id);
 
-		return new EntryEntity($entry->toArray());
+		// Status
+		if ($status = array_get($options, 'status')) $query->where('status', $status);
+
+		// Run query
+		$entry = $query->first();
+
+		if ($entry) return new EntryEntity($entry->toArray());
+	}
+
+	/**
+	 * Find published entry
+	 *
+	 * @param  integer $id
+	 * @return EntryEntity
+	 */
+	public function findPublished($id)
+	{
+		return $this->find($id, array('status' => 'published'));
 	}
 
 	/**
@@ -84,12 +112,29 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 * @param  string $slug
 	 * @return EntryEntity
 	 */
-	public function findBySlug($slug, $channel = null)
+	public function findBySlug($slug, $channel = null, $options = array())
 	{
-		if ($channel) $entry = Entry::with(array('author', 'fields'))->where('slug', $slug)->inChannel($channel)->published()->first();
-		else          $entry = Entry::with(array('author', 'fields'))->where('slug', $slug)->published()->first();
+		if ($channel) $query = Entry::with(array('author', 'fields'))->where('slug', $slug)->inChannel($channel);
+		else          $query = Entry::with(array('author', 'fields'))->where('slug', $slug);
 
-		return new EntryEntity($entry->toArray());
+		// Status
+		if ($status = array_get($options, 'status')) $query->published();
+
+		// Run query
+		$entry = $query->first();
+
+		if ($entry) return new EntryEntity($entry->toArray());
+	}
+
+	/**
+	 * Find published entry by slug
+	 *
+	 * @param  integer $id
+	 * @return EntryEntity
+	 */
+	public function findPublishedBySlug($slug, $channel = null)
+	{
+		return $this->findBySlug($slug, $channel, array('status' => 'published'));
 	}
 
 	/**

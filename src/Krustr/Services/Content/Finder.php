@@ -75,8 +75,8 @@ class Finder extends \Illuminate\Routing\Controllers\Controller {
 	public function entry($slug = null)
 	{
 		// Find entry
-		if ($this->channel) $entry = $this->entryRepository->findBySlug($slug, $this->channel->resource);
-		else                $entry = $this->entryRepository->findBySlug($slug);
+		if ($this->channel) $entry = $this->entryRepository->findPublishedBySlug($slug, $this->channel->resource);
+		else                $entry = $this->entryRepository->findPublishedBySlug($slug);
 
 		// Abort if not found
 		if ( ! $entry) \App::abort(404, 'Entry not found');
@@ -106,7 +106,7 @@ class Finder extends \Illuminate\Routing\Controllers\Controller {
 	public function entryCollection()
 	{
 		// Get content
-		$entries = $this->entryRepository->allInChannel($this->channel->resource);
+		$entries = $this->entryRepository->allPublishedInChannel($this->channel->resource);
 		View::share('entries', $entries);
 
 		// The view
