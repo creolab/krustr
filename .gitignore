@@ -1,6 +1,1 @@
-vendor
-composer.phar
-composer.lock
 .DS_Store
-assets/cache/*
-themes/default/assets/cache/*
