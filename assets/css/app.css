@@ -1,0 +1,36 @@
+html { overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+body { background: #f6f6f6 url(../images/bg_light_alu.png); padding-top: 43px; padding-bottom: 150px; font-family: Helvetica, Arial, sans-serif; }
+
+/* ! Layout */
+#main { padding: 5px 0 20px 0; }
+@media (min-width: 1200px) {
+	.container { max-width: 2000px; padding-right: 25px; padding-left: 25px; }
+}
+
+/* ! Auth header */
+.auth-header { position: absolute; top: 0; right: 0; background: rgba(125,125,125,0.1); min-height: 40px; padding: 0 25px 0 15px; font-size: 10px; min-width: 120px; }
+.auth-header .profile { padding-top: 5px; }
+.auth-header .profile img { float: left; width: 13px; height: 13px; overflow: hidden; }
+.auth-header .profile p { position: absolute; top: 5px; left: 33px; color: #ddd; }
+.auth-header .profile p a { color: #eee; }
+.auth-header a.logout { color: #a00; position: absolute; top: 22px; left: 15px; }
+
+/* ! Pages */
+.pg       { margin: 10px 0 20px 0; }
+.pg h2    { font-size: 26px; float: left; color: #444; text-shadow: 0 1px 0 #fff; margin: 0 15px 0 0; line-height: 120%; }
+.pg h2 em { font-family: "Palatino", Georgia; color: #555; font-weight: normal; font-style: italic; text-transform: capitalize; }
+
+	/* Icons */
+	.pg h2 i.icn        { margin-right: 4px; }
+	.pg h2 i.glyphicon  { font-size: 80%; }
+	.pg h2.status-published i { color: #67aa38; text-shadow: 0 0 15px rgba(0,205,0,0.4); }
+
+	/* Tools */
+	.pg .tools      { border-left: 1px solid #777; padding: 2px 0 2px 15px; float: left; position: relative; top: 4px; }
+	.pg .tools .btn { font-size: 11px; -webkit-border-radius: 15px; -moz-border-radius: 15px; border-radius: 15px; padding: 1px 12px; }
+
+/* ! Boxed */
+.boxed { background: #fafafa; padding: 20px; border: 1px solid #f6f6f6; border-radius: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.1); }
+
+/* ! Debug */
+.krustr .anbu { font-size: 11px !important; z-index: 501 !important; }

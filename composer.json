@@ -1,0 +1,37 @@
+{
+    "name": "creolab/krustr",
+    "description": "The Krustr CMS built in the great Laravel framework.",
+    "keywords": ["cms", "laravel"],
+    "authors": [
+        {
+            "name": "Boris Strahija",
+            "email": "bstrahija@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "laravel/framework": "~4",
+        "zizaco/entrust": "dev-master",
+        "dflydev/markdown": "~1",
+        "creolab/image": "dev-master",
+        "creolab/assets": "dev-master",
+        "creolab/shop": "dev-master",
+        "creolab/alert": "dev-master"
+    },
+    "require-dev": {
+        "itsgoingd/clockwork": "dev-master"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations",
+            "src/seeds"
+        ],
+        "psr-0": {
+            "Krustr": "src/"
+        }
+    },
+    "config": {
+        "preferred-install": "source"
+    },
+    "minimum-stability": "dev"
+}

@@ -1,0 +1,32 @@
+/* Grids */
+.table td.slim    { width: 1%; white-space: nowrap; }
+.table td.title   { font-weight: bold; }
+.table th.c, td.c { text-align: center; }
+.table th.r, td.r { text-align: right; }
+.table th.select input, td.select input { position: relative; top: -3px; }
+.table tr:hover td { background: rgba(200,200,200,.1); }
+
+	/* Status */
+	.table tr.status-published td.status i { color: #0a0; }
+	.table tr.status-draft td.status i     { color: #aaa; }
+	.table tr.status-draft td.title        { font-weight: normal; }
+	.table tr.status-draft td.title a      { opacity: .8; }
+	.table tr.status-deleted td            { font-weight: normal; opacity: .4; color: #a00; }
+	.table tr.status-pending td            { font-weight: normal; opacity: .4; }
+
+	/* Preview */
+	.table td.slug .preview        { font-size: 11px; margin-left: 4px; visibility: hidden; }
+	.table td.slug:hover .preview  { visibility: visible; }
+
+	/* ! Actions */
+	.table td.actions a              { margin-left: 6px; }
+	.table td.actions .sep           { margin: 0 6px 0 12px; color: rgba(100,100,100,.4); }
+	.table .actions .wrapper         { visibility: hidden; }
+	.table tr:hover .actions .wrapper { visibility: visible; }
+	.table td.actions button         { margin: 0 !important; line-height: 100% !important; padding: 0 !important; border: 0 !important; }
+	.table td.actions .edit          { color: #08c; }
+	.table td.actions .edit:hover    { text-decoration: none; color: #06a; }
+	.table td.actions .preview       { color: #666; }
+	.table td.actions .preview:hover { text-decoration: none; color: #555; }
+	.table td.actions .delete        { color: #c00; }
+	.table td.actions .delete:hover  { text-decoration: none; color: #a00; }
