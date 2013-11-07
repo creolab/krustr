@@ -162,7 +162,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$entry->status = $this->inputStatus($data);
 
 		// Save custom fields
-		$this->fields->saveForEntry($id, $data);
+		$this->fields->saveAllForEntry($id, $data);
 
 		return $entry->save();
 	}
@@ -226,14 +226,14 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	{
 		$status = 'draft';
 
-		if (isset($data['status']))
+		if (isset($options['publish']))
 		{
-			$status = $data['status'];
+			if     ((int) array_get($options, 'publish') === 1) $status = 'published';
+			elseif ((int) array_get($options, 'publish') === 0) $status = 'draft';
 		}
-		elseif (isset($data['publish']))
+		elseif (isset($options['status']))
 		{
-			if     ((int) array_get($data, 'publish') === 1) $status = 'published';
-			elseif ((int) array_get($data, 'publish') === 0) $status = 'draft';
+			$status = $options['status'];
 		}
 
 		return $status;

@@ -8,6 +8,6 @@ interface FieldRepositoryInterface {
 	public function update($entryId, $key, $value);
 	public function addOrUpdate($entryId, $key, $value);
 	public function exists($entryId, $key);
-	public function saveForEntry($entryId, $data);
+	public function saveAllForEntry($entryId, $data);
 
 }
