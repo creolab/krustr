@@ -148,15 +148,9 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	{
 		// Set the data
 		$entry = Entry::find($id);
-		$entry->title = array_get($data, 'title');
-		$entry->body  = array_get($data, 'body');
-
-		// Publish?
-		if (isset($data['publish']))
-		{
-			if     ((int) array_get($data, 'publish') === 1) $entry->status = 'published';
-			elseif ((int) array_get($data, 'publish') === 0) $entry->status = 'draft';
-		}
+		$entry->title  = array_get($data, 'title');
+		$entry->body   = array_get($data, 'body');
+		$entry->status = $this->inputStatus($data);
 
 		return $entry->save();
 	}
@@ -209,6 +203,28 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	public function unpublish($id)
 	{
 		return App::make('krustr.publisher')->unpublish($id);
+	}
+
+	/**
+	 * Get status from input for entry
+	 *
+	 * @return string
+	 */
+	protected function inputStatus($options)
+	{
+		$status = 'draft';
+
+		if (isset($data['status']))
+		{
+			$status = $data['status'];
+		}
+		elseif (isset($data['publish']))
+		{
+			if     ((int) array_get($data, 'publish') === 1) $status = 'published';
+			elseif ((int) array_get($data, 'publish') === 0) $status = 'draft';
+		}
+
+		return $status;
 	}
 
 }

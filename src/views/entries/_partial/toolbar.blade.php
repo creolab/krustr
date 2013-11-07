@@ -13,7 +13,7 @@
 				<button type="submit" name="publish" value="1" class="btn btn-info btn-publish pull-right">{{ admin_icn('cloud-upload') }} Publish</button>
 			@elseif ($entry->status == 'published')
 				<button type="submit" name="publish" value="1" class="btn btn-info btn-save">{{ admin_icn('cloud-upload') }} Save and publish</button>
-				<button type="button" name="publish" value="0" class="btn btn-default pull-right">{{ admin_icn('cloud') }} Unpublish</button>
+				<button type="submit" name="publish" value="0" class="btn btn-default pull-right">{{ admin_icn('cloud') }} Unpublish</button>
 			@else
 				<button type="submit" class="btn btn-info btn-save">{{ admin_icn('cloud-upload') }} Save</button>
 			@endif

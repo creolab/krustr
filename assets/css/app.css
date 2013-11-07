@@ -24,6 +24,7 @@ body { background: #f6f6f6 url(../images/bg_light_alu.png); padding-top: 43px; p
 	.pg h2 i.icn        { margin-right: 4px; }
 	.pg h2 i.glyphicon  { font-size: 80%; }
 	.pg h2.status-published i { color: #67aa38; text-shadow: 0 0 15px rgba(0,205,0,0.4); }
+	.pg h2.status-draft     i { opacity: .4; }
 
 	/* Tools */
 	.pg .tools      { border-left: 1px solid #777; padding: 2px 0 2px 15px; float: left; position: relative; top: 4px; }
