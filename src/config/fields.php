@@ -9,6 +9,13 @@ return array(
 		'icon'  => 'pencil',
 	),
 
+	// ! Password
+	'password' => array(
+		'class' => '\Krustr\Forms\Fields\Password\PasswordField',
+		'view'  => 'krustr_fields::password.views.password_field',
+		'icon'  => 'lock',
+	),
+
 	// ! Textarea (multiline)
 	'textarea' => array(
 		'class' => '\Krustr\Forms\Fields\Textarea\TextareaField',

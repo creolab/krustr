@@ -50,16 +50,23 @@ abstract class Field implements FieldInterface {
 	 *
 	 * @return View
 	 */
-	public function render($value = null)
+	public function render($value = null, $additionalData = array())
 	{
 		if ($value) $this->value = $value;
 
 		if ($this->view)
 		{
-			$html = View::make($this->view, array(
+			// Prepare data
+			$data = array(
 				'field' => $this,
 				'value' => $this->value,
-			));
+			);
+
+			// Merge additional if needed
+			if ($additionalData) $data = array_merge($additionalData, $data);
+
+			// Build HTML
+			$html = View::make($this->view, $data);
 
 			return $html;
 		}

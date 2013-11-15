@@ -8,7 +8,7 @@ use Krustr\Repositories\Entities\ChannelEntity;
  *
  * @author Boris Strahija <bstrahija@gmail.com>
  */
-class EntryForm {
+class EntryForm extends BaseForm implements FormInterface {
 
 	/**
 	 * Entry channel

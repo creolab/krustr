@@ -4,8 +4,7 @@
 		<i class="glyphicon glyphicon-{{ $field->icon }}"></i>
 	</label>
 
-	<?php echo '<pre>'; print_r(var_dump($field->value)); echo '</pre>'; ?>
-	<?php echo '<pre>'; print_r(var_dump($field->value())); echo '</pre>'; ?>
+	<?php echo '<pre>'; print_r(var_dump($media)); echo '</pre>'; ?>
 	<?php //echo '<pre>'; print_r(var_dump($entry->field('gallery'))); echo '</pre>'; ?>
 
 	@include("krustr_fields::_default.upload")
