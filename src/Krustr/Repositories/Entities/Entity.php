@@ -94,4 +94,14 @@ abstract class Entity {
 		}, $this->data);
 	}
 
+	/**
+	 * Return string representation of entity
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return "_____";
+	}
+
 }

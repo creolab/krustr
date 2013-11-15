@@ -107,6 +107,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		$this->app->bind('Krustr\Repositories\Interfaces\FieldRepositoryInterface',        'Krustr\Repositories\FieldDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\UserRepositoryInterface',         'Krustr\Repositories\UserDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\MediaRepositoryInterface',        'Krustr\Repositories\MediaDbRepository');
+		$this->app->bind('Krustr\Repositories\Interfaces\GalleryRepositoryInterface',      'Krustr\Repositories\GalleryDbRepository');
 
 		// Register backend navigation environment
 		$this->app->singleton('krustr.navigation', function($app)
@@ -151,7 +152,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		{
 			$matcher = $compiler->createMatcher('image');
 
-			return preg_replace($matcher, '$1<?php echo \Creolab\Image::resize$2; ?>', $value);
+			return preg_replace($matcher, '$1<?php echo \Creolab\Image\ImageFacade::resize$2; ?>', $value);
 		});
 
 		// Create image thumb
@@ -159,7 +160,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		{
 			$matcher = $compiler->createMatcher('thumb');
 
-			return preg_replace($matcher, '$1<?php echo \Creolab\Image::thumb$2; ?>', $value);
+			return preg_replace($matcher, '$1<?php echo \Creolab\Image\ImageFacade::thumb$2; ?>', $value);
 		});
 	}
 

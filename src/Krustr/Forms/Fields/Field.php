@@ -76,6 +76,16 @@ abstract class Field implements FieldInterface {
 	}
 
 	/**
+	 * Return field value
+	 *
+	 * @return mixed
+	 */
+	public function value()
+	{
+		return $this->value;
+	}
+
+	/**
 	 * Set a field data value
 	 *
 	 * @param string $key

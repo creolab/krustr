@@ -41,9 +41,11 @@ class EntryEntity extends Entity {
 			if ($key == $field->name)
 			{
 				// Date field
-				if     ($field->type == 'date')     return Carbon::createFromTimeStamp(strtotime($field->value));
-				elseif ($field->type == 'datetime') return Carbon::createFromTimeStamp(strtotime($field->value));
-				else                                return $field->value;
+				// if     ($field->type == 'date')     return Carbon::createFromTimeStamp(strtotime($field->value));
+				// elseif ($field->type == 'datetime') return Carbon::createFromTimeStamp(strtotime($field->value));
+				// elseif ($field->type == 'gallery')  return app('Krustr\Repositories\Interfaces\GalleryRepositoryInterface')->find($field->value);
+				// else                                return $field->value;
+				return $field->value();
 			}
 		}
 	}

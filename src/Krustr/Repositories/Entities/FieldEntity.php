@@ -44,6 +44,17 @@ class FieldEntity extends Entity {
 	}
 
 	/**
+	 * Return the fields value
+	 *
+	 * @return mixed
+	 */
+	public function value()
+	{
+		// If object was instantiated, save it
+		return $this->instance()->value();
+	}
+
+	/**
 	 * Get field instance
 	 *
 	 * @return Krustr\Forms\Field\Field
