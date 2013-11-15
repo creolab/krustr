@@ -1,5 +1,6 @@
 <?php namespace Krustr\Repositories\Entities;
 
+use Carbon\Carbon;
 use Krustr\Repositories\Collections\FieldCollection;
 
 /**
@@ -39,7 +40,10 @@ class EntryEntity extends Entity {
 		{
 			if ($key == $field->name)
 			{
-				return $field->value;
+				// Date field
+				if     ($field->type == 'date')     return Carbon::createFromTimeStamp(strtotime($field->value));
+				elseif ($field->type == 'datetime') return Carbon::createFromTimeStamp(strtotime($field->value));
+				else                                return $field->value;
 			}
 		}
 	}

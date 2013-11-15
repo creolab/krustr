@@ -1,5 +1,6 @@
 <?php namespace Krustr\Models;
 
+use Config;
 use Krustr\Repositories\Collections\EntryCollection;
 
 /**
@@ -42,17 +43,6 @@ class Entry extends Base {
 	{
 		return $this->hasMany('Krustr\Models\Field');
 	}
-
-	/**
-	 * Set custom collection class for entries
-	 *
-	 * @param  array  $models
-	 * @return Krustr\Repositories\EntryCollection
-	 */
-	/*public function newCollection(array $models = array())
-	{
-		return new EntryCollection($models);
-	}*/
 
 	/**
 	 * Only in a specific channel

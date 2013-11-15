@@ -2,7 +2,7 @@
 
 return array(
 
-	// Site and application
+	// ! Site and application
 	'app_name'   => 'Krustr&deg;',
 	'app_slogan' => 'Creative Administration',
 
@@ -11,5 +11,8 @@ return array(
 	'theme'       => 'default',
 	'backend_url' => 'backend',
 	'api_url'     => 'api',
+
+	// ! Database (no prefix by default)
+	'table_prefix' => '',
 
 );

@@ -18,7 +18,7 @@ class EntriesTableSeeder extends \Seeder
 			'updated_at'   => new Datetime,
 			'published_at' => new Datetime,
 		));
-		DB::table('fields')->insert(array('entry_id' => $entry, 'name' => 'terms', 'value' => 'Lorem ipsum'));
+		DB::table('fields')->insert(array('entry_id' => $entry, 'name' => 'terms', 'value' => 'Lorem ipsum', 'type' => 'textarea'));
 		$entry = DB::table('entries')->insertGetId(array(
 			'title'        => 'Another one',
 			'slug'         => 'another-one',
@@ -41,7 +41,7 @@ class EntriesTableSeeder extends \Seeder
 			'updated_at'   => new Datetime,
 			'published_at' => null,
 		));
-		DB::table('fields')->insert(array('entry_id' => $entry, 'name' => 'terms', 'value' => 'Lorem ipsum 333333333'));
+		DB::table('fields')->insert(array('entry_id' => $entry, 'name' => 'terms', 'value' => 'Lorem ipsum 333333333', 'type' => 'textarea'));
 
 		// ! Pages
 		$entry = DB::table('entries')->insertGetId(array(

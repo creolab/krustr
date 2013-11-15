@@ -28,6 +28,7 @@ App.Upload = {
 			var $fileList       = $('#filelist-' + id);
 			var $fileUploadData = $("#file-upload-data-" + id);
 			var $uploadedFiles  = $("#uploaded-files-" + id);
+			var $uploadedUrls   = $("#uploaded-urls-" + id);
 			var $toggle         = $el.find(".toggle");
 			var $toggleCancel   = $el.find(".btn-cancel-upload");
 			var $maxFiles       = $el.attr("data-max-files");
@@ -73,6 +74,7 @@ App.Upload = {
 			// ! -- Add instance to list
 			var instance = new plupload.Uploader(instanceData);
 			App.Upload.instances.push(instance);
+			instance.uploaded_files = [];
 
 			// ! -- Start uploading on click
 			instance.init();
@@ -128,12 +130,13 @@ App.Upload = {
 				response = App.Upload.parsePluploadResponse(up, file, response);
 
 				// Add to list
-				//instance.uploaded_files.push(response);
-				//console.log(this.files);
+				instance.uploaded_files.push(response);
 
 				if (response && ! response.error) {
 					var uploadedFiles = $.trim(response.path + ";" + $uploadedFiles.val());
 					$uploadedFiles.val(uploadedFiles);
+					var uploadedUrls = $.trim(response.url + ";" + $uploadedUrls.val());
+					$uploadedUrls.val(uploadedUrls);
 
 					// Show message
 					console.log(App);

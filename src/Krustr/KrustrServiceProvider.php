@@ -28,8 +28,8 @@ class KrustrServiceProvider extends ServiceProvider {
 												  '/views');
 
 		// Register content
-		$this->registerFieldDefinitions();
 		$this->registerBindings();
+		$this->registerFieldDefinitions();
 		$this->registerChannels();
 		$this->registerBladeExtensions();
 		$this->registerTheme();
@@ -41,7 +41,6 @@ class KrustrServiceProvider extends ServiceProvider {
 
 		// Initialize backend
 		$this->registerBackend();
-
 	}
 
 	/**
@@ -92,7 +91,7 @@ class KrustrServiceProvider extends ServiceProvider {
 	 */
 	public function registerFieldDefinitions()
 	{
-		$this->app['krustr.fields'] = new Repositories\Collections\FieldTypeCollection($this->app['config']->get('krustr::fields'));
+		$this->app['krustr.fields'] = new Repositories\Collections\FieldDefinitionCollection($this->app['config']->get('krustr::fields'));
 	}
 
 	/**
@@ -107,6 +106,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		$this->app->bind('Krustr\Repositories\Interfaces\ChannelRepositoryInterface',      'Krustr\Repositories\ChannelConfigRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\FieldRepositoryInterface',        'Krustr\Repositories\FieldDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\UserRepositoryInterface',         'Krustr\Repositories\UserDbRepository');
+		$this->app->bind('Krustr\Repositories\Interfaces\MediaRepositoryInterface',        'Krustr\Repositories\MediaDbRepository');
 
 		// Register backend navigation environment
 		$this->app->singleton('krustr.navigation', function($app)
@@ -131,7 +131,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		$blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
 
 		// Single asset
-		$blade->extend(function($value, $compiler)
+		/*$blade->extend(function($value, $compiler)
 		{
 			$matcher = $compiler->createMatcher('theme_asset');
 
@@ -144,6 +144,22 @@ class KrustrServiceProvider extends ServiceProvider {
 			$matcher = $compiler->createMatcher('theme_assets');
 
 			return preg_replace($matcher, '$1<?php echo theme_assets$2; ?>', $value);
+		});*/
+
+		// Resize an image
+		$blade->extend(function($value, $compiler)
+		{
+			$matcher = $compiler->createMatcher('image');
+
+			return preg_replace($matcher, '$1<?php echo \Creolab\Image::resize$2; ?>', $value);
+		});
+
+		// Create image thumb
+		$blade->extend(function($value, $compiler)
+		{
+			$matcher = $compiler->createMatcher('thumb');
+
+			return preg_replace($matcher, '$1<?php echo \Creolab\Image::thumb$2; ?>', $value);
 		});
 	}
 

@@ -5,83 +5,58 @@ use App, View;
 class FieldEntity extends Entity {
 
 	/**
-	 * Field definition
-	 * @var FieldTypeEntity
+	 * Init new field entity
+	 *
+	 * @param array $data
 	 */
-	protected $definition;
-
-	/**
-	 * Field value, passed when creating form
-	 * @var mixed
-	 */
-	protected $value;
-
-	/**
-	 * The actual field object
-	 * @var Forms\Fields\Field;
-	 */
-	protected $object;
-
-	/**
-	 * Initialize field entity
-	 * @param array $config [description]
-	 */
-	public function __construct(array $config)
+	public function __construct(array $data)
 	{
-		// Get field definition
-		$definitions      = App::make('krustr.fields');
-		$this->definition = $definitions->get(array_get($config, 'type'));
+		// Add data to field object
+		$this->data = $data;
 
-		// Add to entity
-		$this->data = $config;
+		// Find field definition
+		$definition = app("krustr.fields")->get($data['type']);
+
+		// Merge the data
+		if ($definition) $this->data = array_merge($definition->toArray(), $this->data);
 	}
 
 	/**
 	 * Render the fields view
+	 *
 	 * @return View
 	 */
 	public function render($value = null)
 	{
-		// Try to instantiate the field object
-		if ( ! $this->object) $this->object = new $this->definition->class($this, $value);
-
 		// If object was instantiated, run redering
-		if ($this->object) return $this->object->render($value);
+		if ($this->instance()) return $this->instance()->render($value);
 	}
 
 	/**
 	 * Save field value
+	 *
 	 * @return boolean
 	 */
 	public function save($data = null)
 	{
-		// Try to instantiate the field object
-		if ( ! $this->object) $this->object = new $this->definition->class($this);
-
-		// If object was instantiated, run redering
-		if ($this->object) return $this->object->save($data);
+		// If object was instantiated, save it
+		return $this->instance()->save($data);
 	}
 
 	/**
-	 * Magic helper
-	 * @param  mixed $key
-	 * @return mixed
+	 * Get field instance
+	 *
+	 * @return Krustr\Forms\Field\Field
 	 */
-	public function __get($key)
+	protected function instance()
 	{
-		$value = null;
-
-		if (in_array($key, array('class', 'view', 'icon')))
+		// Try to instantiate the field object
+		if ( ! $this->instance)
 		{
-			$value = $this->definition->get($key);
-		}
+			$this->data['instance'] = new $this->class($this, $this->value);
 
-		if ( ! $value)
-		{
-			$value = $this->get($key);
+			return $this->instance;
 		}
-
-		return $value;
 	}
 
 }

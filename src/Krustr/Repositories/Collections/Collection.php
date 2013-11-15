@@ -4,12 +4,14 @@ class Collection extends \Illuminate\Support\Collection {
 
 	/**
 	 * Entity class
+	 *
 	 * @var string
 	 */
 	protected $entity;
 
 	/**
 	 * Initialize the collection
+	 *
 	 * @param array $items
 	 */
 	public function __construct(array $items = array())
@@ -23,6 +25,7 @@ class Collection extends \Illuminate\Support\Collection {
 
 	/**
 	 * Get the collection of items as a plain array.
+	 *
 	 * @return array
 	 */
 	public function toArray()

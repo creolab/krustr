@@ -2,14 +2,11 @@
 
 class ChannelCollection extends Collection {
 
-	/**
-	 * Entity class
-	 * @var string
-	 */
 	protected $entity = 'Krustr\Repositories\Entities\ChannelEntity';
 
 	/**
 	 * Initialize the collection with field definitions
+	 *
 	 * @param array $items
 	 */
 	public function __construct(array $items = array())
@@ -23,6 +20,7 @@ class ChannelCollection extends Collection {
 
 	/**
 	 * Get specific channel by name
+	 *
 	 * @param  string $name
 	 * @return ChannelEntity
 	 */

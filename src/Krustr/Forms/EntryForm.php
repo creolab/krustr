@@ -67,15 +67,18 @@ class EntryForm {
 		$html .= $this->hiddenFields();
 
 		// Render each field
-		foreach ($this->channel->fields as $field)
+		foreach ($this->channel->fields as $name => $field)
 		{
 			// Get value
-			$key   = $field->name;
-			$value = $this->entry ? $this->entry->$key : null;
-			if ( ! $value and $this->entry) $value = $this->entry->field($key);
+			$value = $this->entry ? $this->entry->$name : null;
+			$class = $field->class;
+			if ( ! $value and $this->entry) $value = $this->entry->field($name);
+
+			// Instance of field object
+			$fieldInstance = new $class($field, $value);
 
 			// And fetch HTML for rendering
-			$html .= $field->render($value);
+			$html .= $fieldInstance->render($value);
 		}
 
 		// Close the form
@@ -109,7 +112,8 @@ class EntryForm {
 	 */
 	public function hiddenFields()
 	{
-		$html = Form::hidden('channel', $this->channel->resource);
+		$html  = Form::hidden('channel',  $this->channel->resource);
+		$html .= Form::hidden('entry_id', $this->entry ? $this->entry->id : null);
 
 		return $html;
 	}

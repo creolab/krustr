@@ -76,9 +76,13 @@ class EntryController extends BaseController {
 	 */
 	public function store()
 	{
-		$id = $this->repository->create(Input::all());
+		if ($id = $this->repository->create(Input::all()))
+		{
+			return Redirect::back()->withAlertSuccess('Saved.');
+			return Redirect::route('backend.content.'.$this->channel->name.'.edit', array($id))->withAlertSucces("Saved.");
+		}
 
-		return Redirect::route('backend.content.'.$this->channel->name.'.edit', array($id))->withAlertSucces("Saved.");
+		return Redirect::back()->withInput()->withErrors($this->repository->errors());
 	}
 
 	/**

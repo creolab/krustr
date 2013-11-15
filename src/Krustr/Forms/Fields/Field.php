@@ -10,28 +10,39 @@ use View;
 abstract class Field implements FieldInterface {
 
 	/**
-	 * The field entity
-	 *
-	 * @var Repositories\FieldEntity;
+	 * Data container
+	 * @var array
 	 */
-	protected $field;
+	protected $data;
 
 	/**
-	 * Value for the field
-	 *
-	 * @var mixed
+	 * Field repo dependency
+	 * @var FieldRepositoryInterface
 	 */
-	protected $value;
+	protected $repo;
+
+	/**
+	 * Media repo dependency
+	 * @var MediaRepositoryInterface
+	 */
+	protected $media;
 
 	/**
 	 * Initiliaze the field
 	 *
 	 * @param mixed $data
 	 */
-	public function __construct($field, $value = null)
+	public function __construct(&$field, $value = null)
 	{
-		$this->value = $value;
-		$this->field = $field;
+		// Dependencies
+		$this->repo  = \App::make('Krustr\Repositories\Interfaces\FieldRepositoryInterface');
+		$this->media = \App::make('Krustr\Repositories\Interfaces\MediaRepositoryInterface');
+
+		// Get passed data
+		$this->data = $field->data;
+
+		// Get value and field object
+		$this->set('value', $value);
 	}
 
 	/**
@@ -41,14 +52,13 @@ abstract class Field implements FieldInterface {
 	 */
 	public function render($value = null)
 	{
-		$this->value = $value;
+		if ($value) $this->value = $value;
 
-		if ($this->field)
+		if ($this->view)
 		{
-			$view = $this->field->view;
-			$html = View::make($view, array(
-				'field' => $this->field,
-				'value' => $this->value(),
+			$html = View::make($this->view, array(
+				'field' => $this,
+				'value' => $this->value,
 			));
 
 			return $html;
@@ -66,37 +76,26 @@ abstract class Field implements FieldInterface {
 	}
 
 	/**
-	 * Get field definition
+	 * Set a field data value
 	 *
-	 * @param  string $key
-	 * @return mixed
+	 * @param string $key
+	 * @param mixed  $value
 	 */
-	public function definition($key = null)
+	public function set($key, $value)
 	{
-		return $this->field->definition->get($key);
+		$this->data[$key] = $value;
 	}
 
 	/**
-	 * Return value of field
-	 *
-	 * @return mixed
-	 */
-	public function value()
-	{
-		return $this->value;
-	}
-
-	/**
-	 * Get a field param
-	 *
-	 * @param  string $key
+	 * Magic helper
+	 * @param  mixed $key
 	 * @return mixed
 	 */
 	public function __get($key)
 	{
-		if     (isset($this->$key))             return $this->$key;
-		elseif (isset($this->field->$key))      return $this->field->$key;
-		elseif (isset($this->definition->$key)) return $this->definition->$key;
+		if (isset($this->$key))                                                     return $this->$key;
+		elseif (isset($this->data[$key]))                                           return $this->data[$key];
+		elseif (method_exists($this, $method = 'get'.camel_case($key).'Attribute')) return call_user_func(array($this, $method));
 	}
 
 }

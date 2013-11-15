@@ -1,8 +1,8 @@
 <div class="preview">
-	<div class="preview-image clearfix" style="display: <?php echo ($field->value) ? 'block' : 'none'; ?>">
+	<div class="preview-image clearfix">
 		<div class="img">
 			<?php if ($field->value) : ?>
-				<a href="<?php echo $field->value ?>" target="_blank" class="lightbox"><img src="<?php echo Image::thumb($value, 150); ?>" class="preview-image-img" alt="" width="150"></a>
+				<a href="<?php echo $field->value ?>" target="_blank" class="lightbox"><img src="<?php //echo Image::thumb($value, 150); ?>" class="preview-image-img" alt="" width="150"></a>
 			<?php else : ?>
 				<img src="" class="preview-image-img" alt="" width="150">
 			<?php endif; ?>

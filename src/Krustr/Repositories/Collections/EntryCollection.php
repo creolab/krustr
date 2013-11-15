@@ -4,11 +4,6 @@ use Krustr\Repositories\Entities\EntryEntity;
 
 class EntryCollection extends Collection {
 
-	/**
-	 * Entity class
-	 *
-	 * @var string
-	 */
 	protected $entity = 'Krustr\Repositories\Entities\EntryEntity';
 
 	/**

@@ -2,16 +2,10 @@
 
 use View;
 
-/**
- * Base class for various content fields
- *
- * @author Boris Strahija <bstrahija@gmail.com>
- */
-
 interface FieldInterface {
 
 	public function render($value);
 	public function save($data);
-	public function definition();
+	public function set($key, $value);
 
 }

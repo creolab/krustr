@@ -25,7 +25,7 @@ abstract class Repository {
 	 */
 	function errors()
 	{
-		return $errors;
+		return $this->errors;
 	}
 
 }

@@ -147,27 +147,6 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	}
 
 	/**
-	 * Update exiting content entry
-	 *
-	 * @param  integer $id
-	 * @param  array   $data
-	 * @return boolean
-	 */
-	public function update($id, $data = array())
-	{
-		// Set the data
-		$entry = Entry::find($id);
-		$entry->title  = array_get($data, 'title');
-		$entry->body   = array_get($data, 'body');
-		$entry->status = $this->inputStatus($data);
-
-		// Save custom fields
-		$this->fields->saveAllForEntry($id, $data);
-
-		return $entry->save();
-	}
-
-	/**
 	 * Create new entry
 	 *
 	 * @param  array $data
@@ -178,19 +157,57 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		// First validate the input
 		if ($this->validation->passes($data))
 		{
-			$entry = new Entry;
-			$entry->author_id = Auth::user()->id;
-			$entry->slug      = Str::slug(array_get($data, 'title'));
-			$entry->title     = array_get($data, 'title');
-			$entry->body      = array_get($data, 'body');
-			$entry->channel   = array_get($data, 'channel');
+			$entry = new Entry(array(
+				'author_id' => Auth::user()->id,
+				'slug'      => Str::slug(array_get($data, 'title')),
+				'title'     => array_get($data, 'title'),
+				'body'      => array_get($data, 'body'),
+				'channel'   => array_get($data, 'channel'),
+				'status'    => $this->inputStatus($data),
+			));
 			$entry->save();
+
+			// Save custom fields
+			$this->fields->saveAllForEntry($entry->id, $data);
 
 			return $entry->id;
 		}
 
 		// Set errors
-		$this->errors = $this->validation->errors;
+		$this->errors = $this->validation->errors();
+
+		return false;
+	}
+
+	/**
+	 * Update exiting content entry
+	 *
+	 * @param  integer $id
+	 * @param  array   $data
+	 * @return boolean
+	 */
+	public function update($id, $data = array())
+	{
+		// First validate the input
+		if ($this->validation->passes($data))
+		{
+			// Set the data
+			$entry = Entry::find($id);
+			$entry->fill(array(
+				'title'   => array_get($data, 'title'),
+				'body'    => array_get($data, 'body'),
+				'channel' => array_get($data, 'channel'),
+				'status'  => $this->inputStatus($data),
+			));
+
+			// Save custom fields
+			$this->fields->saveAllForEntry($id, $data);
+
+			return $entry->save();
+		}
+
+		// Set errors
+		$this->errors = $this->validation->errors();
 
 		return false;
 	}

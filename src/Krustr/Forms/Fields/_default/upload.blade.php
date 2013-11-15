@@ -1,5 +1,8 @@
 <div id="file-upload-<?php echo $field->name; ?>" class="file-upload-widget" data-id="<?php echo $field->name; ?>">
-	<div class="toggle"><a href="#" class="btn btn-default">{{ admin_icn('cloud-upload') }} Upload new file</a></div>
+	<div class="toggle"><a href="#" class="btn btn-default">{{ admin_icn('cloud-upload') }} Upload file</a></div>
+
+	<input id="uploaded-files-{{ $field->name }}" name="uploaded-files-{{ $field->name }}" value="">
+	<input id="uploaded-urls-{{ $field->name }}" name="uploaded-urls-{{ $field->name }}" value="">
 
 	<div class="uploader">
 		<h3>Upload a new file</h3>

@@ -48,4 +48,22 @@ class ChannelConfigRepository implements Interfaces\ChannelRepositoryInterface {
 		return $channel;
 	}
 
+	/**
+	 * Find field in channel
+	 *
+	 * @param  string $channelId
+	 * @param  string $name
+	 * @return FieldEntity
+	 */
+	public function field($channelId, $name)
+	{
+		$channel = $this->find($channelId);
+
+		if ($channel)
+		{
+
+			return $channel->fields->get($name);
+		}
+	}
+
 }

@@ -3,6 +3,8 @@
 use Krustr\Models\Entry;
 use Krustr\Models\Field;
 use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
+use Krustr\Repositories\Collections\FieldCollection;
+use Krustr\Repositories\Entities\FieldEntity;
 
 class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 
@@ -29,7 +31,9 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 	 */
 	public function all($entryId)
 	{
+		$fields = Field::where('entry_id', $entryId)->get();
 
+		return new FieldCollection($fields);
 	}
 
 	/**
@@ -39,9 +43,11 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 	 * @param  string  $key
 	 * @return mixed
 	 */
-	public function get($entryId, $key)
+	public function find($entryId, $key)
 	{
+		$field = Field::where('entry_id', $entryId)->where('name', $key)->first();
 
+		if ($field) return new FieldEntity($field);
 	}
 
 	/**
@@ -51,12 +57,13 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 	 * @param string  $key
 	 * @param mixed   $value
 	 */
-	public function add($entryId, $key, $value)
+	public function create($entryId, $key, $value, $definition = null)
 	{
 		$field = new Field;
 		$field->entry_id = $entryId;
 		$field->name     = $key;
 		$field->value    = $value;
+		$field->type     = $definition ? $definition->type : null;
 
 		return $field->save();
 	}
@@ -69,10 +76,11 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 	 * @param  mixed   $value
 	 * @return mixed
 	 */
-	public function update($entryId, $key, $value)
+	public function update($entryId, $key, $value, $definition = null)
 	{
 		$field        = Field::where('entry_id', $entryId)->where('name', $key)->first();
 		$field->value = $value;
+		$field->type  = $definition ? $definition->type : null;
 
 		return $field->save();
 	}
@@ -82,18 +90,18 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 	 *
 	 * @param integer $entryId
 	 * @param string  $key
-	 * @param mixed]  $value
+	 * @param mixed   $value
 	 */
-	public function addOrUpdate($entryId, $key, $value)
+	public function createOrUpdate($entryId, $key, $value, $definition = null)
 	{
 		// And save accordinly
-		if ($this->exists($entryId, $field->name))
+		if ($this->exists($entryId, $key))
 		{
-			$this->update($entryId, $field->name, $value);
+			$this->update($entryId, $key, $value, $definition);
 		}
 		else
 		{
-			$this->add($entryId, $field->name, $value);
+			$this->create($entryId, $key, $value, $definition);
 		}
 	}
 
@@ -121,6 +129,7 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 	{
 		// Get entry and channel
 		$entry   = Entry::with(array('author', 'fields'))->where('id', $entryId)->first();
+		$entry   = new Entities\EntryEntity($entry->toArray());
 		$channel = $this->channels->find($entry->channel);
 
 		foreach ($channel->fields as $field)
@@ -130,18 +139,14 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 				// Get value from form
 				$value = array_get($data, $field->name);
 
+				// Set field entry
+				$field->set('entry', $entry);
+
 				// Pass through to field save method
 				$value = $field->save($value);
 
 				// And save accordinly
-				if ($this->exists($entryId, $field->name))
-				{
-					$this->update($entryId, $field->name, $value);
-				}
-				else
-				{
-					$this->add($entryId, $field->name, $value);
-				}
+				$this->createOrUpdate($entryId, $field->name, $value, $field);
 			}
 		}
 	}

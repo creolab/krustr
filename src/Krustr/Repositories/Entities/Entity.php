@@ -24,7 +24,7 @@ abstract class Entity {
 	 * @param  mixed $key
 	 * @return mixed
 	 */
-	public function get($key)
+	/*public function get($key)
 	{
 		if (isset($this->data[$key]))
 		{
@@ -36,6 +36,17 @@ abstract class Entity {
 		}
 
 		return null;
+	}*/
+
+	/**
+	 * Set a data value
+	 *
+	 * @param string $key
+	 * @param mixed  $value
+	 */
+	public function set($key, $value)
+	{
+		$this->data[$key] = $value;
 	}
 
 	/**
@@ -45,7 +56,18 @@ abstract class Entity {
 	 */
 	public function __get($key)
 	{
-		return $this->get($key);
+		if (isset($this->$key))
+		{
+			return $this->$key;
+		}
+		elseif (isset($this->data[$key]))
+		{
+			return $this->data[$key];
+		}
+		elseif (method_exists($this, $method = 'get'.camel_case($key).'Attribute'))
+		{
+			return call_user_func(array($this, $method));
+		}
 	}
 
 	/**
