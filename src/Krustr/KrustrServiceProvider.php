@@ -120,6 +120,9 @@ class KrustrServiceProvider extends ServiceProvider {
 		{
 			return new \Krustr\Services\Publisher($app['Krustr\Repositories\Interfaces\EntryRepositoryInterface']);
 		});
+
+		// Register the image manipulator
+		$this->app->singleton('krustr.image', function() { return new \Creolab\Image\Image; });
 	}
 
 	/**
@@ -152,7 +155,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		{
 			$matcher = $compiler->createMatcher('image');
 
-			return preg_replace($matcher, '$1<?php echo \Creolab\Image\ImageFacade::resize$2; ?>', $value);
+			return preg_replace($matcher, '$1<?php echo app("krustr.image")->resize$2; ?>', $value);
 		});
 
 		// Create image thumb
@@ -160,7 +163,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		{
 			$matcher = $compiler->createMatcher('thumb');
 
-			return preg_replace($matcher, '$1<?php echo \Creolab\Image\ImageFacade::thumb$2; ?>', $value);
+			return preg_replace($matcher, '$1<?php echo app("krustr.image")->thumb$2; ?>', $value);
 		});
 	}
 

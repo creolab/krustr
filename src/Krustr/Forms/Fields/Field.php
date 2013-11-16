@@ -1,6 +1,6 @@
 <?php namespace Krustr\Forms\Fields;
 
-use View;
+use Config, File, View;
 
 /**
  * Base class for various content fields
@@ -101,6 +101,33 @@ abstract class Field implements FieldInterface {
 	public function set($key, $value)
 	{
 		$this->data[$key] = $value;
+	}
+
+	/**
+	 * Return media path for field
+	 *
+	 * @return string
+	 */
+	public function mediaPath($file = null, $createPath = false)
+	{
+		$path = Config::get('krustr::media.upload_path');
+
+		// Add entry data
+		if ($this->entry)
+		{
+			$path .= 'entries/' . $this->entry->id . '/';
+		}
+
+		// Finally the name of the field
+		$path .= $this->name . '/';
+
+		// Now create the path if needed
+		if ($createPath and ! File::isDirectory($path)) File::makeDirectory($path, 0777, true);
+
+		// And the target path
+		if ($file) $path .= $file;
+
+		return $path;
 	}
 
 	/**

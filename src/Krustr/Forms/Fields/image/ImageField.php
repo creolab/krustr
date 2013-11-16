@@ -1,14 +1,20 @@
 <?php namespace Krustr\Forms\Fields\Image;
 
-use Input;
+use Config, File, Input;
 
 class ImageField extends \Krustr\Forms\Fields\Field {
 
+	/**
+	 * Save image data, move and resize the file
+	 * @TODO: Some od the logic can be cleaned up
+	 *
+	 * @param  mixed $data
+	 * @return string
+	 */
 	public function save($data)
 	{
-		$entryId = Input::get('entry_id');
-		$path     = trim(Input::get('uploaded-files-' . $this->name), ";");
-		$url      = trim(Input::get('uploaded-urls-' . $this->name), ";");
+		// Path to uploaded file
+		$path = trim(Input::get('uploaded-files-' . $this->name), ";");
 
 		// If no new photo was uploaded simply return the existing value
 		if ( ! $path)
@@ -17,29 +23,22 @@ class ImageField extends \Krustr\Forms\Fields\Field {
 		}
 		else
 		{
-			if ($entryId and $path and $url)
+			if ($path)
 			{
+				// Get and create target path
+				$target  = $this->mediaPath(pathinfo($path, PATHINFO_BASENAME), true);
+
 				// Get relative path
-				$path = str_replace(public_path(), '', $path);
+				$relativePath = str_replace(public_path(), '', $target);
 
-				return $path;
+				// Move the file
+				File::move($path, $target);
 
-				// $field = $this->repo->find($entryId, $this->name);
+				// Create predefined dimmensions
+				$dimensions = Config::get('krustr::media.image_dimensions');
+				app('krustr.image')->createDimensions($relativePath, $dimensions);
 
-				// Check if media entry exists
-				//if ($entry_id and ! $this->media->exists($entry_id, $this->name))
-				//{
-
-				//}
-				// echo '<pre>'; print_r(var_dump(base_path())); echo '</pre>';
-				// echo '<pre>'; print_r(var_dump(public_path())); echo '</pre>';
-				// echo '<pre>'; print_r(var_dump($path)); echo '</pre>';
-				// echo '<pre>'; print_r(var_dump($url)); echo '</pre>';
-				// die();
-
-
-				// @TODO: Implement!!!
-				return $url;
+				return $relativePath;
 			}
 		}
 	}

@@ -14,16 +14,16 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Image dimmensions
+	| Image dimensions
 	|--------------------------------------------------------------------------
 	|
-	| All uploaded media will be resized to these dimmensions when uploaded
-	| Additionally you can define dimmensions for each field if needed
+	| All uploaded media will be resized to these dimensions when uploaded
+	| Additionally you can define dimensions for each field if needed
 	|
-	| A dimmensions consists of the following: array(width, height, crop, quality)
+	| A dimensions consists of the following: array(width, height, crop, quality)
 	|
 	*/
-	'image_dimmensions' => array(
+	'image_dimensions' => array(
 		'thumb'  => array(100, 100, true,  80),
 		'medium' => array(600, 400, false, 90),
 	),
