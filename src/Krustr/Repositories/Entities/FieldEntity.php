@@ -65,9 +65,9 @@ class FieldEntity extends Entity {
 		if ( ! $this->instance)
 		{
 			$this->data['instance'] = new $this->class($this, $this->value);
-
-			return $this->instance;
 		}
+
+		return $this->instance;
 	}
 
 }
