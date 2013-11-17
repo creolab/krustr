@@ -31,7 +31,10 @@ class GalleryField extends \Krustr\Forms\Fields\Field {
 	 */
 	public function render($value = null, $additionalData = array())
 	{
-		return parent::render($value, array('gallery' => $this->value, 'media' => $this->value->media));
+		$gallery = $this->value;
+		$media   = (isset($this->value->media)) ? $this->value->media : null;
+
+		return parent::render($value, array('gallery' => $gallery, 'media' => $media));
 	}
 
 }

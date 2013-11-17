@@ -1,6 +1,7 @@
 <?php namespace Krustr\Repositories\Entities;
 
 use App, View;
+use Krustr\Forms\Fields\FieldException;
 
 class FieldEntity extends Entity {
 
@@ -61,10 +62,15 @@ class FieldEntity extends Entity {
 	 */
 	protected function instance()
 	{
+		$className = $this->class;
+
+		// Check if class exists
+		if ( ! class_exists($className)) throw new FieldException("The class [$className] does not exist.");
+
 		// Try to instantiate the field object
 		if ( ! $this->instance)
 		{
-			$this->data['instance'] = new $this->class($this, $this->value);
+			$this->data['instance'] = new $className($this, $this->value);
 		}
 
 		return $this->instance;
