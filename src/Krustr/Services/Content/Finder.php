@@ -9,7 +9,7 @@ use App, Config, Redirect, Request, View;
  *
  * @author Boris Strahija <boris@creolab.hr>
  */
-class Finder extends \Illuminate\Routing\Controllers\Controller {
+class Finder extends \Illuminate\Routing\Controller {
 
 	/**
 	 * Current content channel

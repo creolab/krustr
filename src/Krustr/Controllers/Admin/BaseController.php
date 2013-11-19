@@ -5,7 +5,7 @@
  *
  * @author Boris Strahija <bstrahija@gmail.com>
  */
-class BaseController extends \Illuminate\Routing\Controllers\Controller {
+class BaseController extends \Illuminate\Routing\Controller {
 
 
 
