@@ -10,13 +10,22 @@ return array(
 	'icon'              => 'shopping-cart',
 	'order'             => 300,
 
-	// ! -- Fields
-	'fields' => array(
-		// ! -- -- Default
-		'title'   => array('name' => 'title',   'label' => 'Title',   'type' => 'text',     'save' => 'direct', 'placeholder' => 'Enter title...', 'css_class' => 'input-lg'),
-		'slug'    => array('name' => 'slug',    'label' => 'Slug',    'type' => 'text',     'save' => 'direct'),
-		'body'    => array('name' => 'body',    'label' => 'Content', 'type' => 'richtext', 'save' => 'direct'),
-		'image'   => array('name' => 'image',   'label' => 'Image',   'type' => 'image'),
-		'gallery' => array('name' => 'gallery', 'label' => 'Gallery', 'type' => 'gallery'),
+	// ! -- Field groups
+	'groups' => array(
+		// ! Default
+		'default' => array(
+			'name'   => 'Content',
+			'fields' => array(
+				'title'   => array('name' => 'title',   'label' => 'Title',   'type' => 'text',     'save' => 'direct', 'placeholder' => 'Enter title...', 'css_class' => 'input-lg'),
+				'body'    => array('name' => 'body',    'label' => 'Content', 'type' => 'richtext', 'save' => 'direct'),
+			),
+		),
+		'media'   => array(
+			'name'   => 'Media',
+			'fields' => array(
+				'image'   => array('name' => 'image',   'label' => 'Image',   'type' => 'image'),
+				'gallery' => array('name' => 'gallery', 'label' => 'Gallery', 'type' => 'gallery'),
+			),
+		),
 	),
 );

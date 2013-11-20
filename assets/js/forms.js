@@ -30,7 +30,7 @@ App.Forms = {
 		} else if (App.input('g')) {
 			App.Forms.selectGroup(App.input('g'));
 		} else {
-			App.Forms.selectGroup('default');
+			App.Forms.selectGroup('field-group-default');
 		}
 	},
 
@@ -38,22 +38,25 @@ App.Forms = {
 	 * Add clicks to field group navigation
 	 */
 	addGroupClicks: function() {
-		$("#field-groups a").click(function() {
+		$(".field-group-picker a").click(function(e) {
 			App.Forms.selectGroup($(this).attr("href"));
+			e.preventDefault();
 		});
 	},
 
 	selectGroup: function(id) {
 		var groupId = id.replace(/\#/g, "");
-		var $group = $("#fs-" + groupId);
-		var $li    = $("#fs-" + groupId + "-trigger");
+		var $group = $("#" + groupId);
+		var $li    = $("#" + groupId + "-trigger");
+		console.log($li);
+		console.log(groupId);
 
 		// Mark navigation
-		$("#field-groups li").removeClass("active");
+		$(".field-group-picker li").removeClass("active");
 		$li.addClass("active");
 
 		// Toggle groups
-		$(".resource-fs").not($group).hide();
+		$(".field-group").not($group).hide();
 		$group.show();
 
 		// Rememeber active group

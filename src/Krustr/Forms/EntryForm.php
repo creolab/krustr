@@ -1,6 +1,6 @@
 <?php namespace Krustr\Forms;
 
-use Config, Form, View;
+use Config, Form, Log, View;
 use Krustr\Repositories\Entities\ChannelEntity;
 
 /**
@@ -63,23 +63,46 @@ class EntryForm extends BaseForm implements FormInterface {
 		// Start
 		$html = $this->openForm();
 
+		// Grid row
+		$html .= '<div class="row">';
+
+		// Aside (field groups)
+		$html .= $this->renderAside();
+
+		// Start content fields
+		$html .= '<div class="fields col-md-10">';
+
 		// Hidden fields
 		$html .= $this->hiddenFields();
 
 		// Render each field
-		foreach ($this->channel->fields as $name => $field)
+		foreach ($this->channel->groups as $groupName => $group)
 		{
-			// Get value
-			$value = $this->entry ? $this->entry->$name : null;
-			$class = $field->class;
-			if ( ! $value and $this->entry) $value = $this->entry->field($name);
+			// Open fieldset
+			$html .= '<fieldset id="field-group-'.$groupName.'" class="field-group">';
+			$html .= '<h3 class="field-group-title">'.$group->name.'</h3>';
 
-			// Instance of field object
-			$fieldInstance = new $class($field, $value);
+			foreach ($group->fields as $name => $field)
+			{
+				// Get value
+				$value = $this->entry ? $this->entry->$name : null;
+				$class = $field->class;
+				if ( ! $value and $this->entry) $value = $this->entry->field($name);
 
-			// And fetch HTML for rendering
-			$html .= $fieldInstance->render($value);
+				// Instance of field object
+				if (class_exists($class)) $fieldInstance = new $class($field, $value);
+				else                      Log::error('[KRUSTR] [ENTRYFORM] Error when rendering form. Class by the name of "'.$class.'" for "'.$field->type.'" field type could not be found.');
+
+				// And fetch HTML for rendering
+				$html .= $fieldInstance->render($value);
+			}
+
+			// Close the fieldset
+			$html .= '</fieldset>';
 		}
+
+		// End content fields and grid row
+		$html .= '</div></div>';
 
 		// Close the form
 		$html .= $this->closeForm();
@@ -114,6 +137,23 @@ class EntryForm extends BaseForm implements FormInterface {
 	{
 		$html  = Form::hidden('channel',  $this->channel->resource);
 		$html .= Form::hidden('entry_id', $this->entry ? $this->entry->id : null);
+
+		return $html;
+	}
+
+	/**
+	 * Render sidebar for form
+	 *
+	 * @return string
+	 */
+	public function renderAside()
+	{
+		$html  = '<aside class="form-aside col-md-2">';
+
+		// Render the groups
+		$html .= View::make('krustr::entries._partial.field_groups')->withGroups($this->channel->groups);
+
+		$html .= '</aside>';
 
 		return $html;
 	}

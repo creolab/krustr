@@ -44,6 +44,13 @@ return array(
 		'icon'  => 'picture',
 	),
 
+	// ! Video field
+	'video' => array(
+		'class' => '\Krustr\Forms\Fields\Video\VideoField',
+		'view'  => 'krustr_fields::video.views.video_field',
+		'icon'  => 'film',
+	),
+
 	// ! Selectbox
 	'selectbox' => array(
 		'class' => '\Krustr\Forms\Fields\Selectbox\SelectboxField',

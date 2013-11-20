@@ -17,7 +17,7 @@
 		</div>
 	</div>
 
-	<div id="entry-form entry-form-create">
+	<div id="entry-form" class="entry-form entry-form-create boxed">
 		{{ $form->render() }}
 	</div>
 @stop
