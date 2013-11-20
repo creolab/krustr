@@ -12,9 +12,7 @@
 		</div>
 	</div>
 
-	<div class="boxed">
-		<div id="user-form" class="user-form-edit boxed">
-			{{ $form->render() }}
-		</div>
+	<div id="user-form" class="user-form-edit boxed">
+		{{ $form->render() }}
 	</div>
 @stop
