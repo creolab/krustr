@@ -1,7 +1,8 @@
 App.Forms = {
 	params: {
-		ckEditorPath: App.get('assetsPath') + '/vendor/ckeditor',
-		ckEditorURL:  App.get('assetsPath')
+		ckEditorPath:   App.get('assetsPath') + '/vendor/ckeditor',
+		ckEditorURL:    App.get('assetsPath'),
+		ckEditorConfig: App.get('assetsPath') + '/js/editor_config.js'
 	},
 
 	/**
@@ -73,7 +74,7 @@ App.Forms = {
 
 			$(".richtext").each(function() {
 				CKEDITOR.replace(this, {
-					customConfig: App.url(App.Forms.params.ckEditorPath + '/config.js'),
+					customConfig: App.url(App.Forms.params.ckEditorConfig),
 					baseHref:     App.url(),
 					contentsCss:  App.url(App.Forms.params.ckEditorPath + '/contents.css')
 				});
