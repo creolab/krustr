@@ -1,6 +1,6 @@
 <?php namespace Krustr\Repositories;
 
-use Auth, Str;
+use Auth, Log, Str;
 use Krustr\Models\Entry;
 use Krustr\Repositories\Collections\EntryCollection;
 use Krustr\Repositories\Entities\EntryEntity;
@@ -202,6 +202,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 
 			// Save custom fields
 			$this->fields->saveAllForEntry($id, $data);
+			Log::debug('[KRUSTR] [ENTRYREPOSITORY] Entry ['.$id.'] was updated.');
 
 			return $entry->save();
 		}

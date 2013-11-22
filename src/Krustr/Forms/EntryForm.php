@@ -90,11 +90,17 @@ class EntryForm extends BaseForm implements FormInterface {
 				if ( ! $value and $this->entry) $value = $this->entry->field($name);
 
 				// Instance of field object
-				if (class_exists($class)) $fieldInstance = new $class($field, $value);
-				else                      Log::error('[KRUSTR] [ENTRYFORM] Error when rendering form. Class by the name of "'.$class.'" for "'.$field->type.'" field type could not be found.');
+				if (class_exists($class))
+				{
+					$fieldInstance = new $class($field, $value);
 
-				// And fetch HTML for rendering
-				$html .= $fieldInstance->render($value);
+					// And fetch HTML for rendering
+					$html .= $fieldInstance->render($value);
+				}
+				else
+				{
+					Log::error('[KRUSTR] [ENTRYFORM] Error when rendering form. Class by the name of "'.$class.'" for "'.$field->type.'" field type could not be found.');
+				}
 			}
 
 			// Close the fieldset
