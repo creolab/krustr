@@ -30,7 +30,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 *
 	 * @return EntryCollection
 	 */
-	public function all($status = null)
+	public function all($status = null, $options = array())
 	{
 		$query = Entry::with(array('author', 'fields'))->orderBy('created_at', 'desc');
 

@@ -111,6 +111,8 @@ class Finder extends \Illuminate\Routing\Controller {
 
 		// The view
 		$view = 'theme::'.$this->channel->resource_singular.'.collection';
+		if ( ! View::exists($view)) $view = 'theme::'.$this->channel->resource;
+		if ( ! View::exists($view)) $view = 'theme::'.$this->channel->resource.'collection';
 		if ( ! View::exists($view)) $view = 'theme::collection';
 		if ( ! View::exists($view)) $view = 'theme::index';
 

@@ -22,23 +22,32 @@ if ( ! function_exists('theme_assets'))
 	 * @param  string $path
 	 * @return string
 	 */
-	function theme_assets($name, $addAssets = array(), $addOptions = array())
+	function theme_assets($collection = 'theme.css', $assets = array(), $options = array())
 	{
-		$collection = Config::get('theme::assets.' . $name);
+		// Set paths for theme
+		$theme = app('config')->get('krustr::theme');
+		app('config')->set('assets::public_dir', "themes/$theme/assets");
+		app('config')->set('assets::cache_path', "themes/$theme/assets/cache");
 
-		// Get assets and filters
-		if ($collection)
+		// Find collection config
+		$configCollection = str_replace(".", "_", $collection);
+		$config           = app('config')->get('theme::assets.'.$configCollection);
+
+		if ($config and is_array($config))
 		{
-			$assets  = (array) array_get($collection, 'assets');
-			$filters = (array) array_get($collection, 'filters');
+			$assets  = array_get($config, 'assets');
+			$options = array_except($config, 'assets');
 
-			// Merge 'em
-			if ($addAssets  and is_array($addAssets))                        $assets  = array_merge($assets, $addAssets);
-			if ($addOptions and is_array(array_get($addOptions, 'filters'))) $filters = array_merge($filters, array_get($addOptions, 'filters'));
-
-			// Return tags
-			return app('assets')->assets($name, $assets, $filters);
+			if ( ! $name = array_get($options, 'name')) $options['name'] = $collection;
 		}
+		elseif (array_get($assets, 'assets'))
+		{
+			$assets          = array_get($assets, 'assets');
+			$options         = array_except($assets, 'assets');
+			$options['name'] = $collection;
+		}
+
+		return app('assets')->assets($collection, $assets, $options);
 	}
 }
 
@@ -59,27 +68,6 @@ if ( ! function_exists('theme_asset_tag'))
 		elseif ($ext == 'css') return '<link rel="stylesheet" href="'.$path.'">'.PHP_EOL;
 		elseif ($ext == 'jpg') return '<img src="'.$path.'">'.PHP_EOL;
 		else                   return $path.PHP_EOL;
-	}
-}
-
-if ( ! function_exists('theme_assets'))
-{
-	/**
-	 * Include a theme asset
-	 *
-	 * @param  string $path
-	 * @return string
-	 */
-	function theme_assets($id = 'default.css', $assets = array(), $filters = array())
-	{
-		$themeAssets = array();
-
-		foreach ($assets as $asset)
-		{
-			$themeAssets[] = $asset;
-		}
-
-		return assets($id, $themeAssets, $filters);
 	}
 }
 

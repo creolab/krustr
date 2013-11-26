@@ -60,9 +60,9 @@ class KrustrServiceProvider extends ServiceProvider {
 	public function bootCommands()
 	{
 		// Add install command to IoC
-		// $this->app['krustr.commands.install'] = $this->app->share(function($app) {
-		// 	return new Commands\InstallCommand;
-		// });
+		$this->app['krustr.commands.install'] = $this->app->share(function($app) {
+			return new Commands\InstallCommand;
+		});
 
 		// Add refresh command to IoC
 		// $this->app['krustr.commands.refresh'] = $this->app->share(function($app) {
@@ -75,7 +75,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		});
 
 		// Now register all the commands
-		$this->commands(/*'krustr.commands.install', 'krustr.commands.refresh',*/ 'krustr.commands.dev');
+		$this->commands('krustr.commands.install', /*'krustr.commands.refresh',*/ 'krustr.commands.dev');
 	}
 
 	public function registerChannels()
@@ -135,7 +135,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		$blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
 
 		// Single asset
-		/*$blade->extend(function($value, $compiler)
+		$blade->extend(function($value, $compiler)
 		{
 			$matcher = $compiler->createMatcher('theme_asset');
 
@@ -148,7 +148,7 @@ class KrustrServiceProvider extends ServiceProvider {
 			$matcher = $compiler->createMatcher('theme_assets');
 
 			return preg_replace($matcher, '$1<?php echo theme_assets$2; ?>', $value);
-		});*/
+		});
 
 		// Resize an image
 		$blade->extend(function($value, $compiler)

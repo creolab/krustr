@@ -2,7 +2,9 @@
 
 return array(
 
-	'app.css' => array(
+	'app_css' => array(
+		'name'   => 'app.css',
+		'type'   => 'css',
 		'assets' => array(
 			'vendor/bootstrap/bootstrap.min.css',
 			'vendor/font-awesome/font-awesome.min.css',
@@ -21,7 +23,9 @@ return array(
 		'combine' => true,
 	),
 
-	'app.js' => array(
+	'app_js' => array(
+		'name'   => 'app.js',
+		'type'   => 'js',
 		'assets' => array(
 			'vendor/jquery.min.js',
 			'vendor/underscore.js',
