@@ -66,4 +66,16 @@ class ChannelConfigRepository implements Interfaces\ChannelRepositoryInterface {
 		}
 	}
 
+	/**
+	 * Return all fields ungrouped
+	 *
+	 * @return array
+	 */
+	public function fields()
+	{
+		$fields = new Krustr\Repositories\Collections\FieldCollection;
+
+		return $fields;
+	}
+
 }

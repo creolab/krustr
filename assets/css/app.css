@@ -3,8 +3,9 @@ body { background: #f6f6f6 url(../images/bg_light_alu.png); padding-top: 43px; p
 
 /* ! Layout */
 #main { padding: 5px 0 20px 0; }
+.container { max-width: 2000px; padding-right: 25px; padding-left: 25px; }
 @media (min-width: 1200px) {
-	.container { max-width: 2000px; padding-right: 25px; padding-left: 25px; }
+	.container { max-width: 2000px; padding-right: 25px; padding-left: 25px; width: auto; }
 }
 
 /* ! Auth header */

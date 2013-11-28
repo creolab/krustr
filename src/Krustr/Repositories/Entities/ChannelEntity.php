@@ -16,20 +16,20 @@ class ChannelEntity extends Entity {
 	{
 		// Get all groups
 		$this->groups = new \Krustr\Repositories\Collections\FieldGroupCollection((array) array_get($config, 'groups'));
-		$this->fields = new \Krustr\Repositories\Collections\FieldCollection(array());
+		$this->fields = new \Krustr\Repositories\Collections\FieldCollection;
 
 		// And get all fields
 		foreach ($this->groups as $groupName => &$group)
 		{
 			foreach ($group->fields as $name => &$field)
 			{
-				$this->fields->put($name, $field);
+				$this->fields[$name] = $field;
 			}
 		}
 
-		// Get all fields and remove array from data
-		$this->fields = new \Krustr\Repositories\Collections\FieldCollection((array) array_get($config, 'fields'));
+		// Get all fields and groups, and remove array from data
 		array_forget($config, 'fields');
+		array_forget($config, 'groups');
 
 		// Rest of the data
 		$this->data = $config;

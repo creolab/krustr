@@ -202,3 +202,34 @@ if ( ! function_exists('gravatar'))
 		return $url;
 	}
 }
+
+if ( ! function_exists('image'))
+{
+	/**
+	 * Resize an image
+	 * @param  string  $url
+	 * @param  integer $width
+	 * @param  integer $height
+	 * @param  boolean $crop
+	 * @return string
+	 */
+	function image($url, $width = 100, $height = null, $crop = false, $quality = null)
+	{
+		return Creolab\Image\ImageFacade::resize($url, $width, $height, $crop, $quality);
+	}
+}
+
+if ( ! function_exists('thumb'))
+{
+	/**
+	 * Helper for creating thumbs
+	 * @param  string  $url
+	 * @param  integer $width
+	 * @param  integer $height
+	 * @return string
+	 */
+	function thumb($url, $width, $height = null)
+	{
+		return Creolab\Image\ImageFacade::thumb($url, $width, $height);
+	}
+}

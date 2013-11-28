@@ -52,6 +52,16 @@ class Navigation {
 	}
 
 	/**
+	 * Return a collection
+	 * @param  string $name
+	 * @return Collection
+	 */
+	public function collection($name)
+	{
+		if (isset($this->collections[$name])) return $this->collections[$name];
+	}
+
+	/**
 	 * Render a collection
 	 *
 	 * @param  string $name

@@ -30,8 +30,10 @@ App.Forms = {
 			App.Forms.selectGroup(App.get('hash'));
 		} else if (App.input('g')) {
 			App.Forms.selectGroup(App.input('g'));
+		} else if (ACTIVE_FIELD_GROUP) {
+			App.Forms.selectGroup(ACTIVE_FIELD_GROUP);
 		} else {
-			App.Forms.selectGroup('field-group-default');
+			App.Forms.selectGroup('default');
 		}
 	},
 
@@ -41,16 +43,15 @@ App.Forms = {
 	addGroupClicks: function() {
 		$(".field-group-picker a").click(function(e) {
 			App.Forms.selectGroup($(this).attr("href"));
-			e.preventDefault();
+			return true;
 		});
 	},
 
 	selectGroup: function(id) {
 		var groupId = id.replace(/\#/g, "");
-		var $group = $("#" + groupId);
-		var $li    = $("#" + groupId + "-trigger");
-		console.log($li);
-		console.log(groupId);
+		var elId    = 'field-group-' + groupId;
+		var $group  = $("#" + elId);
+		var $li     = $("#" + elId + "-trigger");
 
 		// Mark navigation
 		$(".field-group-picker li").removeClass("active");

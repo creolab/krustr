@@ -16,7 +16,7 @@
 		</div>
 	</div>
 
-	<div class="no-image" style="display: <?php echo ( ! $value) ? 'block' : 'none'; ?>">
+	<div class="no-image" style="display: <?php echo ( ! $value) ? 'none' : 'none'; ?>">
 		<div class="no-image-icon">{{ admin_icn('ban-circle') }}</div>
 		<div class="no-image-text">
 			There's no image currently uploaded<br>

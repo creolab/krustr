@@ -24,6 +24,31 @@ class Collection extends \Illuminate\Support\Collection {
 		{
 			$this->items[] = new Item($item);
 		}
+
+		// Order the collection
+		$this->order();
+	}
+
+	/**
+	 * Order the collection
+	 * @return void
+	 */
+	public function order()
+	{
+		$this->sort(function($a, $b) {
+			return $a->order > $b->order;
+		});
+	}
+
+	/**
+	 * Add new item to collection
+	 * @param array $config
+	 */
+	public function addItem(array $item)
+	{
+		$this->items[] = new Item($item);
+
+		$this->order();
 	}
 
 	/**

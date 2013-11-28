@@ -2,6 +2,7 @@
 
 use Krustr\Repositories\Interfaces\EntryRepositoryInterface;
 use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
+use Krustr\Services\Profiler;
 use App, Config, Redirect, Request, View;
 
 /**
@@ -56,11 +57,15 @@ class Finder extends \Illuminate\Routing\Controller {
 	 */
 	public function home()
 	{
+		Profiler::start('FINDER - HOME');
+
 		// Get entry used for the home page
 		$entry = $this->entryRepository->home();
 
 		// Share with all views
 		View::share('entry', $entry);
+
+		Profiler::end('FINDER - HOME');
 
 		return $this->render('index');
 	}
@@ -68,15 +73,25 @@ class Finder extends \Illuminate\Routing\Controller {
 	/**
 	 * Single content entry
 	 *
-	 * @param  string $slug
-	 * @param  string $channel
+	 * @param  int|string $id
+	 * @param  string     $channel
 	 * @return View
 	 */
-	public function entry($slug = null)
+	public function entry($id = null)
 	{
-		// Find entry
-		if ($this->channel) $entry = $this->entryRepository->findPublishedBySlug($slug, $this->channel->resource);
-		else                $entry = $this->entryRepository->findPublishedBySlug($slug);
+		Profiler::start('FINDER - ENTRY');
+
+		// Find entry by slug or ID
+		if (is_numeric($id))
+		{
+			if ($this->channel) $entry = $this->entryRepository->findPublished((int) $id, $this->channel->resource);
+			else                $entry = $this->entryRepository->findPublished((int) $id);
+		}
+		else
+		{
+			if ($this->channel) $entry = $this->entryRepository->findPublishedBySlug($id, $this->channel->resource);
+			else                $entry = $this->entryRepository->findPublishedBySlug($id);
+		}
 
 		// Abort if not found
 		if ( ! $entry) \App::abort(404, 'Entry not found');
@@ -87,11 +102,15 @@ class Finder extends \Illuminate\Routing\Controller {
 		// Views that we need to search for
 		$views = array(
 			$entry->slug, // contact.blade.php
-			$this->channel->resource_singular . '.' . $entry->slug, // page.contact.blade.php
+			$this->channel->resource . '_entry', // shop.entry.blade.php
+			$this->channel->resource . '_' . $this->channel->resource_singular, // shop.product.blade.php
+			$this->channel->resource_singular . '_' . $entry->slug, // page.contact.blade.php
 			$this->channel->resource_singular, // page.blade.php
 			'entry',
 			'index',
 		);
+
+		Profiler::end('FINDER - ENTRY');
 
 		// The view
 		return $this->render($views);
@@ -105,18 +124,26 @@ class Finder extends \Illuminate\Routing\Controller {
 	 */
 	public function entryCollection()
 	{
+		Profiler::start('FINDER - ENTRY COLLECTION');
+
 		// Get content
 		$entries = $this->entryRepository->allPublishedInChannel($this->channel->resource);
-		View::share('entries', $entries);
+		View::share('entries',    $entries);
+		View::share('pagination', $this->entryRepository->pagination());
+
+		// Views that we need to search for
+		$views = array(
+			$this->channel->resource_singular.'_collection',
+			$this->channel->resource,
+			$this->channel->resource.'_collection',
+			'collection',
+			'index',
+		);
+
+		Profiler::end('FINDER - ENTRY COLLECTION');
 
 		// The view
-		$view = 'theme::'.$this->channel->resource_singular.'.collection';
-		if ( ! View::exists($view)) $view = 'theme::'.$this->channel->resource;
-		if ( ! View::exists($view)) $view = 'theme::'.$this->channel->resource.'collection';
-		if ( ! View::exists($view)) $view = 'theme::collection';
-		if ( ! View::exists($view)) $view = 'theme::index';
-
-		return View::make($view);
+		return $this->render($views);
 	}
 
 	/**
@@ -127,6 +154,8 @@ class Finder extends \Illuminate\Routing\Controller {
 	 */
 	public function resolveChannel($channel = null)
 	{
+		Profiler::start('FINDER - RESOLVE CHANNEL');
+
 		if ( ! $channel) $channel = Request::segment(1);
 
 		// Find and share channel
@@ -141,6 +170,8 @@ class Finder extends \Illuminate\Routing\Controller {
 		// Share with all views
 		View::share('channel', $this->channel);
 
+		Profiler::end('FINDER - RESOLVE CHANNEL');
+
 		return $this->channel;
 	}
 
@@ -153,6 +184,8 @@ class Finder extends \Illuminate\Routing\Controller {
 	 */
 	public function render($views = array(), $data = array())
 	{
+		Profiler::start('FINDER - RENDER');
+
 		if ( ! is_array($views)) $views = array($views);
 
 		// View to load
@@ -163,12 +196,16 @@ class Finder extends \Illuminate\Routing\Controller {
 		{
 			if (View::exists('theme::' . $view))
 			{
-				View::share('template',       $view);
-				View::share('template_class', 'tpl-' . str_replace(",", "", $view));
 				$loadView = 'theme::' . $view;
 				break;
 			}
 		}
+
+		// Share some data with the view
+		View::share('template',       $view);
+		View::share('template_class', 'tpl-' . str_replace(",", "", $view));
+
+		Profiler::end('FINDER - RENDER', $view);
 
 		// Render view or abort
 		if (View::exists($loadView)) return View::make($loadView);

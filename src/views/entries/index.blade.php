@@ -54,5 +54,7 @@
 		@else
 			<div class="alert alert-warning not-found">{{ admin_icn('warning-sign') }} Nothing found.</div>
 		@endif
+
+		{{ $pagination->links() }}
 	</div>
 @stop

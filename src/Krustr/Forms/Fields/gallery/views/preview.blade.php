@@ -5,5 +5,5 @@
 		<?php echo '<pre>'; print_r(var_dump($value)); echo '</pre>'; ?>
 	</p>
 @else
-	<p>No image...</p>
+
 @endif

@@ -1,6 +1,6 @@
 <?php namespace Krustr\Forms;
 
-use Config, Form, Log, View;
+use Config, Form, Input, Log, Session, View;
 use Krustr\Repositories\Entities\ChannelEntity;
 
 /**
@@ -107,6 +107,10 @@ class EntryForm extends BaseForm implements FormInterface {
 			$html .= '</fieldset>';
 		}
 
+		// Special groups
+		$html .= $this->renderSpecialGroups();
+
+
 		// End content fields and grid row
 		$html .= '</div></div>';
 
@@ -143,6 +147,7 @@ class EntryForm extends BaseForm implements FormInterface {
 	{
 		$html  = Form::hidden('channel',  $this->channel->resource);
 		$html .= Form::hidden('entry_id', $this->entry ? $this->entry->id : null);
+		$html .= Form::hidden('active_field_group', Session::get('active_field_group'));
 
 		return $html;
 	}
@@ -160,6 +165,14 @@ class EntryForm extends BaseForm implements FormInterface {
 		$html .= View::make('krustr::entries._partial.field_groups')->withGroups($this->channel->groups);
 
 		$html .= '</aside>';
+
+		return $html;
+	}
+
+	public function renderSpecialGroups()
+	{
+		$html  = View::make('krustr::entries._partial.taxonomies');
+		$html .= View::make('krustr::entries._partial.settings');
 
 		return $html;
 	}

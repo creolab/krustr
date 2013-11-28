@@ -54,7 +54,10 @@ class EntryController extends BaseController {
 		// Find in repository
 		$entries = $this->repository->allInChannel($this->channel->name);
 
-		return View::make('krustr::entries.index', array('entries' => $entries));
+		return View::make('krustr::entries.index', array(
+			'entries'    => $entries,
+			'pagination' => $this->repository->pagination()
+		));
 	}
 
 	/**
@@ -78,8 +81,7 @@ class EntryController extends BaseController {
 	{
 		if ($id = $this->repository->create(Input::all()))
 		{
-			return Redirect::back()->withAlertSuccess('Saved.');
-			return Redirect::route('backend.content.'.$this->channel->name.'.edit', array($id))->withAlertSucces("Saved.");
+			return Redirect::route('backend.content.'.$this->channel->name.'.edit', $id)->withAlertSuccess("Saved.");
 		}
 
 		return Redirect::back()->withInput()->withErrors($this->repository->errors());
@@ -108,7 +110,7 @@ class EntryController extends BaseController {
 	public function edit($id)
 	{
 		// Get entry and prepare the form
-		$entry = $this->repository->find($id, $this->channel->name);
+		$entry = $this->repository->findInChannel($id, $this->channel->name);
 		$form  = new EntryForm($this->channel, $entry);
 
 		return View::make('krustr::entries.edit')->withEntry($entry)->withForm($form);
@@ -124,10 +126,10 @@ class EntryController extends BaseController {
 	{
 		if ($this->repository->update($id, Input::all()))
 		{
-			return Redirect::back()->withAlertSuccess('Saved.');
+			return Redirect::back()->with('active_field_group', Input::get('active_field_group'))->withAlertSuccess('Saved.');
 		}
 
-		return Redirect::back()->withInput()->withErrors($this->repository->errors());
+		return Redirect::back()->with('active_field_group', Input::get('active_field_group'))->withInput()->withErrors($this->repository->errors());
 	}
 
 	/**

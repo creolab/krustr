@@ -15,6 +15,7 @@ class Bootstrap {
 		$this->entries = $this->app['Krustr\Repositories\Interfaces\EntryRepositoryInterface'];
 
 		$this->registerActions();
+		$this->registerFilters();
 		$this->registerRoutes();
 	}
 
@@ -25,7 +26,18 @@ class Bootstrap {
 
 	public function registerRoutes()
 	{
-		include public_path() . '/themes/' . $this->theme . '/routes.php';
+		if (file_exists($routes = public_path() . '/themes/' . $this->theme . '/routes.php'))
+		{
+			//include $routes;
+		}
+	}
+
+	public function registerFilters()
+	{
+		if (file_exists($filters = public_path() . '/themes/' . $this->theme . '/filters.php'))
+		{
+			include $filters;
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 <?php namespace Krustr;
 
+use Config, Request;
 use Illuminate\Support\ServiceProvider;
 
 class KrustrServiceProvider extends ServiceProvider {
@@ -174,8 +175,11 @@ class KrustrServiceProvider extends ServiceProvider {
 	 */
 	public function registerBackend()
 	{
-		// Register backend navigation
-		$this->app['krustr.navigation']->add('backend', $this->app['config']->get('krustr::navigation.backend'));
+		if (Request::segment(1) == Config::get('krustr::backend_url'))
+		{
+			// Register backend navigation
+			$this->app['krustr.navigation']->add('backend', $this->app['config']->get('krustr::navigation.backend'));
+		}
 	}
 
 	/**

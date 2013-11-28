@@ -18,7 +18,7 @@ class CreateFieldsTable extends Migration {
 			$table->integer('entry_id');
 			$table->string('name', 100);
 			$table->string('type', 20);
-			$table->text('value');
+			$table->text('value')->nullable();
 			$table->timestamps();
 		});
 	}
