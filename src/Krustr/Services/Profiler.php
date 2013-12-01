@@ -17,7 +17,7 @@ class Profiler {
 
 	public static function end($name, $message = null)
 	{
-		$duration = static::duration($name);
+		$duration = round(static::duration($name) * 1000, 2);
 
 		Log::debug("[PROFILER] [$name]: $duration ms [$message]");
 	}

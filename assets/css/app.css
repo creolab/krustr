@@ -7,6 +7,7 @@ body { background: #f6f6f6 url(../images/bg_light_alu.png); padding-top: 43px; p
 @media (min-width: 1200px) {
 	.container { max-width: 2000px; padding-right: 25px; padding-left: 25px; width: auto; }
 }
+.disable-hover { pointer-events: none; }
 
 /* ! Auth header */
 .auth-header { position: absolute; top: 0; right: 0; background: rgba(125,125,125,0.1); min-height: 40px; padding: 0 25px 0 15px; font-size: 10px; min-width: 120px; }

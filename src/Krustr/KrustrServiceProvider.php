@@ -12,6 +12,8 @@ class KrustrServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
+		\Krustr\Services\Profiler::start("KRUSTR BOOT");
+
 		$this->package('creolab/krustr', 'krustr', __DIR__.'/../');
 		$this->bootCommands();
 
@@ -42,6 +44,7 @@ class KrustrServiceProvider extends ServiceProvider {
 
 		// Initialize backend
 		$this->registerBackend();
+		\Krustr\Services\Profiler::end("KRUSTR BOOT");
 	}
 
 	/**
