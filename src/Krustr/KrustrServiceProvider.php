@@ -34,6 +34,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		$this->registerBindings();
 		$this->registerFieldDefinitions();
 		$this->registerChannels();
+		$this->registerTaxonomies();
 		$this->registerBladeExtensions();
 		$this->registerTheme();
 
@@ -82,15 +83,24 @@ class KrustrServiceProvider extends ServiceProvider {
 		$this->commands('krustr.commands.install', /*'krustr.commands.refresh',*/ 'krustr.commands.dev');
 	}
 
+	/**
+	 * Register all contentn channels with fields
+	 * @return void
+	 */
 	public function registerChannels()
 	{
 		$channelRepository = $this->app->make('Krustr\Repositories\Interfaces\ChannelRepositoryInterface');
 		$this->app['krustr.channels'] = new Repositories\Collections\ChannelCollection($channelRepository->all());
 	}
 
+	public function registerTaxonomies()
+	{
+		$taxonomyRepository = $this->app->make('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface');
+		$this->app['krustr.taxonomies'] = new Repositories\Collections\TaxonomyCollection($taxonomyRepository->all());
+	}
+
 	/**
 	 * Register all field definitions
-	 *
 	 * @return void
 	 */
 	public function registerFieldDefinitions()
@@ -108,6 +118,8 @@ class KrustrServiceProvider extends ServiceProvider {
 		// Register repositories
 		$this->app->bind('Krustr\Repositories\Interfaces\EntryRepositoryInterface',        'Krustr\Repositories\EntryDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\ChannelRepositoryInterface',      'Krustr\Repositories\ChannelConfigRepository');
+		$this->app->bind('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface',     'Krustr\Repositories\TaxonomyConfigRepository');
+		$this->app->bind('Krustr\Repositories\Interfaces\TermRepositoryInterface',         'Krustr\Repositories\TermDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\FieldRepositoryInterface',        'Krustr\Repositories\FieldDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\UserRepositoryInterface',         'Krustr\Repositories\UserDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\MediaRepositoryInterface',        'Krustr\Repositories\MediaDbRepository');

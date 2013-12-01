@@ -6,6 +6,7 @@ $controller    = 'Krustr\Controllers\\';
 $api           = $controller.'Api\\';
 $admin         = $controller.'Admin\\';
 $channels      = App::make('krustr.channels');
+$taxonomies    = App::make('krustr.taxonomies');
 
 // ! Assets settings
 if (Request::segment(1) == $backendPrefix)
@@ -28,7 +29,7 @@ Route::post($backendPrefix.'/login',  array('as' => $backendPrefix.'.login.post'
 // ! Backend routes
 if (Request::segment(1) == $backendPrefix)
 {
-	Route::group(array('prefix' => $backendPrefix, 'before' => 'krustr.backend.auth'), function() use ($admin, $channels, $backendPrefix)
+	Route::group(array('prefix' => $backendPrefix, 'before' => 'krustr.backend.auth'), function() use ($admin, $channels, $taxonomies, $backendPrefix)
 	{
 		Route::get('/', array('as' => $backendPrefix . '.dashboard', 'uses' => $admin.'DashboardController@index'));
 
@@ -41,6 +42,17 @@ if (Request::segment(1) == $backendPrefix)
 		foreach ($channels as $key => $channel)
 		{
 			Route::resource('content/'.$channel->name, $admin.'EntryController');
+		}
+
+		// ! ===> Redirect to 1st taxonomy
+		Route::get('taxonomy', array('as' => $backendPrefix . '.taxonomy', function() use ($taxonomies, $backendPrefix) {
+			return Redirect::to($backendPrefix . '/taxonomy/' . key($taxonomies));
+		}));
+
+		// ! ===> Taxonomies
+		foreach ($taxonomies as $key => $taxonomy)
+		{
+			Route::resource('taxonomy/'.$taxonomy->name, $admin.'TaxonomyController');
 		}
 
 		// ! ===> System

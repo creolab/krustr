@@ -21,6 +21,14 @@ return array(
 				'children' => app('config')->get('krustr::channels'),
 			),
 
+			// ! Taxonomies
+			'taxonomies' => array(
+				'order' => 300, 'label' => 'Taxonomies', 'icon'  => 'tasks', 'route' => 'backend.taxonomy',
+
+				// ! ==> Channels (Load from channels configuration)
+				'children' => app('config')->get('krustr::taxonomies'),
+			),
+
 			// ! System
 			'system' => array(
 				'order' => 9999, 'label' => 'System', 'icon'  => 'cog', 'route' => 'backend.system',

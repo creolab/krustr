@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTermsTable extends Migration {
+class CreateEntryTermTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,11 +12,11 @@ class CreateTermsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('terms', function(Blueprint $table)
+		Schema::table('entry_term', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('slug')->index();
-			$table->string('title');
+			$table->integer('entry_id')->index();
+			$table->integer('term_id')->index();
 			$table->string('taxonomy_id')->index();
 			$table->timestamps();
 		});
@@ -29,7 +29,7 @@ class CreateTermsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('terms');
+		Schema::drop('entry_term');
 	}
 
 }
