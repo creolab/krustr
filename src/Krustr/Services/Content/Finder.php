@@ -202,8 +202,7 @@ class Finder extends \Illuminate\Routing\Controller {
 		}
 
 		// Share some data with the view
-		View::share('template',       $view);
-		View::share('template_class', 'tpl-' . str_replace(",", "", $view));
+		View::share('template', $view);
 
 		Profiler::end('FINDER - RENDER', $view);
 

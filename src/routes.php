@@ -76,5 +76,4 @@ if (file_exists($routes = public_path() . '/themes/' . Config::get('krustr::them
 }
 
 // ! Public content routes
-$router = new Krustr\Services\Content\Router;
-$router->init();
+app('krustr.router')->init();

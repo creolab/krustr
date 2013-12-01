@@ -113,6 +113,12 @@ class KrustrServiceProvider extends ServiceProvider {
 		$this->app->bind('Krustr\Repositories\Interfaces\MediaRepositoryInterface',        'Krustr\Repositories\MediaDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\GalleryRepositoryInterface',      'Krustr\Repositories\GalleryDbRepository');
 
+		// Register the content router
+		$this->app->singleton('krustr.router', function($app)
+		{
+			return new \Krustr\Services\Content\Router($app);
+		});
+
 		// Register backend navigation environment
 		$this->app->singleton('krustr.navigation', function($app)
 		{

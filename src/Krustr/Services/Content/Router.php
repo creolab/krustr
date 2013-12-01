@@ -40,8 +40,8 @@ class Router {
 		// Channel routes
 		foreach ($this->channels as $channel)
 		{
-			Route::get($channel->resource,           array('as' => 'channel.'.$channel->resource.'.collection', 'uses' => 'Krustr\Services\Content\Finder@entryCollection'));
-			Route::get($channel->resource . '/{id}', array('as' => 'channel.'.$channel->resource.'.entry',      'uses' => 'Krustr\Services\Content\Finder@entry'));
+			Route::get($channel->resource,           array('as' => 'channel.'.$channel->resource,           'uses' => 'Krustr\Services\Content\Finder@entryCollection'));
+			Route::get($channel->resource . '/{id}', array('as' => 'channel.'.$channel->resource.'.entry',  'uses' => 'Krustr\Services\Content\Finder@entry'));
 		}
 
 		// Page routes

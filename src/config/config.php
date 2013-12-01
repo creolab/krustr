@@ -15,4 +15,7 @@ return array(
 	// ! Database (no prefix by default)
 	'table_prefix' => '',
 
+	// ! Debug
+	'debug' => false,
+
 );

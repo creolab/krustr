@@ -12,14 +12,17 @@ class Profiler {
 
 	public static function start($name)
 	{
-		static::$marks[$name] = microtime();
+		if (app('config')->get('krustr::debug')) static::$marks[$name] = microtime();
 	}
 
 	public static function end($name, $message = null)
 	{
-		$duration = round(static::duration($name) * 1000, 2);
+		if (app('config')->get('krustr::debug'))
+		{
+			$duration = round(static::duration($name) * 1000, 2);
 
-		Log::debug("[PROFILER] [$name]: $duration ms [$message]");
+			Log::debug("[PROFILER] [$name]: $duration ms [$message]");
+		}
 	}
 
 	public static function duration($name)
