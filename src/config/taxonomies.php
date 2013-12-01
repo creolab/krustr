@@ -2,7 +2,7 @@
 
 return array(
 
-	'category' => array(
+	'categories' => array(
 		'name'           => 'categories',
 		'name_singular'  => 'category',
 		'title'          => 'Categories',
@@ -11,7 +11,7 @@ return array(
 		'order'          => 100,
 	),
 
-	'tag' => array(
+	'tags' => array(
 		'name'           => 'tags',
 		'name_singular'  => 'tag',
 		'title'          => 'Tags',

@@ -3,44 +3,34 @@
 use Config, Form, Input, Log, Session, View;
 use Krustr\Repositories\Entities\ChannelEntity;
 
-/**
- * Base form class for content entries
- *
- * @author Boris Strahija <bstrahija@gmail.com>
- */
 class EntryForm extends BaseForm implements FormInterface {
 
 	/**
 	 * Entry channel
-	 *
 	 * @var array
 	 */
 	protected $channel;
 
 	/**
 	 * Content entry object
-	 *
 	 * @var array
 	 */
 	protected $entry;
 
 	/**
 	 * Container holding all field objects
-	 *
 	 * @var array
 	 */
 	protected $fields = array();
 
 	/**
 	 * Container holding all field groups
-	 *
 	 * @var array
 	 */
 	protected $groups = array();
 
 	/**
 	 * Initialize new form object
-	 *
 	 * @param string $channel
 	 * @param mixed  $entry
 	 */
@@ -55,7 +45,6 @@ class EntryForm extends BaseForm implements FormInterface {
 
 	/**
 	 * Renders the form
-	 *
 	 * @return string
 	 */
 	public function render()
@@ -122,7 +111,6 @@ class EntryForm extends BaseForm implements FormInterface {
 
 	/**
 	 * Open the form tag with proper URL and method
-	 *
 	 * @return string
 	 */
 	public function openForm()
@@ -140,7 +128,6 @@ class EntryForm extends BaseForm implements FormInterface {
 
 	/**
 	 * Add hidden fields to form
-	 *
 	 * @return string
 	 */
 	public function hiddenFields()
@@ -154,7 +141,6 @@ class EntryForm extends BaseForm implements FormInterface {
 
 	/**
 	 * Render sidebar for form
-	 *
 	 * @return string
 	 */
 	public function renderAside()
@@ -169,8 +155,30 @@ class EntryForm extends BaseForm implements FormInterface {
 		return $html;
 	}
 
+	/**
+	 * Render special field groups
+	 * @return string
+	 */
 	public function renderSpecialGroups()
 	{
+		// Resolve term repo
+		$terms          = array();
+		$termRepository = app('Krustr\Repositories\Interfaces\TermRepositoryInterface');
+		$taxRepository  = app('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface');
+
+		// And get all terms
+		foreach ($this->channel->taxonomies as $taxonomy)
+		{
+			$terms[$taxonomy] = $taxRepository->find($taxonomy);
+
+			// And find all terms - @TODO: This needs to be optimized
+			if ($terms[$taxonomy]) $terms[$taxonomy]->terms = $termRepository->all($taxonomy);
+		}
+
+		// Share it with the view
+		View::share('taxonomy_terms', $terms);
+
+		// Render partials
 		$html  = View::make('krustr::entries._partial.taxonomies');
 		$html .= View::make('krustr::entries._partial.settings');
 
@@ -179,7 +187,6 @@ class EntryForm extends BaseForm implements FormInterface {
 
 	/**
 	 * Close the form HTML and add actions
-	 *
 	 * @return string
 	 */
 	public function closeForm()

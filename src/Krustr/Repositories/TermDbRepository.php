@@ -5,7 +5,7 @@ use Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface;
 use Krustr\Repositories\Collections\TermCollection;
 use Krustr\Repositories\Entities\TermEntity;
 
-class TermdDbRepository implements Interfaces\FieldRepositoryInterface {
+class TermDbRepository implements Interfaces\TermRepositoryInterface {
 
 	/**
 	 * Taxonomies repo
@@ -27,9 +27,11 @@ class TermdDbRepository implements Interfaces\FieldRepositoryInterface {
 	 * @param  integer $entryId
 	 * @return mixed
 	 */
-	public function all($taxId)
+	public function all($taxonomyId)
 	{
-		return array();
+		$terms = Term::where('taxonomy_id', $taxonomyId)->orderBy('title')->get();
+
+		return new TermCollection($terms->toArray());
 	}
 
 	/**
@@ -45,47 +47,32 @@ class TermdDbRepository implements Interfaces\FieldRepositoryInterface {
 
 	/**
 	 * Create new field value
-	 *
-	 * @param integer $entryId
-	 * @param string  $key
-	 * @param mixed   $value
 	 */
-	public function create($entryId, $key, $value, $definition = null)
+	public function create()
 	{
 
 	}
 
 	/**
 	 * Update field value
-	 *
-	 * @param  integer $entryId
-	 * @param  string  $key
-	 * @param  mixed   $value
-	 * @return mixed
 	 */
-	public function update($entryId, $key, $value, $definition = null)
+	public function update($id)
 	{
 
 	}
 
 	/**
 	 * Add if missing, else update
-	 * @param integer $entryId
-	 * @param string  $key
-	 * @param mixed   $value
 	 */
-	public function createOrUpdate($entryId, $key, $value, $definition = null)
+	public function createOrUpdate()
 	{
 
 	}
 
 	/**
 	 * Check if field exists in DB
-	 * @param  integer $entryId
-	 * @param  string  $key
-	 * @return mixed
 	 */
-	public function exists($entryId, $key)
+	public function exists($name)
 	{
 		return false;
 	}
