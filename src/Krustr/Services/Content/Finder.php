@@ -2,49 +2,48 @@
 
 use Krustr\Repositories\Interfaces\EntryRepositoryInterface;
 use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
+use Krustr\Repositories\Interfaces\TermRepositoryInterface;
 use Krustr\Services\Profiler;
 use App, Config, Redirect, Request, View;
 
-/**
- * Find requested content and assign to a view
- *
- * @author Boris Strahija <boris@creolab.hr>
- */
 class Finder extends \Illuminate\Routing\Controller {
 
 	/**
 	 * Current content channel
-	 *
 	 * @var ChannelEntity
 	 */
 	protected $channel;
 
 	/**
 	 * Instance of entry repository
-	 *
 	 * @var EntryRepositoryInterface
 	 */
 	protected $entryRepository;
 
 	/**
 	 * Instance of channel repository
-	 *
 	 * @var ChannelRepositoryInterface
 	 */
 	protected $channelRepository;
 
 	/**
+	 * Instance of term repository
+	 * @var TermRepositoryInterface
+	 */
+	protected $termRepository;
+
+	/**
 	 * Init public controller with dependencies
-	 *
 	 * @param  EntryRepositoryInterface    $entryRepository
 	 * @param  ChannelRepositoryInterface  $channelRepository
 	 * @return void
 	 */
-	public function __construct(EntryRepositoryInterface $entryRepository, ChannelRepositoryInterface $channelRepository)
+	public function __construct(EntryRepositoryInterface $entryRepository, ChannelRepositoryInterface $channelRepository, TermRepositoryInterface $termRepository)
 	{
 		// Dependecies
 		$this->entryRepository   = $entryRepository;
 		$this->channelRepository = $channelRepository;
+		$this->termRepository    = $termRepository;
 
 		// Resolve current channel
 		$this->resolveChannel();
@@ -52,7 +51,6 @@ class Finder extends \Illuminate\Routing\Controller {
 
 	/**
 	 * The home page
-	 *
 	 * @return View
 	 */
 	public function home()
@@ -72,7 +70,6 @@ class Finder extends \Illuminate\Routing\Controller {
 
 	/**
 	 * Single content entry
-	 *
 	 * @param  int|string $id
 	 * @param  string     $channel
 	 * @return View
@@ -118,7 +115,6 @@ class Finder extends \Illuminate\Routing\Controller {
 
 	/**
 	 * Collection of entries
-	 *
 	 * @param  string $channel
 	 * @return View
 	 */
@@ -147,8 +143,37 @@ class Finder extends \Illuminate\Routing\Controller {
 	}
 
 	/**
+	 * Collection of entries in taxonomy by term
+	 * @param  string $term
+	 * @return View
+	 */
+	public function entryTaxonomyCollection($term)
+	{
+		Profiler::start('FINDER - ENTRY TAXONOMY COLLECTION');
+
+		echo '<pre>'; print_r(var_dump($this->termRepository->find($term))); echo '</pre>';
+		die();
+
+		// Get content
+		$entries = $this->entryRepository->allPublishedInChannel($this->channel->resource);
+		View::share('entries',    $entries);
+		View::share('pagination', $this->entryRepository->pagination());
+
+		// Views that we need to search for
+		$views = array(
+			'shop',
+			'collection',
+			'index',
+		);
+
+		Profiler::end('FINDER - ENTRY TAXONOMY COLLECTION');
+
+		// The view
+		return $this->render($views);
+	}
+
+	/**
 	 * Try to resolve current content channel
-	 *
 	 * @param  string $channel
 	 * @return mixed
 	 */
@@ -177,7 +202,6 @@ class Finder extends \Illuminate\Routing\Controller {
 
 	/**
 	 * Render a view
-	 *
 	 * @param  array  $view
 	 * @param  array  $data
 	 * @return View

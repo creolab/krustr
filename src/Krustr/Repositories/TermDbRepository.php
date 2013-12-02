@@ -40,7 +40,7 @@ class TermDbRepository implements Interfaces\TermRepositoryInterface {
 	 * @param  string  $key
 	 * @return mixed
 	 */
-	public function find($entryId, $key)
+	public function find($slug)
 	{
 		return array();
 	}

@@ -13,6 +13,7 @@ class Bootstrap {
 		$this->app     = $app;
 		$this->theme   = $app['config']->get('krustr::theme');
 		$this->entries = $this->app['Krustr\Repositories\Interfaces\EntryRepositoryInterface'];
+		$this->terms   = $this->app['Krustr\Repositories\Interfaces\TermRepositoryInterface'];
 
 		$this->registerActions();
 		$this->registerFilters();

@@ -37,10 +37,30 @@ class Router {
 		// Home page
 		Route::get('/', array('as' => 'site.home', 'uses' => 'Krustr\Services\Content\Finder@home'));
 
+		// We need the taxonomy repo for some content routes
+		$taxRepository = app('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface');
+
 		// Channel routes
 		foreach ($this->channels as $channel)
 		{
-			Route::get($channel->resource,           array('as' => 'channel.'.$channel->resource,           'uses' => 'Krustr\Services\Content\Finder@entryCollection'));
+			// Collection in channel
+			Route::get($channel->resource, array('as' => 'channel.'.$channel->resource, 'uses' => 'Krustr\Services\Content\Finder@entryCollection'));
+
+			// Taxonomies
+			if ($channel->taxonomies)
+			{
+				$taxonomies = $taxRepository->all($channel->taxonomies);
+
+				if ( ! $taxonomies->isEmpty())
+				{
+					foreach ($taxonomies as $taxonomy)
+					{
+						Route::get($channel->resource . '/'.$taxonomy->slug.'/{term}', array('as' => 'channel.'.$channel->resource.'.tax.'.$taxonomy->name_singular,  'uses' => 'Krustr\Services\Content\Finder@entryTaxonomyCollection'));
+					}
+				}
+			}
+
+			// Single entry
 			Route::get($channel->resource . '/{id}', array('as' => 'channel.'.$channel->resource.'.entry',  'uses' => 'Krustr\Services\Content\Finder@entry'));
 		}
 

@@ -1,6 +1,8 @@
 <?php namespace Krustr\Repositories;
 
 use Config;
+use Krustr\Repositories\Collections\TaxonomyCollection;
+use Krustr\Repositories\Entities\TaxonomyEntity;
 
 class TaxonomyConfigRepository implements Interfaces\TaxonomyRepositoryInterface {
 
@@ -8,9 +10,23 @@ class TaxonomyConfigRepository implements Interfaces\TaxonomyRepositoryInterface
 	 * Get all taxonomies
 	 * @return array
 	 */
-	public function all()
+	public function all($ids = array())
 	{
-		return Config::get('krustr::taxonomies');
+		if ($ids)
+		{
+			$taxonomies = array();
+
+			foreach (Config::get('krustr::taxonomies') as $key => $taxonomy)
+			{
+				if (in_array($key, $ids)) $taxonomies[$key] = $taxonomy;
+			}
+
+			return new TaxonomyCollection($taxonomies);
+		}
+		else
+		{
+			return Config::get('krustr::taxonomies');
+		}
 	}
 
 	/**
