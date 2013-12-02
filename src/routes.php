@@ -27,8 +27,8 @@ Route::get($backendPrefix.'/login',   array('as' => $backendPrefix.'.login',    
 Route::post($backendPrefix.'/login',  array('as' => $backendPrefix.'.login.post',  'uses' => $admin.'AuthController@postLogin'));
 
 // ! Backend routes
-if (Request::segment(1) == $backendPrefix)
-{
+// if (Request::segment(1) == $backendPrefix)
+// {
 	Route::group(array('prefix' => $backendPrefix, 'before' => 'krustr.backend.auth'), function() use ($admin, $channels, $taxonomies, $backendPrefix)
 	{
 		Route::get('/', array('as' => $backendPrefix . '.dashboard', 'uses' => $admin.'DashboardController@index'));
@@ -45,14 +45,14 @@ if (Request::segment(1) == $backendPrefix)
 		}
 
 		// ! ===> Redirect to 1st taxonomy
-		Route::get('taxonomy', array('as' => $backendPrefix . '.taxonomy', function() use ($taxonomies, $backendPrefix) {
-			return Redirect::to($backendPrefix . '/taxonomy/' . key($taxonomies));
+		Route::get('taxonomies', array('as' => $backendPrefix . '.taxonomy', function() use ($taxonomies, $backendPrefix) {
+			return Redirect::to($backendPrefix . '/taxonomies/' . key($taxonomies));
 		}));
 
 		// ! ===> Taxonomies
 		foreach ($taxonomies as $key => $taxonomy)
 		{
-			Route::resource('taxonomy/'.$taxonomy->name, $admin.'TaxonomyController');
+			Route::resource('taxonomies/'.$taxonomy->name, $admin.'TermController');
 		}
 
 		// ! ===> System
@@ -60,7 +60,7 @@ if (Request::segment(1) == $backendPrefix)
 		Route::get('system',            array('as' => $backendPrefix . '.system', 'uses' => $admin.'SystemController@getUsers'));
 
 	});
-}
+// }
 
 // ! API routes
 // if (Request::segment(1) == $apiPrefix or Request::segment(1) == $backendPrefix)

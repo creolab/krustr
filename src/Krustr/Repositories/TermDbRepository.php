@@ -1,5 +1,6 @@
 <?php namespace Krustr\Repositories;
 
+use DB;
 use Krustr\Models\Term;
 use Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface;
 use Krustr\Repositories\Collections\TermCollection;
@@ -84,10 +85,48 @@ class TermDbRepository implements Interfaces\TermRepositoryInterface {
 
 	/**
 	 * Check if field exists in DB
+	 * @return boolean
 	 */
 	public function exists($name)
 	{
 		return false;
+	}
+
+	/**
+	 * Save all terms for entry
+	 * @param  integer $entryId
+	 * @param  mixed   $data
+	 * @return mixed
+	 */
+	public function saveAllForEntry($entryId, $data)
+	{
+		$taxonomies = array_get($data, 'taxonomy-terms');
+
+		if ($taxonomies)
+		{
+			foreach ($taxonomies as $taxonomy => $terms)
+			{
+				$taxonomy = $this->taxonomies->find($taxonomy);
+
+				if ($taxonomy)
+				{
+					// Delete all
+					$query = DB::table('entry_term')->where('entry_id', $entryId)->where('taxonomy_id', $taxonomy->name_singular)->delete();
+
+					// And insert new ones
+					foreach ($terms as $termId)
+					{
+						$query = DB::table('entry_term')->insert(array(
+							'entry_id'    => $entryId,
+							'term_id'     => (int) $termId,
+							'taxonomy_id' => $taxonomy->name_singular,
+							'created_at'  => \Carbon\Carbon::now()->toDateTimeString(),
+							'updated_at'  => \Carbon\Carbon::now()->toDateTimeString(),
+						));
+					}
+				}
+			}
+		}
 	}
 
 }

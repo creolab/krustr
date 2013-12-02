@@ -8,6 +8,7 @@ use Krustr\Repositories\Entities\EntryEntity;
 use Krustr\Repositories\Collections\TermCollection;
 use Krustr\Repositories\Interfaces\FieldRepositoryInterface;
 use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
+use Krustr\Repositories\Interfaces\TermRepositoryInterface;
 use Krustr\Services\Validation\EntryValidator;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -18,6 +19,12 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 * @var FieldRepositoryInterface
 	 */
 	protected $fields;
+
+	/**
+	 * Repository for saving taxonomy term data
+	 * @var TermRepositoryInterface
+	 */
+	protected $terms;
 
 	/**
 	 * Repository for fetching channel data
@@ -50,12 +57,16 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	protected $query;
 
 	/**
-	 * Init dependecies
+	 * Initialize dependencies
+	 * @param EntryValidator           $validation
+	 * @param FieldRepositoryInterface $fields
+	 * @param TermRepositoryInterface  $terms
 	 */
-	public function __construct(EntryValidator $validation, FieldRepositoryInterface $fields)
+	public function __construct(EntryValidator $validation, FieldRepositoryInterface $fields, TermRepositoryInterface $terms)
 	{
 		$this->validation = $validation;
 		$this->fields     = $fields;
+		$this->terms      = $terms;
 		$this->channels   = app('Krustr\Repositories\Interfaces\ChannelRepositoryInterface');
 	}
 
@@ -295,6 +306,11 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 
 			// Save custom fields
 			$this->fields->saveAllForEntry($id, $data);
+
+			// Also save taxonomies
+			$this->terms->saveAllForEntry($id, $data);
+
+			// Log it
 			Log::debug('[KRUSTR] [ENTRYREPOSITORY] Entry ['.$id.'] was updated.');
 
 			return $entry->save();
