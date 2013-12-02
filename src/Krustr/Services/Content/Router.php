@@ -1,6 +1,6 @@
 <?php namespace Krustr\Services\Content;
 
-use App, Config, Request, Route, View;
+use App, Config, Response, Request, Route, View;
 
 /**
  * Route public requests to content
@@ -79,9 +79,20 @@ class Router {
 		return App::error(function(\Exception $exception, $code)
 		{
 			// 404 errors everywhere, other only in frontend
-			if ($code == 404 or Request::segment(1) != Config::get('krustr::backend_url'))
+			if ($code == 404 or (Request::segment(1) != Config::get('krustr::backend_url') and Request::segment(1) != Config::get('krustr::api_url')))
 			{
 				return $this->error($code, $exception);
+			}
+			elseif (Request::segment(1) == Config::get('krustr::api_url'))
+			{
+				return Response::json(array(
+					'ok' => false,
+					'error' => true,
+					'message' => $exception->getMessage(),
+					'file' => $exception->getFile(),
+					'line' => $exception->getLine(),
+					'code' => $code
+				), $code);
 			}
 		});
 	}

@@ -10,29 +10,26 @@
 		<div class="control-field">
 			<ul class="nav nav-tabs">
 				@foreach ($taxonomy_terms as $key => $taxonomy)
-					@if ( ! $taxonomy->terms->isEmpty())
-						<li class="active"><a href="#tax-{{ $taxonomy->name }}" data-toggle="tab">{{ $taxonomy->title }}</a></li>
-					@endif
+					<li class="active"><a href="#tax-{{ $taxonomy->name }}" data-toggle="tab">{{ $taxonomy->title }}</a></li>
 				@endforeach
 			</ul>
 
 			<!-- Tab panes -->
 			<div class="tab-content">
 				@foreach ($taxonomy_terms as $key => $taxonomy)
-					@if ( ! $taxonomy->terms->isEmpty())
-						<div class="tab-pane active" id="tax-{{ $taxonomy->name }}">
-							@foreach ($taxonomy->terms as $term)
-									<div class="checkbox">
-										<label for="tax-term-{{ $term->id }}">
-											<input type="checkbox" value="{{ $term->id }}" id="tax-term-{{ $term->id }}">
-											{{ $term->title }}
-										</label>
-									</div>
-							@endforeach
-						</div>
-					@endif
+					<div class="tab-pane active" id="tax-{{ $taxonomy->name }}">
+						@foreach ($taxonomy->terms as $term)
+							<div class="checkbox">
+								<label for="tax-term-{{ $term->id }}">
+									<input type="checkbox" value="{{ $term->id }}" id="tax-term-{{ $term->id }}" {{ $entry->hasTerm($term->id) ? ' checked="checked"' : '' }}>
+									{{ $term->title }}
+								</label>
+							</div>
+						@endforeach
+					</div>
 				@endforeach
 			</div>
+			<!-- /Tab panes -->
 		</div>
 	</div>
 </fieldset>

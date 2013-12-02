@@ -4,7 +4,7 @@ use Krustr\Repositories\Interfaces\EntryRepositoryInterface;
 use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
 use Krustr\Repositories\Interfaces\TermRepositoryInterface;
 use Krustr\Services\Profiler;
-use App, Config, Redirect, Request, View;
+use App, Config, Log, Redirect, Request, View;
 
 class Finder extends \Illuminate\Routing\Controller {
 
@@ -151,17 +151,41 @@ class Finder extends \Illuminate\Routing\Controller {
 	{
 		Profiler::start('FINDER - ENTRY TAXONOMY COLLECTION');
 
-		echo '<pre>'; print_r(var_dump($this->termRepository->find($term))); echo '</pre>';
-		die();
+		// First get taxonomy
+		$taxonomy = app('krustr.taxonomies')->findBySlug(Request::segment(2));
 
-		// Get content
-		$entries = $this->entryRepository->allPublishedInChannel($this->channel->resource);
+		if ($taxonomy)
+		{
+			$term = $this->termRepository->findBySlug($term);
+
+			if ($term)
+			{
+				$entries = $this->entryRepository->allPublishedByTerm($term->id);
+			}
+			else
+			{
+				return App::abort(404);
+			}
+		}
+		else
+		{
+			return App::abort(404);
+		}
+
+		// Share content
 		View::share('entries',    $entries);
 		View::share('pagination', $this->entryRepository->pagination());
 
 		// Views that we need to search for
 		$views = array(
-			'shop',
+			$this->channel->name.'_'.$taxonomy->name_singular,
+			$this->channel->name.'_taxonomy',
+			$taxonomy->name_singular,
+			'taxonomy_'.$taxonomy->name_singular,
+			$this->channel->resource_singular.'_collection',
+			$this->channel->resource,
+			$this->channel->resource.'_collection',
+			'taxonomy',
 			'collection',
 			'index',
 		);
@@ -224,6 +248,7 @@ class Finder extends \Illuminate\Routing\Controller {
 				break;
 			}
 		}
+		if (app('config')->get('krustr::debug')) Log::debug('[KRUST] [CONTENT FINDER] Loading view [' . $loadView . ']');
 
 		// Share some data with the view
 		View::share('template', $view);

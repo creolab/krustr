@@ -2,8 +2,10 @@
 
 use Auth, Config, Log, Request, Str;
 use Krustr\Models\Entry;
+use Krustr\Models\Term;
 use Krustr\Repositories\Collections\EntryCollection;
 use Krustr\Repositories\Entities\EntryEntity;
+use Krustr\Repositories\Collections\TermCollection;
 use Krustr\Repositories\Interfaces\FieldRepositoryInterface;
 use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
 use Krustr\Services\Validation\EntryValidator;
@@ -110,6 +112,29 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	public function allPublishedInChannel($channel)
 	{
 		return $this->allInChannel($channel, array('status' => 'published'));
+	}
+
+	/**
+	 * Get all published entries by term ID
+	 * @param  string $term
+	 * @return EntryCollection
+	 */
+	public function allPublishedByTerm($termId, $options = array())
+	{
+		// Start the query
+		$this->query = Entry::with(array('author', 'fields'))->select('entries.*')->orderBy('created_at', 'desc');
+
+		// Filter by term
+		$this->query->join('entry_term', 'entry_term.entry_id', '=', 'entries.id')->where('entry_term.term_id', $termId);
+
+		// Add options
+		$this->query = $this->options($options);
+
+		// Run query
+		$items            = $this->paginate();
+		$this->entries    = new EntryCollection(array_get($items, 'data'));
+
+		return $this->entries;
 	}
 
 	/**
@@ -363,7 +388,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 			}
 			else
 			{
-				$perPage = $this->channel->per_page ?: 10;
+				$perPage = $this->channel ? $this->channel->per_page : 10;
 			}
 		}
 
@@ -390,6 +415,19 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	public function channel()
 	{
 		return $this->channel;
+	}
+
+	/**
+	 * Get entry terms
+	 * @return TermCollection
+	 */
+	public function terms($entryId, $taxonomyId = null)
+	{
+		$terms = Term::join('entry_term', 'entry_term.term_id', '=', 'terms.id')
+		             ->where('entry_term.entry_id', $entryId)
+		             ->get();
+
+		return new TermCollection($terms->toArray());
 	}
 
 }

@@ -16,6 +16,6 @@ return array(
 	'table_prefix' => '',
 
 	// ! Debug
-	'debug' => false,
+	'debug' => true,
 
 );

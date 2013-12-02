@@ -49,6 +49,8 @@ class EntryForm extends BaseForm implements FormInterface {
 	 */
 	public function render()
 	{
+		View::share('entry', $this->entry);
+
 		// Start
 		$html = $this->openForm();
 
@@ -97,7 +99,8 @@ class EntryForm extends BaseForm implements FormInterface {
 		}
 
 		// Special groups
-		$html .= $this->renderSpecialGroups();
+		$html .= $this->renderSettings();
+		$html .= $this->renderTaxonomies();
 
 
 		// End content fields and grid row
@@ -156,10 +159,19 @@ class EntryForm extends BaseForm implements FormInterface {
 	}
 
 	/**
-	 * Render special field groups
+	 * Render entry settings
 	 * @return string
 	 */
-	public function renderSpecialGroups()
+	public function renderSettings()
+	{
+		return View::make('krustr::entries._partial.settings');
+	}
+
+	/**
+	 * Render taxonomy picker/manager
+	 * @return string
+	 */
+	public function renderTaxonomies()
 	{
 		// Resolve term repo
 		$terms          = array();
@@ -178,11 +190,7 @@ class EntryForm extends BaseForm implements FormInterface {
 		// Share it with the view
 		View::share('taxonomy_terms', $terms);
 
-		// Render partials
-		$html  = View::make('krustr::entries._partial.taxonomies');
-		$html .= View::make('krustr::entries._partial.settings');
-
-		return $html;
+		return View::make('krustr::entries._partial.taxonomies');
 	}
 
 	/**

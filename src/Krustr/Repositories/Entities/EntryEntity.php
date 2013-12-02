@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Krustr\Repositories\Collections\FieldCollection;
+use Krustr\Repositories\Interfaces\EntryRepositoryInterface;
 
 /**
  * Single entity for content entry
@@ -9,6 +10,18 @@ use Krustr\Repositories\Collections\FieldCollection;
  * @author Boris Strahija <bstrahija@gmail.com>
  */
 class EntryEntity extends Entity {
+
+	/**
+	 * Entry repository
+	 * @var EntryRepositoryInterface
+	 */
+	protected $entryRepository;
+
+	/**
+	 * Taxonomy terms for this entry
+	 * @var TermCollection
+	 */
+	protected $taxonomyTerms;
 
 	/**
 	 * Initialize the collection
@@ -22,6 +35,9 @@ class EntryEntity extends Entity {
 			$data['author'] = new UserEntity((array) $data['author']);
 			$data['fields'] = new FieldCollection($data['fields']);
 		}
+
+		// Resolve entry repository
+		$this->entryRepository = app('Krustr\Repositories\Interfaces\EntryRepositoryInterface');
 
 		parent::__construct($data);
 	}
@@ -48,6 +64,38 @@ class EntryEntity extends Entity {
 				return $field->value();
 			}
 		}
+	}
+
+	/**
+	 * Return all terms for taxonomy
+	 * @param  string $taxonomyId
+	 * @return TermCollection
+	 */
+	public function terms($taxonomyId = null)
+	{
+		if ( ! $this->taxonomyTerms)
+		{
+			$this->taxonomyTerms = $this->entryRepository->terms($this->id, $taxonomyId);
+		}
+
+		return $this->taxonomyTerms;
+	}
+
+	/**
+	 * Check if entry has a term
+	 * @param  mixed  $termId
+	 * @return boolean
+	 */
+	public function hasTerm($termId)
+	{
+		$terms = $this->terms();
+
+		foreach ($terms as $term)
+		{
+			if ($term->id == $termId) return true;
+		}
+
+		return false;
 	}
 
 	/**

@@ -3,30 +3,22 @@
 use Config;
 use Krustr\Repositories\Collections\EntryCollection;
 
-/**
- * Model for content entries
- *
- * @author Boris Strahija <bstrahija@gmail.com>
- */
 class Entry extends Base {
 
 	/**
 	 * Database table
-	 *
 	 * @var string
 	 */
 	protected $table = 'entries';
 
 	/**
 	 * Fields gurded from mass assignment
-	 *
 	 * @var array
 	 */
 	protected $guarded = array('id');
 
 	/**
 	 * User relationship
-	 *
 	 * @return Eloquent
 	 */
 	public function author()
@@ -36,7 +28,6 @@ class Entry extends Base {
 
 	/**
 	 * Field relationship
-	 *
 	 * @return Eloquent
 	 */
 	public function fields()
@@ -45,8 +36,16 @@ class Entry extends Base {
 	}
 
 	/**
+	 * Terms relationship
+	 * @return Eloquent
+	 */
+	public function terms()
+	{
+		return $this->belongsToMany('Krustr\Models\Term');
+	}
+
+	/**
 	 * Only in a specific channel
-	 *
 	 * @param  Query $query
 	 * @param  string $channel
 	 * @return Query
@@ -58,7 +57,6 @@ class Entry extends Base {
 
 	/**
 	 * Only published entries
-	 *
 	 * @return Query
 	 */
 	public function scopePublished($query)

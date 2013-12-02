@@ -63,9 +63,9 @@ if (Request::segment(1) == $backendPrefix)
 }
 
 // ! API routes
-if (Request::segment(1) == $apiPrefix or Request::segment(1) == $backendPrefix)
-{
-	Route::group(array('prefix' => $apiPrefix, 'before' => 'krustr.backend.auth'), function() use ($apiPrefix, $api, $channels)
+// if (Request::segment(1) == $apiPrefix or Request::segment(1) == $backendPrefix)
+// {
+	Route::group(array('prefix' => $apiPrefix, 'before' => 'krustr.backend.auth'), function() use ($apiPrefix, $api, $channels, $taxonomies)
 	{
 		Route::get('/', function() { return array('version' => '1.0.0'); });
 		Route::resource('entries', $api.'EntryController');
@@ -76,10 +76,17 @@ if (Request::segment(1) == $apiPrefix or Request::segment(1) == $backendPrefix)
 			Route::resource('content/'.$key, $api.'EntryController');
 		}
 
+		// ! ===> Taxonomies and terms
+		foreach ($taxonomies as $key => $taxonomy)
+		{
+			Route::get('taxonomy/'.$taxonomy->name_singular,          $api.'TaxonomyController@get');
+			Route::get('taxonomy/'.$taxonomy->name_singular.'/terms', $api.'TermController@index');
+		}
+
 		// ! ===> Upload
 		Route::any('upload', array('as' => $apiPrefix . '.upload', 'uses' => $api . 'UploadController@fire'));
 	});
-}
+// }
 
 // Theme routes
 if (file_exists($routes = public_path() . '/themes/' . Config::get('krustr::theme') . '/routes.php'))

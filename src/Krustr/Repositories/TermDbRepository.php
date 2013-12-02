@@ -35,14 +35,27 @@ class TermDbRepository implements Interfaces\TermRepositoryInterface {
 	}
 
 	/**
-	 * Get terms for entry in taxonomy
-	 * @param  integer $entryId
-	 * @param  string  $key
+	 * Find term by ID
+	 * @param  integer $id
 	 * @return mixed
 	 */
-	public function find($slug)
+	public function find($id)
 	{
-		return array();
+		$term = Term::find($id);
+
+		if ($term) return new TermEntity($term->toArray());
+	}
+
+	/**
+	 * Find term by slug
+	 * @param  string $slug
+	 * @return mixed
+	 */
+	public function findBySlug($slug)
+	{
+		$term = Term::where('slug', $slug)->first();
+
+		if ($term) return new TermEntity($term->toArray());
 	}
 
 	/**
