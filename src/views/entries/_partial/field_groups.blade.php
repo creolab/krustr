@@ -8,8 +8,15 @@
 
 			<hr>
 
-			<li id="field-group-_taxonomies-trigger"><a href="#_taxonomies" title="">Taxonomies</a></li>
-			<li id="field-group-_settings-trigger"><a href="#_settings" title="">Settings</a></li>
+			@if ($taxonomies)
+				@foreach ($taxonomies as $name => $taxonomy)
+					<li id="field-group-tax-{{ $name }}-trigger"><a href="#tax-{{ $name }}" title="">{{ admin_icn($taxonomy->icon) }} {{ $taxonomy->title }}</a></li>
+				@endforeach
+
+				<hr>
+			@endif
+
+			<li id="field-group-_settings-trigger"><a href="#_settings" title="">{{ admin_icn('cog') }} Settings</a></li>
 		</ul>
 	</div>
 </div>

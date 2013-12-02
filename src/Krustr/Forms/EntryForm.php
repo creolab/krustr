@@ -12,6 +12,12 @@ class EntryForm extends BaseForm implements FormInterface {
 	protected $channel;
 
 	/**
+	 * Channel taxonomies
+	 * @var array
+	 */
+	protected $taxonomies;
+
+	/**
 	 * Content entry object
 	 * @var array
 	 */
@@ -29,6 +35,10 @@ class EntryForm extends BaseForm implements FormInterface {
 	 */
 	protected $groups = array();
 
+	protected $termRepository;
+
+	protected $taxRepository;
+
 	/**
 	 * Initialize new form object
 	 * @param string $channel
@@ -41,6 +51,15 @@ class EntryForm extends BaseForm implements FormInterface {
 
 		// Assign entry if exists
 		$this->entry = $entry;
+
+		// Assign taxonomies
+		$this->termRepository = app('Krustr\Repositories\Interfaces\TermRepositoryInterface');
+		$this->taxRepository  = app('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface');
+
+		// Get the taxonomies
+		foreach ($this->channel->taxonomies as $taxonomy)
+			$this->taxonomies[$taxonomy] = $this->taxRepository->find($taxonomy);
+		View::share('taxonomies', $this->taxonomies);
 	}
 
 	/**
@@ -173,18 +192,15 @@ class EntryForm extends BaseForm implements FormInterface {
 	 */
 	public function renderTaxonomies()
 	{
-		// Resolve term repo
-		$terms          = array();
-		$termRepository = app('Krustr\Repositories\Interfaces\TermRepositoryInterface');
-		$taxRepository  = app('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface');
+		$terms = array();
 
-		// And get all terms
-		foreach ($this->channel->taxonomies as $taxonomy)
+		// Get all terms
+		foreach ($this->taxonomies as $taxonomy)
 		{
-			$terms[$taxonomy] = $taxRepository->find($taxonomy);
+			$terms[$taxonomy->name] = $taxonomy;
 
 			// And find all terms - @TODO: This needs to be optimized
-			if ($terms[$taxonomy]) $terms[$taxonomy]->terms = $termRepository->all($taxonomy);
+			if ($terms[$taxonomy->name]) $terms[$taxonomy->name]->terms = $this->termRepository->all($taxonomy->name);
 		}
 
 		// Share it with the view
