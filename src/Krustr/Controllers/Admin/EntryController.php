@@ -81,7 +81,9 @@ class EntryController extends BaseController {
 	{
 		if ($id = $this->repository->create(Input::all()))
 		{
-			return Redirect::route('backend.content.'.$this->channel->name.'.edit', $id)->withAlertSuccess("Saved.");
+			return Redirect::route('backend.content.'.$this->channel->name.'.edit', $id)
+			               ->with('active_field_group', Input::get('active_field_group'))
+			               ->withAlertSuccess("Saved.");
 		}
 
 		return Redirect::back()->withInput()->withErrors($this->repository->errors());
@@ -126,7 +128,9 @@ class EntryController extends BaseController {
 	{
 		if ($this->repository->update($id, Input::all()))
 		{
-			return Redirect::back()->with('active_field_group', Input::get('active_field_group'))->withAlertSuccess('Saved.');
+			return Redirect::back()
+			               ->with('active_field_group', Input::get('active_field_group'))
+			               ->withAlertSuccess('Saved.');
 		}
 
 		return Redirect::back()->with('active_field_group', Input::get('active_field_group'))->withInput()->withErrors($this->repository->errors());

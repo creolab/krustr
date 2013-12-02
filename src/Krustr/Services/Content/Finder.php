@@ -160,7 +160,7 @@ class Finder extends \Illuminate\Routing\Controller {
 
 			if ($term)
 			{
-				$entries = $this->entryRepository->allPublishedByTerm($term->id);
+				$entries = $this->entryRepository->allPublishedByTerm($term->id, $this->channel->resource);
 			}
 			else
 			{
