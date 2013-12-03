@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTaxonomiesTable extends Migration {
+class CreateEntryTermTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,9 +12,11 @@ class CreateTaxonomiesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('taxonomies', function(Blueprint $table)
+		Schema::create('entry_term', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->integer('entry_id')->index();
+			$table->integer('term_id')->index();
+			$table->string('taxonomy_id')->index();
 			$table->timestamps();
 		});
 	}
@@ -26,7 +28,7 @@ class CreateTaxonomiesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('taxonomies');
+		Schema::drop('entry_term');
 	}
 
 }

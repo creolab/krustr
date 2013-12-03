@@ -14,7 +14,6 @@
         "dflydev/markdown": "~1",
         "creolab/image": "dev-master",
         "creolab/assets": "dev-master",
-        "creolab/shop": "dev-master",
         "creolab/alert": "dev-master"
     },
     "require-dev": {

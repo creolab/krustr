@@ -47,7 +47,7 @@ class AuthController extends BaseController {
 		{
 			Event::fire('krustr.auth.failed_login', $credentials);
 
-			return Redirect::adminRoute('login');
+			return Redirect::adminRoute('login')->withErrors("Wrong credentials.")->withInput();
 		}
 	}
 

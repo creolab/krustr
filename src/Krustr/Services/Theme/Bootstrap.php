@@ -20,6 +20,11 @@ class Bootstrap {
 		$this->registerRoutes();
 	}
 
+	public function init()
+	{
+
+	}
+
 	public function registerActions()
 	{
 
