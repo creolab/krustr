@@ -27,8 +27,8 @@ Route::get($backendPrefix.'/login',   array('as' => $backendPrefix.'.login',    
 Route::post($backendPrefix.'/login',  array('as' => $backendPrefix.'.login.post',  'uses' => $admin.'AuthController@postLogin'));
 
 // ! Backend routes
-// if (Request::segment(1) == $backendPrefix)
-// {
+if (Request::segment(1) == $backendPrefix)
+{
 	Route::group(array('prefix' => $backendPrefix, 'before' => 'krustr.backend.auth'), function() use ($admin, $channels, $taxonomies, $backendPrefix)
 	{
 		Route::get('/', array('as' => $backendPrefix . '.dashboard', 'uses' => $admin.'DashboardController@index'));
@@ -60,11 +60,11 @@ Route::post($backendPrefix.'/login',  array('as' => $backendPrefix.'.login.post'
 		Route::get('system',            array('as' => $backendPrefix . '.system', 'uses' => $admin.'SystemController@getUsers'));
 
 	});
-// }
+}
 
 // ! API routes
-// if (Request::segment(1) == $apiPrefix or Request::segment(1) == $backendPrefix)
-// {
+if (Request::segment(1) == $apiPrefix or Request::segment(1) == $backendPrefix)
+{
 	Route::group(array('prefix' => $apiPrefix, 'before' => 'krustr.backend.auth'), function() use ($apiPrefix, $api, $channels, $taxonomies)
 	{
 		Route::get('/', function() { return array('version' => '1.0.0'); });
@@ -86,7 +86,7 @@ Route::post($backendPrefix.'/login',  array('as' => $backendPrefix.'.login.post'
 		// ! ===> Upload
 		Route::any('upload', array('as' => $apiPrefix . '.upload', 'uses' => $api . 'UploadController@fire'));
 	});
-// }
+}
 
 // Theme routes
 if (file_exists($routes = public_path() . '/themes/' . Config::get('krustr::theme') . '/routes.php'))

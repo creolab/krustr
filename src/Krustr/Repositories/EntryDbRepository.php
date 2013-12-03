@@ -130,8 +130,11 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 * @param  string $term
 	 * @return EntryCollection
 	 */
-	public function allPublishedByTerm($termId, $options = array())
+	public function allPublishedByTerm($termId, $channel = null, $options = array())
 	{
+		// Get channel config
+		if ($channel) $this->channel = $this->channels->find($channel);
+
 		// Start the query
 		$this->query = Entry::with(array('author', 'fields'))->select('entries.*')->orderBy('created_at', 'desc');
 
@@ -274,6 +277,9 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 
 			// Save custom fields
 			$this->fields->saveAllForEntry($entry->id, $data);
+
+			// Also save taxonomies
+			$this->terms->saveAllForEntry($entry->id, $data);
 
 			return $entry->id;
 		}
