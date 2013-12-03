@@ -56,6 +56,9 @@ class InstallCommand extends Command {
 	 */
 	public function migrate()
 	{
+		// Install migration table if needed
+		$this->call('migrate:install');
+
 		// Reset migrations
 		$this->comment('Reseting migrations.');
 		$this->comment('**************************************************');

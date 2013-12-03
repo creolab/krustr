@@ -1,6 +1,8 @@
 <?php namespace Krustr\Commands;
 
 use File;
+use Krustr\Services\Install\AssetsInstaller;
+use Krustr\Services\Install\ThemeInstaller;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -40,7 +42,7 @@ class DevCommand extends Command {
 		$this->seed();
 
 		// Remove published config
-		File::deleteDirectory(app_path() . '/config/packages/creolab');
+		// File::deleteDirectory(app_path() . '/config/packages/creolab');
 
 		// Publish or symlink assets
 		$this->assets();
@@ -86,27 +88,8 @@ class DevCommand extends Command {
 	{
 		$this->comment('Setting up assets.');
 
-		// First remove the assets
-		$theme = public_path() . '/packages/creolab/krustr/assets';
-		if     (is_link($theme))           File::delete($theme);
-		elseif (File::isDirectory($theme)) File::deleteDirectory($theme);
-
-		// Create dir if missing
-		$dir = public_path() . '/packages/creolab/krustr';
-		if ( ! File::exists($dir)) File::makeDirectory($dir, 0777, true);
-
-		if ($this->input->getOption('symlinks'))
-		{
-			exec('ln -s ../../../../vendor/creolab/krustr/assets public/packages/creolab/krustr/assets');
-			$this->info("Linked assets.");
-		}
-		else
-		{
-			$source      = __DIR__ . '/../../../assets';
-			$destination = $dir . '/assets';
-			File::copyDirectory($source, $destination);
-			$this->info("Published assets to [" . $destination . "]");
-		}
+		$installer = new AssetsInstaller();
+		$installer->fire($this->input->getOption('symlinks'));
 
 		$this->comment('Done.');
 		$this->comment('**************************************************');
@@ -121,27 +104,8 @@ class DevCommand extends Command {
 	{
 		$this->comment('Setting up default theme.');
 
-		// First remove the published theme
-		$theme = public_path() . '/themes/default';
-		if     (is_link($theme))           File::delete($theme);
-		elseif (File::isDirectory($theme)) File::deleteDirectory($theme);
-
-		// Create dir if missing
-		$dir = public_path() . '/themes';
-		if ( ! File::exists($dir)) File::makeDirectory($dir, 0777, true);
-
-		if ($this->input->getOption('symlinks'))
-		{
-			exec('ln -s ../../vendor/creolab/krustr/themes/default public/themes/default');
-			$this->info("Linked default theme.");
-		}
-		else
-		{
-			$source      = __DIR__ . '/../../../themes/default';
-			$destination = $dir . '/default';
-			File::copyDirectory($source, $destination);
-			$this->info("Published default theme to [" . $destination . "]");
-		}
+		$installer = new ThemeInstaller();
+		$installer->fire($this->input->getOption('symlinks'));
 
 		$this->comment('Done.');
 		$this->comment('**************************************************');
