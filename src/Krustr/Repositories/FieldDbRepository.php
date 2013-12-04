@@ -25,7 +25,6 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 
 	/**
 	 * Get all fields for entry
-	 *
 	 * @param  integer $entryId
 	 * @return mixed
 	 */
@@ -38,7 +37,6 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 
 	/**
 	 * Get specific field for entry
-	 *
 	 * @param  integer $entryId
 	 * @param  string  $key
 	 * @return mixed
@@ -52,7 +50,6 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 
 	/**
 	 * Create new field value
-	 *
 	 * @param integer $entryId
 	 * @param string  $key
 	 * @param mixed   $value
@@ -70,7 +67,6 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 
 	/**
 	 * Update field value
-	 *
 	 * @param  integer $entryId
 	 * @param  string  $key
 	 * @param  mixed   $value
@@ -87,7 +83,6 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 
 	/**
 	 * Add if missing, else update
-	 *
 	 * @param integer $entryId
 	 * @param string  $key
 	 * @param mixed   $value
@@ -120,7 +115,6 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 
 	/**
 	 * Save all entry fields
-	 *
 	 * @param  integer $entryId
 	 * @param  mixed   $data
 	 * @return mixed
