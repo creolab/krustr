@@ -4,16 +4,10 @@ use Redirect, Response, Request, View;
 use Krustr\Models\Channel;
 use Krustr\Models\Entry;
 
-/**
- * API controller for content entries
- *
- * @author Boris Strahija <bstrahija@gmail.com>
- */
 class EntryController extends BaseController {
 
 	/**
 	 * List all entries
-	 *
 	 * @return Response
 	 */
 	public function index()
@@ -27,7 +21,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Store a new entry to the DB
-	 *
 	 * @return Response
 	 */
 	public function store()
@@ -37,7 +30,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Preview single entry
-	 *
 	 * @param  integer $id
 	 * @return Response
 	 */
@@ -52,7 +44,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Update an entry via a PUT request
-	 *
 	 * @param  integer $id
 	 * @return Response
 	 */
@@ -63,7 +54,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Delete the entry
-	 *
 	 * @param  integer $id
 	 * @return Response
 	 */

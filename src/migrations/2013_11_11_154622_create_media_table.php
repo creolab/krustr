@@ -15,12 +15,14 @@ class CreateMediaTable extends Migration {
 		Schema::create('media', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('parent_id');
-			$table->integer('field_id')->nullable();
+			$table->integer('parent_id')->nullable()->index();
+			$table->integer('entry_id')->nullable()->index();
+			$table->string('field_id')->nullable()->index();
 			$table->string('title')->nullable();
 			$table->text('description')->nullable();
-			$table->string('path');
+			$table->string('path')->nullable();
 			$table->string('type', 20)->default('item'); // Can be 'item' or 'collection'
+			$table->integer('order')->nullable();
 			$table->timestamps();
 		});
 	}

@@ -22,7 +22,7 @@ class GalleryDbRepository implements Interfaces\GalleryRepositoryInterface {
 			$gallery = new GalleryEntity($gallery->toArray());
 
 			// Now get media
-			$media = Media::where('parent_id', $gallery->id)->where('type', 'item')->get();
+			$media = Media::where('parent_id', $gallery->id)->where('type', 'item')->orderBy('order')->get();
 
 			if ($media)
 			{
@@ -31,6 +31,62 @@ class GalleryDbRepository implements Interfaces\GalleryRepositoryInterface {
 			}
 
 			return $gallery;
+		}
+	}
+
+	/**
+	 * Create new gallery
+	 * @param array $data
+	 */
+	public function create($data)
+	{
+		$gallery = new Media;
+		$gallery->entry_id    = (int) array_get($data, 'entry_id');
+		$gallery->field_id    = array_get($data, 'field_id');
+		$gallery->title       = array_get($data, 'title');
+		$gallery->description = array_get($data, 'description');
+		$gallery->type        = 'collection';
+		$gallery->save();
+
+		return new GalleryEntity($gallery->toArray());
+	}
+
+	/**
+	 * Update gallery
+	 * @param integer $id
+	 * @param array   $data
+	 */
+	public function update($id, $data)
+	{
+		$gallery = Media::find($id);
+		$gallery->title       = array_get($data, 'title');
+		$gallery->description = array_get($data, 'description');
+		$gallery->save();
+
+		return new GalleryEntity($gallery->toArray());
+	}
+
+	/**
+	 * Add if missing, else update
+	 * @param array $data
+	 */
+	public function createOrUpdate($data)
+	{
+		// Try to get the gallery
+		$gallery = Media::where('type',      'collection')
+		                ->where('parent_id', null)
+		                ->where('entry_id',  array_get($data, 'entry_id'))
+		                ->where('field_id',  array_get($data, 'field_id'))
+		                ->first();
+
+		// Create or update
+		if ($gallery)
+		{
+			return $this->update($gallery->id, $data);
+		}
+		else
+		{
+			return $this->create($data);
 		}
 	}
 

@@ -7,7 +7,6 @@ class ImageField extends \Krustr\Forms\Fields\Field {
 	/**
 	 * Save image data, move and resize the file
 	 * @TODO: Some od the logic can be cleaned up
-	 *
 	 * @param  mixed $data
 	 * @return string
 	 */
@@ -23,7 +22,7 @@ class ImageField extends \Krustr\Forms\Fields\Field {
 		}
 		else
 		{
-			if ($path)
+			if ($path and File::exists($path))
 			{
 				// Get and create target path
 				$target  = $this->mediaPath(pathinfo($path, PATHINFO_BASENAME), true);

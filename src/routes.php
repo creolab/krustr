@@ -83,8 +83,9 @@ if (Request::segment(1) == $apiPrefix or Request::segment(1) == $backendPrefix)
 			Route::get('taxonomy/'.$taxonomy->name_singular.'/terms', $api.'TermController@index');
 		}
 
-		// ! ===> Upload
-		Route::any('upload', array('as' => $apiPrefix . '.upload', 'uses' => $api . 'UploadController@fire'));
+		// ! ===> Upload and media
+		Route::any('upload',        array('as' => $apiPrefix . '.upload',       'uses' => $api . 'UploadController@fire'));
+		Route::delete('media/{id}', array('as' => $apiPrefix . '.media.delete', 'uses' => $api . 'MediaController@destroy'));
 	});
 }
 

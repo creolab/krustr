@@ -13,6 +13,8 @@ App = {
 		App.Ajax.init();
 		App.Upload.init();
 		App.Forms.init();
+		App.Media.init();
+		App.initLightbox();
 	},
 
 	/**

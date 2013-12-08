@@ -25,7 +25,13 @@ abstract class Field implements FieldInterface {
 	 * Media repo dependency
 	 * @var MediaRepositoryInterface
 	 */
-	protected $media;
+	protected $mediaRepo;
+
+	/**
+	 * Gallery repo dependency
+	 * @var GalleryRepositoryInterface
+	 */
+	protected $galleryRepo;
 
 	/**
 	 * Initiliaze the field
@@ -35,8 +41,9 @@ abstract class Field implements FieldInterface {
 	public function __construct(&$field, $value = null)
 	{
 		// Dependencies
-		$this->repo  = \App::make('Krustr\Repositories\Interfaces\FieldRepositoryInterface');
-		$this->media = \App::make('Krustr\Repositories\Interfaces\MediaRepositoryInterface');
+		$this->repo        = \App::make('Krustr\Repositories\Interfaces\FieldRepositoryInterface');
+		$this->mediaRepo   = \App::make('Krustr\Repositories\Interfaces\MediaRepositoryInterface');
+		$this->galleryRepo = \App::make('Krustr\Repositories\Interfaces\GalleryRepositoryInterface');
 
 		// Get passed data
 		$this->data = $field->data;

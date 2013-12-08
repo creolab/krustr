@@ -113,7 +113,7 @@ App.Upload = {
 
 				up.refresh();
 
-				// Automatic upload if only file is allowed
+				// Automatic upload if only 1 file is allowed
 				if ($maxFiles == 1) this.start();
 			});
 

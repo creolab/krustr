@@ -1,4 +1,4 @@
-<div id="file-upload-<?php echo $field->name; ?>" class="file-upload-widget" data-id="<?php echo $field->name; ?>">
+<div id="file-upload-<?php echo $field->name; ?>" class="file-upload-widget" data-id="<?php echo $field->name; ?>" data-max-files="{{ $field->type == 'gallery' ? 999 : 1 }}">
 	<div class="toggle"><a href="#" class="btn btn-default">{{ admin_icn('cloud-upload') }} Upload file</a></div>
 
 	<input id="uploaded-files-{{ $field->name }}" name="uploaded-files-{{ $field->name }}" value="" type="hidden">
@@ -17,9 +17,11 @@
 			</div>
 		</div>
 
-		<!-- <div class="clearfix">
-			<a id="upload-files-<?php echo $field->name; ?>" href="#" class="btn btn-success btn-upload">{{ admin_icn('cloud-upload') }} Start uploading</a>
-			<a href="#" class="btn btn-cancel-upload pull-right">{{ admin_icn('ban-circle') }} Cancel upload</a>
-		</div> -->
+		@if ($field->type == 'gallery')
+			<div class="clearfix">
+				<a id="upload-files-<?php echo $field->name; ?>" href="#" class="btn btn-success btn-upload">{{ admin_icn('cloud-upload') }} Start uploading</a>
+				<a href="#" class="btn btn-cancel-upload pull-right">{{ admin_icn('ban-circle') }} Cancel upload</a>
+			</div>
+		@endif
 	</div>
 </div>

@@ -41,6 +41,7 @@ return array(
 			'packages/creolab/krustr/assets/js/ajax.js',
 			'packages/creolab/krustr/assets/js/forms.js',
 			'packages/creolab/krustr/assets/js/upload.js',
+			'packages/creolab/krustr/assets/js/media.js',
 			'packages/creolab/krustr/assets/js/init.js',
 		),
 		'filters' => array(),

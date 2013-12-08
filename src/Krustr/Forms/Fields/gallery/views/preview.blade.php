@@ -1,3 +1,4 @@
+<?php /*
 @if ($value)
 	<p>
 		<h3>Preview</h3>
@@ -7,3 +8,4 @@
 @else
 
 @endif
+*/ ?>

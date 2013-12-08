@@ -113,14 +113,5 @@ App.Forms = {
 			minuteStep: 15,
 			showMeridian: false
 		});
-	},
-
-	/**
-	 * Just remove a gallery item after being deleted from DB
-	 * @return {void}
-	 */
-	removeGalleryImage: function(response, el) {
-		var id = $(el).attr('data-id');
-		$('#' + id).fadeOut(300, function() { $(this).remove(); });
 	}
 };
