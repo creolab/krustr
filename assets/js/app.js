@@ -1,9 +1,18 @@
 App = {
+	/**
+	 * Application params
+	 * @type {Object}
+	 */
 	params: {
 		url:        APP_URL,
 		hash:       window.location.hash.replace(/\#/g, ""),
 		assetsPath: '/packages/creolab/krustr/assets',
 	},
+
+	/**
+	 * Loading spinner
+	 */
+	spinner: false,
 
 	/**
 	 * Initialize core app
@@ -79,6 +88,36 @@ App = {
 		} else {
 			return decodeURIComponent(results[1].replace(/\+/g, " "));
 		}
+	},
+
+	/**
+	 * Show nice loading spinner
+	 * @param  {string} text
+	 * @return {void}
+	 */
+	showSpinner: function(text) {
+		$("#loading-text").html(text);
+
+		var opts = {
+			length: 25, // The length of each line
+			width: 9, // The line thickness
+			radius: 26, // The radius of the inner circle
+			color: '#fff', // #rgb or #rrggbb or array of colors
+		};
+		var target = document.getElementById('loading-spinner');
+		App.spinner = new Spinner(opts).spin(target);
+
+		$("#loading-overlay").fadeIn(100);
+	},
+
+	/**
+	 * Hide loading spinner
+	 * @return {void}
+	 */
+	hideSpinner: function() {
+		$("#loading-overlay").fadeOut(100, function() {
+			App.spinner.stop();
+		});
 	}
 
 };

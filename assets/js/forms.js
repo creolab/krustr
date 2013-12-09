@@ -14,6 +14,7 @@ App.Forms = {
 		this.initEditors();
 		this.initSelectboxes();
 		this.initDateTimePickers();
+		this.initSave();
 		// this.Fields.init();
 	},
 
@@ -112,6 +113,16 @@ App.Forms = {
 		$timeElements.timepicker({
 			minuteStep: 15,
 			showMeridian: false
+		});
+	},
+
+	/**
+	 * Hook into save event
+	 * @return {void}
+	 */
+	initSave: function() {
+		$("#entry-form").submit(function() {
+			App.showSpinner("Saving");
 		});
 	}
 };

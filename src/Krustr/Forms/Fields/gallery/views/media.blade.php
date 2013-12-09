@@ -1,7 +1,5 @@
 @if ($field->value and ! $field->value->media->isEmpty())
 	<div class="media-collection clearfix">
-		<h3>Media in {{ $field->label }}</h3>
-
 		<div class="gallery-manager clearfix">
 			<ul class="clearfix">
 				@foreach ($field->value->media as $media)
@@ -19,6 +17,4 @@
 			</ul>
 		</div>
 	</div>
-
-	<hr>
 @endif

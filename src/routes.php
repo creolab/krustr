@@ -95,5 +95,8 @@ if (file_exists($routes = public_path() . '/themes/' . Config::get('krustr::them
 	include $routes;
 }
 
+// Feed routes
+Route::get('feed.{type}', 'Krustr\Controllers\FeedController@feed');
+
 // ! Public content routes
 app('krustr.router')->init();

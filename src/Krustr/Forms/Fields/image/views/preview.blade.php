@@ -8,12 +8,12 @@
 			<?php endif; ?>
 		</div>
 
-		<div class="info">
+		<!-- <div class="info">
 			<label for="">Title</label>
 			<input type="text" name="<?php echo $field->name ?>[title]"><br><br>
 			<label for="">Alt</label>
 			<input type="text" name="<?php echo $field->name ?>[title]">
-		</div>
+		</div> -->
 	</div>
 
 	<div class="no-image" style="display: <?php echo ( ! $value) ? 'none' : 'none'; ?>">
