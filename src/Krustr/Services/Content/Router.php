@@ -81,17 +81,17 @@ class Router {
 			// 404 errors everywhere, other only in frontend
 			if ($code == 404 or (Request::segment(1) != Config::get('krustr::backend_url') and Request::segment(1) != Config::get('krustr::api_url')))
 			{
-				return $this->error($code, $exception);
+				return App::make('krustr.router')->error($code, $exception);
 			}
 			elseif (Request::segment(1) == Config::get('krustr::api_url'))
 			{
 				return Response::json(array(
-					'ok' => false,
-					'error' => true,
+					'ok'      => false,
+					'error'   => true,
 					'message' => $exception->getMessage(),
-					'file' => $exception->getFile(),
-					'line' => $exception->getLine(),
-					'code' => $code
+					'file'    => $exception->getFile(),
+					'line'    => $exception->getLine(),
+					'code'    => $code
 				), $code);
 			}
 		});

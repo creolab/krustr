@@ -24,7 +24,7 @@ class KrustrServiceProvider extends ServiceProvider {
 												  '/config');
 
 		// Add theme namespaces
-		$this->app['view']->addNamespace('krustr_fields', __DIR__ . '/forms/fields');
+		$this->app['view']->addNamespace('krustr_fields', __DIR__ . '/Forms/Fields');
 		$this->app['view']->addNamespace('theme', public_path() . '/' .
 												  $this->app['config']->get('krustr::theme_dir') . '/' .
 												  $this->app['config']->get('krustr::theme') .

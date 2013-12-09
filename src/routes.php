@@ -86,8 +86,8 @@ if (Request::segment(1) == $apiPrefix or Request::segment(1) == $backendPrefix)
 		// ! ===> Upload and media
 		Route::any('upload',                            array('as' => $apiPrefix . '.upload',             'uses' => $api . 'UploadController@fire'));
 		Route::delete('media/entry/{entry}/field/{id}', array('as' => $apiPrefix . '.media.field.delete', 'uses' => $api . 'MediaController@destroyField'));
-		Route::get('media/entry/{entry}/field/{id}',    array('as' => $apiPrefix . '.media.field.get',    'uses' => $api . 'MediaController@destroyField'));
 		Route::delete('media/{id}',                     array('as' => $apiPrefix . '.media.delete',       'uses' => $api . 'MediaController@destroy'));
+		Route::get('media/{id}',                        array('as' => $apiPrefix . '.media.delete.get',   'uses' => $api . 'MediaController@destroy'));
 	});
 }
 
