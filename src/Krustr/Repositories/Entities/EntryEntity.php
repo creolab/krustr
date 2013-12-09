@@ -4,11 +4,6 @@ use Carbon\Carbon;
 use Krustr\Repositories\Collections\FieldCollection;
 use Krustr\Repositories\Interfaces\EntryRepositoryInterface;
 
-/**
- * Single entity for content entry
- *
- * @author Boris Strahija <bstrahija@gmail.com>
- */
 class EntryEntity extends Entity {
 
 	/**
@@ -25,7 +20,6 @@ class EntryEntity extends Entity {
 
 	/**
 	 * Initialize the collection
-	 *
 	 * @param array $items
 	 */
 	public function __construct($data)
@@ -44,7 +38,6 @@ class EntryEntity extends Entity {
 
 	/**
 	 * Get an entry field
-	 *
 	 * @param  string $key
 	 * @return mixed
 	 */
@@ -56,12 +49,25 @@ class EntryEntity extends Entity {
 		{
 			if ($key == $field->name)
 			{
-				// Date field
-				// if     ($field->type == 'date')     return Carbon::createFromTimeStamp(strtotime($field->value));
-				// elseif ($field->type == 'datetime') return Carbon::createFromTimeStamp(strtotime($field->value));
-				// elseif ($field->type == 'gallery')  return app('Krustr\Repositories\Interfaces\GalleryRepositoryInterface')->find($field->value);
-				// else                                return $field->value;
 				return $field->value();
+			}
+		}
+	}
+
+	/**
+	 * Get an entry field data
+	 * @param  string $key
+	 * @return mixed
+	 */
+	public function fieldData($key)
+	{
+		if (is_array($key)) $key = $key[0];
+
+		foreach ($this->fields as $field)
+		{
+			if ($key == $field->name)
+			{
+				return $field->data;
 			}
 		}
 	}
@@ -100,7 +106,6 @@ class EntryEntity extends Entity {
 
 	/**
 	 * Returns date for entry
-	 *
 	 * @return string
 	 */
 	public function getDateAttribute()

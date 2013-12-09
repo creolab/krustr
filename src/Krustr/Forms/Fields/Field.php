@@ -1,6 +1,7 @@
 <?php namespace Krustr\Forms\Fields;
 
 use Config, File, View;
+use Krustr\Models\Field as FieldModel;
 
 /**
  * Base class for various content fields
@@ -34,6 +35,12 @@ abstract class Field implements FieldInterface {
 	protected $galleryRepo;
 
 	/**
+	 * Field repo dependency
+	 * @var FieldRepositoryInterface
+	 */
+	protected $fieldRepo;
+
+	/**
 	 * Initiliaze the field
 	 *
 	 * @param mixed $data
@@ -44,9 +51,10 @@ abstract class Field implements FieldInterface {
 		$this->repo        = \App::make('Krustr\Repositories\Interfaces\FieldRepositoryInterface');
 		$this->mediaRepo   = \App::make('Krustr\Repositories\Interfaces\MediaRepositoryInterface');
 		$this->galleryRepo = \App::make('Krustr\Repositories\Interfaces\GalleryRepositoryInterface');
+		$this->fieldRepo   = \App::make('Krustr\Repositories\Interfaces\FieldRepositoryInterface');
 
 		// Get passed data
-		$this->data = $field->data;
+		$this->data       = $field->data;
 
 		// Get value and field object
 		$this->set('value', $value);
@@ -146,7 +154,10 @@ abstract class Field implements FieldInterface {
 	{
 		if (isset($this->$key))                                                     return $this->$key;
 		elseif (isset($this->data[$key]))                                           return $this->data[$key];
+		elseif (isset($this->data['field_data'][$key]))                             return $this->data['field_data'][$key];
 		elseif (method_exists($this, $method = 'get'.camel_case($key).'Attribute')) return call_user_func(array($this, $method));
 	}
+
+
 
 }

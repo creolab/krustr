@@ -1,7 +1,7 @@
-@if ($field->value and ! $field->value->media->isEmpty())
-	<div class="media-collection clearfix">
-		<div class="gallery-manager clearfix">
-			<ul class="clearfix">
+<div class="media-collection clearfix">
+	<div class="gallery-manager clearfix">
+		<ul class="clearfix">
+			@if ($field->value and ! $field->value->media->isEmpty())
 				@foreach ($field->value->media as $media)
 					<li id="gallery-list-item-{{ $media->id }}">
 						<figure>
@@ -14,7 +14,7 @@
 						</figure>
 					</li>
 				@endforeach
-			</ul>
-		</div>
+			@endif
+		</ul>
 	</div>
-@endif
+</div>

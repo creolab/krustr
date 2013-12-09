@@ -1,5 +1,6 @@
 <?php namespace Krustr\Repositories;
 
+use File;
 use Krustr\Models\Entry;
 use Krustr\Models\Field;
 use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
@@ -39,13 +40,25 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 	 * Get specific field for entry
 	 * @param  integer $entryId
 	 * @param  string  $key
-	 * @return mixed
+	 * @return FieldEntity
 	 */
 	public function find($entryId, $key)
 	{
 		$field = Field::where('entry_id', $entryId)->where('name', $key)->first();
 
-		if ($field) return new FieldEntity($field);
+		if ($field) return new FieldEntity($field->toArray());
+	}
+
+	/**
+	 * Get specific field by id
+	 * @param  integer $id
+	 * @return FieldEntity
+	 */
+	public function findById($id)
+	{
+		$field = Field::find($id);
+
+		if ($field) return new FieldEntity($field->toArray());
 	}
 
 	/**
@@ -142,6 +155,30 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 				// And save accordinly
 				$this->createOrUpdate($entryId, $field->name, $value, $field);
 			}
+		}
+	}
+
+	/**
+	 * Delete field content from database
+	 * @param  integer $id
+	 * @return boolean
+	 */
+	public function destroy($id)
+	{
+		$field = $this->findById($id);
+
+		if ($field)
+		{
+			// Delete from database
+			Field::destroy($id);
+
+			// And delete file
+			if (File::exists($path = public_path($field->value)))
+			{
+				File::delete($path);
+			}
+
+			return true;
 		}
 	}
 

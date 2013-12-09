@@ -157,20 +157,39 @@ App.Upload = {
 	reloadPreview: function(id, response, listId) {
 		var $upload          = $("#file-upload-" + id);
 		var $listItem        = $("#" + listId);
-		var $el              = $("#" + id);
+		var $el              = $("#field-element-" + id);
 		var $previewImage    = $("#field-element-" + id).find(".preview-image");
 		var $previewImageSrc = $("#field-element-" + id).find(".preview-image-img");
 		var $noImage         = $("#field-element-" + id).find(".no-image");
+		var fieldType        = $el.attr("data-field-type");
 
-		console.log("#field-element-" + id);
-		console.log($previewImage.length);
+		// console.log("#field-element-" + id);
+		// console.log($previewImage.length);
 
-		// Change SRC for preview image
-		$previewImageSrc.attr("src", response.url);
+		console.log("=================================================");
+		console.log($el);
+		console.log(fieldType);
+		console.log(id);
+		console.log(response);
+		console.log("=================================================");
 
-		// Hide "no-image" container, and show preview
-		$noImage.hide();
-		$previewImage.show();
+		// For gallery we need to add items to the list
+		if (fieldType == 'gallery') {
+			var $gallery = $el.find(".gallery-manager ul");
+			var galleryIcon = '<div class="upinfo" title="Save the entry to keep uploaded files."><i class="icn icon icon-download"></i></div>';
+			var $galleryItem = $('<li class="pending"><figure style="background-image: url(' + response.url + ');">' + galleryIcon + '</figure></li>');
+			$gallery.append($galleryItem);
+			$galleryItem.fadeIn(80);
+
+		} else {
+			// Change SRC for preview image
+			$previewImageSrc.attr("src", response.url);
+
+			// Hide "no-image" container, and show preview
+			$noImage.hide();
+			$previewImage.show();
+		}
+
 
 		// $previewImage.closest("a").attr("href", response.base_filepath).show();
 		//$("#file-path-act-<?php echo $field->slug; ?> .current-path a").attr("href", response.base_filepath).html(response.base_filepath);

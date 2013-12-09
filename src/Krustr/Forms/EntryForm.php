@@ -102,7 +102,10 @@ class EntryForm extends BaseForm implements FormInterface {
 				// Instance of field object
 				if (class_exists($class))
 				{
+					// Create instance and pass some data
 					$fieldInstance = new $class($field, $value);
+					$fieldInstance->set('entry_id',   ($this->entry) ? $this->entry->id : null);
+					$fieldInstance->set('field_data', ($this->entry) ? $this->entry->fieldData($name) : null);
 
 					// And fetch HTML for rendering
 					$html .= $fieldInstance->render($value);
