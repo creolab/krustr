@@ -132,20 +132,6 @@ App.Forms = {
 				persist: false,
 				loadThrottle: 100,
 				create: function(input) {
-					// Add new tags to array
-					/*var $create = $el.parent().find(".tag-picker-create");
-					var tags = [];
-					if ($create.val()) tags = $create.val().split(",");
-					tags.push(input);
-
-					// Unique tags only
-					tags = _.uniq(tags);
-					console.log(tags);
-
-					// Join back and updae value
-					tags = tags.join(",");
-					$create.val(tags);*/
-
 					return { value: input, text: input, existing: false };
 				},
 				load: function(query, callback) {
@@ -175,7 +161,12 @@ App.Forms = {
 							callback(terms);
 						}
 					});
-				}
+				},
+				render: {
+					item: function(item, escape) {
+						return '<div><i class="icn icon icon-tags"></i>' + escape(item.text) + '</div>';
+					}
+				},
 			});
 		});
 

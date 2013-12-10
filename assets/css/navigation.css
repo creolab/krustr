@@ -1,5 +1,7 @@
 /* ! Override defaults */
 .navbar                   { min-height: 40px; }
+.navbar-toggle            { padding: 5px 6px; margin-top: 5px; margin-bottom: 4px; line-height: 40%; }
+.navbar-toggle .icon-bar  { width: 16px; }
 .navbar-brand             { padding-top: 10px; padding-bottom: 10px; padding-right: 28px; font-size: 20px; }
 .navbar-inverse           { border-color: #5ba4b3; border-bottom-width: 3px; }
 .navbar-nav > li > a      { padding-top: 10px; padding-bottom: 10px; }

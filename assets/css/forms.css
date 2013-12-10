@@ -115,3 +115,7 @@ aside.form-aside .widget p     { font-size: 12px; }
 .field-group-picker .nav a:hover     { color: #fff; background: #444; }
 .field-group-picker .nav li.active a { background: #303030; }
 .field-group-picker hr               { margin: 5px 0; border-top-color: rgba(0,0,0,.2); border-bottom-color: rgba(255,255,255,.2); }
+
+/* ! ===> Tags */
+.selectize-control.multi .selectize-input > div { background: #84c2d0; color: #fff; font-size: 12px; padding: 2px 6px; }
+.selectize-control.multi .selectize-input > div i.icn { margin-right: 3px; opacity: .8; }
