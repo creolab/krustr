@@ -18,6 +18,8 @@
 	margin: 0; color: #555;
 }
 .entry-form .form-group h3 { font-size: 15px; color: #444; border-bottom: 1px dotted #ccc; padding-bottom: 6px; }
+.entry-form .inline-form .control-field { margin: 0 0 22px 0; }
+.entry-form .inline-form label { color: #666; margin: 0 0 8px 0; font-size: 13px; }
 
 
 /* ! Field groups */

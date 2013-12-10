@@ -22,6 +22,9 @@ class CreateEntriesTable extends Migration {
 			$table->string('channel', 20)->default('pages');
 			$table->string('status', 20)->default('draft');
 			$table->integer('home');
+			$table->string('meta_title')->nullable();
+			$table->string('meta_keywords')->nullable();
+			$table->text('meta_description')->nullable();
 			$table->dateTime('published_at')->nullable();
 			$table->timestamps();
 		});

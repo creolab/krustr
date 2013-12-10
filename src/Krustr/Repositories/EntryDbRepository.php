@@ -266,12 +266,15 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		if ($this->validation->passes($data))
 		{
 			$entry = new Entry(array(
-				'author_id' => Auth::user()->id,
-				'slug'      => Str::slug(array_get($data, 'title')),
-				'title'     => array_get($data, 'title'),
-				'body'      => array_get($data, 'body'),
-				'channel'   => array_get($data, 'channel'),
-				'status'    => $this->inputStatus($data),
+				'author_id'        => Auth::user()->id,
+				'slug'             => Str::slug(array_get($data, 'title')),
+				'title'            => array_get($data, 'title'),
+				'body'             => array_get($data, 'body'),
+				'channel'          => array_get($data, 'channel'),
+				'status'           => $this->inputStatus($data),
+				'meta_title'       => array_get($data, 'meta_title'),
+				'meta_keywords'    => array_get($data, 'meta_keywords'),
+				'meta_description' => array_get($data, 'meta_description'),
 			));
 			$entry->save();
 
@@ -304,10 +307,13 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 			// Set the data
 			$entry = Entry::find($id);
 			$entry->fill(array(
-				'title'   => array_get($data, 'title'),
-				'body'    => array_get($data, 'body'),
-				'channel' => array_get($data, 'channel'),
-				'status'  => $this->inputStatus($data),
+				'title'            => array_get($data, 'title'),
+				'body'             => array_get($data, 'body'),
+				'channel'          => array_get($data, 'channel'),
+				'status'           => $this->inputStatus($data),
+				'meta_title'       => array_get($data, 'meta_title'),
+				'meta_keywords'    => array_get($data, 'meta_keywords'),
+				'meta_description' => array_get($data, 'meta_description'),
 			));
 
 			// Save custom fields
