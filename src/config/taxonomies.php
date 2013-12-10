@@ -9,6 +9,7 @@ return array(
 		'title_singular' => 'Category',
 		'slug'           => 'category',
 		'icon'           => 'th-list',
+		'type'           => 'categories',
 		'order'          => 100,
 	),
 
@@ -19,6 +20,7 @@ return array(
 		'title_singular' => 'Tag',
 		'slug'           => 'tag',
 		'icon'           => 'tags',
+		'type'           => 'tags',
 		'order'          => 200,
 	),
 

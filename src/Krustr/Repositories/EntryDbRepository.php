@@ -445,9 +445,14 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 */
 	public function terms($entryId, $taxonomyId = null)
 	{
-		$terms = Term::join('entry_term', 'entry_term.term_id', '=', 'terms.id')
-		             ->where('entry_term.entry_id', $entryId)
-		             ->get();
+		$query = Term::join('entry_term', 'entry_term.term_id', '=', 'terms.id')
+		             ->where('entry_term.entry_id', $entryId);
+
+		// Add taxonomy
+		if ($taxonomyId) $query->where('entry_term.taxonomy_id', $taxonomyId);
+
+		// Get terms
+		$terms = $query->get();
 
 		return new TermCollection($terms->toArray());
 	}

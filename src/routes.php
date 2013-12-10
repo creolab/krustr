@@ -79,8 +79,9 @@ if (Request::segment(1) == $apiPrefix or Request::segment(1) == $backendPrefix)
 		// ! ===> Taxonomies and terms
 		foreach ($taxonomies as $key => $taxonomy)
 		{
-			Route::get('taxonomy/'.$taxonomy->name_singular,          $api.'TaxonomyController@get');
-			Route::get('taxonomy/'.$taxonomy->name_singular.'/terms', $api.'TermController@index');
+			Route::get('taxonomies/'.$taxonomy->name,               $api.'TaxonomyController@get');
+			Route::get('taxonomies/'.$taxonomy->name.'/terms',      $api.'TermController@index');
+			Route::get('taxonomies/'.$taxonomy->name.'/terms/{id}', $api.'TermController@show');
 		}
 
 		// ! ===> Upload and media

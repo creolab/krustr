@@ -14,6 +14,7 @@ App.Forms = {
 		this.initEditors();
 		this.initSelectboxes();
 		this.initDateTimePickers();
+		this.initTags();
 		this.initSave();
 		// this.Fields.init();
 	},
@@ -114,6 +115,121 @@ App.Forms = {
 			minuteStep: 15,
 			showMeridian: false
 		});
+	},
+
+	/**
+	 * Initialize the tag picker
+	 * @return {void}
+	 */
+	initTags: function() {
+		$(".tag-picker").each(function() {
+			var $el = $(this);
+			var except = $el.val();
+			var url = $el.attr("data-source");
+
+			var $sel = $el.selectize({
+				delimiter: ',',
+				persist: false,
+				loadThrottle: 100,
+				create: function(input) {
+					// Add new tags to array
+					/*var $create = $el.parent().find(".tag-picker-create");
+					var tags = [];
+					if ($create.val()) tags = $create.val().split(",");
+					tags.push(input);
+
+					// Unique tags only
+					tags = _.uniq(tags);
+					console.log(tags);
+
+					// Join back and updae value
+					tags = tags.join(",");
+					$create.val(tags);*/
+
+					return { value: input, text: input, existing: false };
+				},
+				load: function(query, callback) {
+					var $existing = $el.parent().find(".tag-picker-existing");
+
+					// New tag
+					if ( ! query.length) return callback();
+
+					$.ajax({
+						url: url + '?q=' + encodeURIComponent(query),
+						data: {
+							q: encodeURIComponent(query),
+							except: except
+						},
+						type: 'GET',
+						error: function() { callback(); },
+						success: function(res) {
+							var terms = [];
+
+							// Existing tag
+							if (res) {
+								$(res).each(function(index, val) {
+									terms.push({ value: val.title, text: val.title, existing: true });
+								});
+							}
+
+							callback(terms);
+						}
+					});
+				}
+			});
+		});
+
+
+
+		/*$(".tag-picker").each(function() {
+			var url = $(this).attr("data-source");
+
+			$(this).select2({
+				tokenSeparators: [";", ","],
+				placeholder: "Enter your tags",
+				tags: true,
+				multiple: true,
+				ajax: {
+					url: url,
+					data: function (term, page) {
+						return { q: term };
+					},
+					results: function (data, page) {
+						var terms = [];
+
+						$(data).each(function(index, el) {
+							terms.push({ id: el.title, text: el.title });
+						});
+
+						return { results: terms };
+					}
+				},
+				createSearchChoice: function(term, data) {
+					if ($(data).filter(function() {
+						return this.text.localeCompare(term) === 0;
+					}).length === 0) {
+						return { id:term, text:term };
+					}
+				},
+				initSelection: function(element, callback) {
+					var id = $(element).val();
+					var ids = id.split(",");
+
+					if (ids) {
+						$.ajax(url + "/" + id).done(function(data) {
+							var terms = [];
+
+							$(data).each(function(index, val) {
+								terms.push({ id: val.id, text: val.title });
+							});
+
+							callback(terms);
+						});
+					}
+				},
+
+			});
+		});*/
 	},
 
 	/**

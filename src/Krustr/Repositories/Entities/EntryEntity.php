@@ -79,12 +79,34 @@ class EntryEntity extends Entity {
 	 */
 	public function terms($taxonomyId = null)
 	{
-		if ( ! $this->taxonomyTerms)
+		if ( ! $taxonomyId) $key = 'all';
+		else                $key = $taxonomyId;
+
+		if ( ! isset($this->taxonomyTerms[$key]))
 		{
-			$this->taxonomyTerms = $this->entryRepository->terms($this->id, $taxonomyId);
+			$this->taxonomyTerms[$key] = $this->entryRepository->terms($this->id, $taxonomyId);
 		}
 
-		return $this->taxonomyTerms;
+		return $this->taxonomyTerms[$key];
+	}
+
+	/**
+	 * Get term list as string
+	 * @param  string $taxonomyId
+	 * @param  string $separator
+	 * @return string
+	 */
+	public function termsString($taxonomyId = null, $separator = ",")
+	{
+		$termString = array();
+		$terms = $this->terms($taxonomyId);
+
+		foreach ($terms as $term)
+		{
+			$termString[] = $term->title;
+		}
+
+		return implode($separator, $termString);
 	}
 
 	/**

@@ -26,12 +26,34 @@ class TermController extends BaseController {
 	public function index()
 	{
 		// Get taxonomy from request
-		$taxonomy = Input::get('taxonomy_id', 'categories');
+		$taxonomyId = Input::get('taxonomy_id', Request::segment(3));
 
 		// Fetch the terms
-		$terms = $this->terms->all($taxonomy);
+		$terms = $this->terms->searchAll($taxonomyId, Input::get('q'), array('except' => Input::get('except')));
 
 		return Response::json($terms);
+	}
+
+	/**
+	 * Show a specific term
+	 * @param  integer $id
+	 * @return Response
+	 */
+	public function show($id)
+	{
+		// Prepare
+		$terms = array();
+		$ids   = explode(",", $id);
+
+		foreach ($ids as $id)
+		{
+			if ($term = $this->terms->find($id))
+			{
+				$terms[] = $term->toArray();
+			}
+		}
+
+		if ($term) return Response::json($terms);
 	}
 
 }

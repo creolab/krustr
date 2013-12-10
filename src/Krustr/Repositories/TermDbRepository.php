@@ -1,6 +1,6 @@
 <?php namespace Krustr\Repositories;
 
-use DB;
+use DB, Input, Str;
 use Krustr\Models\Term;
 use Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface;
 use Krustr\Repositories\Collections\TermCollection;
@@ -36,6 +36,29 @@ class TermDbRepository implements Interfaces\TermRepositoryInterface {
 	}
 
 	/**
+	 * Search all terms
+	 * @param  string $taxonomyId
+	 * @param  string $query
+	 * @return mixed
+	 */
+	public function searchAll($taxonomyId, $query = null, $options = array())
+	{
+		$query = Term::where('taxonomy_id', $taxonomyId)->where('title', 'like', "%$query%")->orderBy('title');
+
+		if ($except = explode(",", array_get($options, 'except')))
+		{
+			foreach ($except as $term)
+			{
+				$query->where('title', 'not like', $term);
+			}
+		}
+
+		$terms = $query->get();
+
+		return new TermCollection($terms->toArray());
+	}
+
+	/**
 	 * Find term by ID
 	 * @param  integer $id
 	 * @return mixed
@@ -62,9 +85,15 @@ class TermDbRepository implements Interfaces\TermRepositoryInterface {
 	/**
 	 * Create new field value
 	 */
-	public function create()
+	public function create($data)
 	{
+		$term = new Term;
+		$term->title       = array_get($data, 'title');
+		$term->slug        = Str::slug($term->title);
+		$term->taxonomy_id = array_get($data, 'taxonomy_id');
+		$term->save();
 
+		return $term->id;
 	}
 
 	/**
@@ -110,23 +139,70 @@ class TermDbRepository implements Interfaces\TermRepositoryInterface {
 
 				if ($taxonomy)
 				{
-					// Delete all
-					$query = DB::table('entry_term')->where('entry_id', $entryId)->where('taxonomy_id', $taxonomy->name_singular)->delete();
-
-					// And insert new ones
-					foreach ($terms as $termId)
-					{
-						$query = DB::table('entry_term')->insert(array(
-							'entry_id'    => $entryId,
-							'term_id'     => (int) $termId,
-							'taxonomy_id' => $taxonomy->name_singular,
-							'created_at'  => \Carbon\Carbon::now()->toDateTimeString(),
-							'updated_at'  => \Carbon\Carbon::now()->toDateTimeString(),
-						));
-					}
+					if ($taxonomy->type == 'tags') $this->saveTags($entryId, $taxonomy, $terms);
+					else                           $this->saveCategories($entryId, $taxonomy, $terms);
 				}
 			}
 		}
+	}
+
+	public function saveCategories($entryId, $taxonomy, $terms)
+	{
+		// Delete all
+		$query = DB::table('entry_term')->where('entry_id', $entryId)->where('taxonomy_id', $taxonomy->name_singular)->delete();
+
+		// And insert new ones
+		foreach ($terms as $termId)
+		{
+			$query = DB::table('entry_term')->insert(array(
+				'entry_id'    => $entryId,
+				'term_id'     => (int) $termId,
+				'taxonomy_id' => $taxonomy->name_singular,
+				'created_at'  => \Carbon\Carbon::now()->toDateTimeString(),
+				'updated_at'  => \Carbon\Carbon::now()->toDateTimeString(),
+			));
+		}
+	}
+
+	public function saveTags($entryId, $taxonomy, $terms)
+	{
+		// Explode terms if needed
+		if (is_string($terms)) $terms = explode(",", $terms);
+
+		// Delete all
+		$query = DB::table('entry_term')->where('entry_id', $entryId)->where('taxonomy_id', $taxonomy->name_singular)->delete();
+
+		foreach ($terms as $term)
+		{
+			if ($term)
+			{
+				// Add to list if doesn't exist
+				if ( ! $id = $this->existsByTitle($term, $taxonomy->name))
+				{
+					$id = $this->create(array(
+						'title'       => $term,
+						'type'        => 'tags',
+						'taxonomy_id' => $taxonomy->name,
+					));
+				}
+
+				$query = DB::table('entry_term')->insert(array(
+					'entry_id'    => $entryId,
+					'term_id'     => (int) $id,
+					'taxonomy_id' => $taxonomy->name_singular,
+					'created_at'  => \Carbon\Carbon::now()->toDateTimeString(),
+					'updated_at'  => \Carbon\Carbon::now()->toDateTimeString(),
+				));
+			}
+		}
+	}
+
+	public function existsByTitle($title, $taxonomyId = null)
+	{
+		if ($taxonomyId) $term = Term::where('title', 'like', $title)->first();
+		else             $term = Term::where('title', 'like', $title)->where('taxonomy_id', $taxonomyId)->first();
+
+		if ($term) return $term->id;
 	}
 
 }
