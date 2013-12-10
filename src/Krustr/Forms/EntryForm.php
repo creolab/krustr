@@ -57,8 +57,12 @@ class EntryForm extends BaseForm implements FormInterface {
 		$this->taxRepository  = app('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface');
 
 		// Get the taxonomies
-		foreach ($this->channel->taxonomies as $taxonomy)
-			$this->taxonomies[$taxonomy] = $this->taxRepository->find($taxonomy);
+		if ($this->channel->taxonomies)
+		{
+			foreach ($this->channel->taxonomies as $taxonomy)
+				$this->taxonomies[$taxonomy] = $this->taxRepository->find($taxonomy);
+		}
+
 		View::share('taxonomies', $this->taxonomies);
 	}
 
@@ -196,21 +200,24 @@ class EntryForm extends BaseForm implements FormInterface {
 	 */
 	public function renderTaxonomies()
 	{
-		$terms = array();
-
-		// Get all terms
-		foreach ($this->taxonomies as $taxonomy)
+		if ($this->taxonomies)
 		{
-			$terms[$taxonomy->name] = $taxonomy;
+			$terms = array();
 
-			// And find all terms - @TODO: This needs to be optimized
-			if ($terms[$taxonomy->name]) $terms[$taxonomy->name]->terms = $this->termRepository->all($taxonomy->name);
+			// Get all terms
+			foreach ($this->taxonomies as $taxonomy)
+			{
+				$terms[$taxonomy->name] = $taxonomy;
+
+				// And find all terms - @TODO: This needs to be optimized
+				if ($terms[$taxonomy->name]) $terms[$taxonomy->name]->terms = $this->termRepository->all($taxonomy->name);
+			}
+
+			// Share it with the view
+			View::share('taxonomy_terms', $terms);
+
+			return View::make('krustr::entries._partial.taxonomies');
 		}
-
-		// Share it with the view
-		View::share('taxonomy_terms', $terms);
-
-		return View::make('krustr::entries._partial.taxonomies');
 	}
 
 	/**

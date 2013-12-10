@@ -12,17 +12,17 @@
 				<div class="inline-form">
 					<div class="control-field">
 						<label for="meta_title">Meta title</label>
-						{{ Form::text('meta_title', $entry->meta_title, array('class' => 'form-control')) }}
+						{{ Form::text('meta_title', ((isset($entry)) ? $entry->meta_title : null), array('class' => 'form-control')) }}
 					</div>
 
 					<div class="control-field">
 						<label for="meta_keywords">Meta keywords</label>
-						{{ Form::text('meta_keywords', $entry->meta_keywords, array('class' => 'form-control')) }}
+						{{ Form::text('meta_keywords',  ((isset($entry)) ? $entry->meta_keywords : null), array('class' => 'form-control')) }}
 					</div>
 
 					<div class="control-field">
 						<label for="meta_keywords">Meta description</label>
-						{{ Form::textarea('meta_description', $entry->meta_description, array('class' => 'form-control')) }}
+						{{ Form::textarea('meta_description',  ((isset($entry)) ? $entry->meta_description : null), array('class' => 'form-control')) }}
 					</div>
 				</div>
 			</div>
@@ -42,17 +42,17 @@
 				<div class="inline-form">
 					<div class="control-field">
 						<label for="meta_title">Created at</label>
-						{{ Form::text('created_at', $entry->created_at, array('class' => 'form-control')) }}
+						{{ Form::text('created_at', ((isset($entry)) ? $entry->created_at : null), array('class' => 'form-control')) }}
 					</div>
 
 					<div class="control-field">
 						<label for="meta_title">Updated at</label>
-						{{ Form::text('updated_at', $entry->created_at, array('class' => 'form-control')) }}
+						{{ Form::text('updated_at', ((isset($entry)) ? $entry->created_at : null), array('class' => 'form-control')) }}
 					</div>
 
 					<div class="control-field">
 						<label for="meta_title">Published at</label>
-						{{ Form::text('published_at', $entry->created_at, array('class' => 'form-control')) }}
+						{{ Form::text('published_at', ((isset($entry)) ? $entry->created_at : null), array('class' => 'form-control')) }}
 					</div>
 				</div>
 			</div>
@@ -72,7 +72,7 @@
 				<div class="inline-form">
 					<div class="control-field">
 						<label for="meta_title">Author</label>
-						{{ Form::text('user', $entry->author->full_name, array('class' => 'form-control')) }}
+						{{ Form::text('user', ((isset($entry)) ? $entry->author->full_name : null), array('class' => 'form-control')) }}
 					</div>
 				</div>
 			</div>

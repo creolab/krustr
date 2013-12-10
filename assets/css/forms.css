@@ -103,7 +103,7 @@ aside.form-aside .widget        { position: relative; z-index: 1; box-shadow: 0 
 /* ! ===> Rouded borders */
 aside.form-aside .widget       { border-radius: 0 6px 6px 0; }
 aside.form-aside .widget h2    { background: #444; color: #eee; font-size: 12px; margin: 0; padding: 6px 10px; line-height: 120%; border-radius: 0 6px 0 0; }
-aside.form-aside .widget .wrap { border: 1px solid #bababa; background: #ddd url(../img/bg_noise_light.png); padding: 14px; border-radius: 0 0 6px 0; }
+aside.form-aside .widget .wrap { border: 1px solid #bababa; background: #ddd url(../images/bg_noise_light.png); padding: 14px; border-radius: 0 0 6px 0; }
 aside.form-aside .widget ul    { font-size: 12px; }
 aside.form-aside .widget p     { font-size: 12px; }
 
