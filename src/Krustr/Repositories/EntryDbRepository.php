@@ -132,6 +132,8 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 */
 	public function allPublishedByTerm($termId, $channel = null, $options = array())
 	{
+		if ( ! is_array($termId)) $termId = array($termId);
+
 		// Get channel config
 		if ($channel) $this->channel = $this->channels->find($channel);
 
@@ -139,7 +141,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$this->query = Entry::with(array('author', 'fields'))->select('entries.*')->orderBy('created_at', 'desc');
 
 		// Filter by term
-		$this->query->join('entry_term', 'entry_term.entry_id', '=', 'entries.id')->where('entry_term.term_id', $termId);
+		$this->query->join('entry_term', 'entry_term.entry_id', '=', 'entries.id')->whereIn('entry_term.term_id', $termId);
 
 		// Add options
 		$this->query = $this->options($options);

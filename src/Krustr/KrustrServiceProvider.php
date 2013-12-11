@@ -213,12 +213,18 @@ class KrustrServiceProvider extends ServiceProvider {
 		// Register theme singleton
 		$this->app->singleton('krustr.theme', function($app)
 		{
+			return new \Krustr\Services\Theme\Theme($app);
+		});
+
+		// Register theme bootstrap singleton
+		$this->app->singleton('krustr.theme.bootstrap', function($app)
+		{
 			if (class_exists('\Theme\Bootstrap')) return new \Theme\Bootstrap($app);
 			else                                  return new \Krustr\Services\Theme\Bootstrap($app);
 		});
 
 		// Initialize the theme
-		$this->app['krustr.theme']->init();
+		$this->app['krustr.theme.bootstrap']->init();
 	}
 
 }

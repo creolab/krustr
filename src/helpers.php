@@ -149,7 +149,7 @@ if ( ! function_exists('template_class'))
 	 */
 	function template_class()
 	{
-		if (isset($template_class)) return $template_class;
+		return app('krustr.theme')->templateClass();
 	}
 }
 

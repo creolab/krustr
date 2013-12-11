@@ -6,6 +6,10 @@ use Krustr\Repositories\Interfaces\TermRepositoryInterface;
 use Krustr\Services\Profiler;
 use App, Config, Log, Redirect, Request, View;
 
+/**
+ * Find content entries based on route, and render matching view
+ * @author Boris Strahija <bstrahija@gmail.com>
+ */
 class Finder extends \Illuminate\Routing\Controller {
 
 	/**

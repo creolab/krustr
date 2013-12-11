@@ -4,6 +4,7 @@ use App, Config, Response, Request, Route, View;
 
 /**
  * Route public requests to content
+ * Fetching content and rendering views is handled by the Finder
  * @author Boris Strahija <boris@creolab.hr>
  */
 class Router {
