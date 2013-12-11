@@ -1,10 +1,12 @@
-<div class="form-group {{ ($field->value) ? 'has-value' : 'no-value' }} field-type-{{ $field->type }}" id="field-element-{{ $field->name }}">
-	<label for="text" class="control-label">
-		{{ $field->label }}
-		{{ admin_icn($field->icon) }}
-	</label>
+<div class="{{ $field->css_box_class }}">
+	<div class="form-group {{ ($field->value) ? 'has-value' : 'no-value' }} field-type-{{ $field->type }}" id="field-element-{{ $field->name }}">
+		<label for="text" class="control-label">
+			{{ $field->label }}
+			{{ admin_icn($field->icon) }}
+		</label>
 
-	<div class="control-field">
-		<input type="text" name="{{ $field->name }}" value="{{ $value }}" placeholder="{{ $field->placeholder }}" class="form-control {{ $field->css_class }}">
+		<div class="control-field">
+			<input type="text" name="{{ $field->name }}" value="{{ $value }}" placeholder="{{ $field->placeholder }}" class="form-control {{ $field->css_class }}">
+		</div>
 	</div>
 </div>

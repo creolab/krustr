@@ -2,6 +2,8 @@
 
 use Config, Form, Input, Log, Session, View;
 use Krustr\Repositories\Entities\ChannelEntity;
+use Krustr\Repositories\Entities\FieldEntity;
+use Krustr\Repositories\Entities\FieldGroupEntity;
 
 class EntryForm extends BaseForm implements FormInterface {
 
@@ -35,9 +37,23 @@ class EntryForm extends BaseForm implements FormInterface {
 	 */
 	protected $groups = array();
 
+	/**
+	 * Repository for terms
+	 * @var TermRepositoryInterface
+	 */
 	protected $termRepository;
 
+	/**
+	 * Repository for taxonomies
+	 * @var TaxonomyRepositoryInterface
+	 */
 	protected $taxRepository;
+
+	/**
+	 * Repository for channels
+	 * @var ChannelRepositoryInterface
+	 */
+	protected $channelRepository;
 
 	/**
 	 * Initialize new form object
@@ -53,8 +69,8 @@ class EntryForm extends BaseForm implements FormInterface {
 		$this->entry = $entry;
 
 		// Assign taxonomies
-		$this->termRepository = app('Krustr\Repositories\Interfaces\TermRepositoryInterface');
-		$this->taxRepository  = app('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface');
+		$this->termRepository    = app('Krustr\Repositories\Interfaces\TermRepositoryInterface');
+		$this->taxRepository     = app('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface');
 
 		// Get the taxonomies
 		if ($this->channel->taxonomies)
@@ -62,6 +78,9 @@ class EntryForm extends BaseForm implements FormInterface {
 			foreach ($this->channel->taxonomies as $taxonomy)
 				$this->taxonomies[$taxonomy] = $this->taxRepository->find($taxonomy);
 		}
+
+		// Add entry fields
+		if ($entry) $this->channel->addEntryFields($entry);
 
 		View::share('taxonomies', $this->taxonomies);
 	}

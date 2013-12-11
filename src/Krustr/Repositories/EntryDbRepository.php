@@ -152,7 +152,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$this->query = Entry::with(array('author', 'fields'))->select('entries.*')->distinct();
 
 		// Exclude some entries
-		if ($exclude) $this->query->whereNotIn('id', $exclude);
+		// if ($exclude) $this->query->whereNotIn('entries.id', $exclude);
 
 		// Order
 		$orderBy = array_get($options, 'order_by', 'created_at');

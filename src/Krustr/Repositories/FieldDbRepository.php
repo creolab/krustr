@@ -139,6 +139,9 @@ class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
 		$entry   = new Entities\EntryEntity($entry->toArray());
 		$channel = $this->channels->find($entry->channel);
 
+		// Add specific entry fields
+		$channel->addEntryFields($entry);
+
 		foreach ($channel->fields as $field)
 		{
 			if ($field->save != 'direct')
