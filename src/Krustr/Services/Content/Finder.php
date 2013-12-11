@@ -170,6 +170,8 @@ class Finder extends \Illuminate\Routing\Controller {
 			{
 				return App::abort(404);
 			}
+
+			View::share('term', $term);
 		}
 		else
 		{
@@ -179,6 +181,7 @@ class Finder extends \Illuminate\Routing\Controller {
 		// Share content
 		View::share('entries',    $entries);
 		View::share('pagination', $this->entryRepository->pagination());
+		View::share('taxonomy',   $taxonomy);
 
 		// Views that we need to search for
 		$views = array(
