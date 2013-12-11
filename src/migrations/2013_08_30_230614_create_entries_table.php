@@ -15,13 +15,13 @@ class CreateEntriesTable extends Migration {
 		Schema::create('entries', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('author_id');
+			$table->integer('author_id')->index();
 			$table->string('title');
-			$table->string('slug');
+			$table->string('slug')->index();
 			$table->text('body')->nullable();
-			$table->string('channel', 20)->default('pages');
-			$table->string('status', 20)->default('draft');
-			$table->integer('home');
+			$table->string('channel', 20)->default('pages')->index();
+			$table->string('status', 20)->default('draft')->index();
+			$table->integer('home')->index();
 			$table->string('meta_title')->nullable();
 			$table->string('meta_keywords')->nullable();
 			$table->text('meta_description')->nullable();

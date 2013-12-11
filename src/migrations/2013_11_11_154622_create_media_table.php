@@ -21,7 +21,7 @@ class CreateMediaTable extends Migration {
 			$table->string('title')->nullable();
 			$table->text('description')->nullable();
 			$table->string('path')->nullable();
-			$table->string('type', 20)->default('item'); // Can be 'item' or 'collection'
+			$table->string('type', 20)->default('item')->index(); // Can be 'item' or 'collection'
 			$table->integer('order')->nullable();
 			$table->timestamps();
 		});

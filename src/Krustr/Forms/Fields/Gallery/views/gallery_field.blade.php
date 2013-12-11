@@ -4,9 +4,9 @@
 		<i class="glyphicon glyphicon-{{ $field->icon }}"></i>
 	</label>
 
-	@include("krustr_fields::gallery.views.preview")
+	@include("krustr_fields::Gallery.views.preview")
 
-	@include("krustr_fields::gallery.views.media")
+	@include("krustr_fields::Gallery.views.media")
 
 	@include("krustr_fields::_default.upload")
 
