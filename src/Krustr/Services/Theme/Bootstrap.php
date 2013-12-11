@@ -34,7 +34,7 @@ class Bootstrap {
 	{
 		if (file_exists($routes = public_path() . '/themes/' . $this->theme . '/routes.php'))
 		{
-			//include $routes;
+			include $routes;
 		}
 	}
 
@@ -44,6 +44,15 @@ class Bootstrap {
 		{
 			include $filters;
 		}
+	}
+
+	/**
+	 * Try to trigger an actions for specific route
+	 * @return mixed
+	 */
+	public function triggerRoute()
+	{
+
 	}
 
 }

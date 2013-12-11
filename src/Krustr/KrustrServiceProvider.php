@@ -5,6 +5,8 @@ use Illuminate\Support\ServiceProvider;
 
 class KrustrServiceProvider extends ServiceProvider {
 
+	protected $loader;
+
 	/**
 	 * Bootstrap the application events.
 	 *
@@ -15,8 +17,8 @@ class KrustrServiceProvider extends ServiceProvider {
 		$this->package('creolab/krustr', 'krustr', __DIR__.'/../');
 
 		// Shortcut so developers don't need to add an Alias in app/config/app.php
-		$loader = \Illuminate\Foundation\AliasLoader::getInstance();
-		$loader->alias('Kprofile', '\Krustr\Services\Profiler');
+		$this->loader = \Illuminate\Foundation\AliasLoader::getInstance();
+		$this->loader->alias('Kprofile', '\Krustr\Services\Profiler');
 
 		// Start
 		\Kprofile::start("KRUSTR BOOT");
@@ -222,6 +224,8 @@ class KrustrServiceProvider extends ServiceProvider {
 		{
 			return new \Krustr\Services\Theme\Theme($app);
 		});
+		$this->loader->alias('Theme', '\Krustr\Facades\ThemeFacade');
+
 
 		// Register theme bootstrap singleton
 		$this->app->singleton('krustr.theme.bootstrap', function($app)
@@ -229,9 +233,6 @@ class KrustrServiceProvider extends ServiceProvider {
 			if (class_exists('\Theme\Bootstrap')) return new \Theme\Bootstrap($app);
 			else                                  return new \Krustr\Services\Theme\Bootstrap($app);
 		});
-
-		// Initialize the theme
-		$this->app['krustr.theme.bootstrap']->init();
 	}
 
 }

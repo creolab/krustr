@@ -73,6 +73,22 @@ class EntryEntity extends Entity {
 	}
 
 	/**
+	 * Return 1st term
+	 * @param  string $taxonomyId
+	 * @return string
+	 */
+	public function term($taxonomyId = null, $field = null)
+	{
+		$terms = $this->terms($taxonomyId);
+
+		if ($terms)
+		{
+			if ($field) return $terms->first()->$field;
+			else        return $terms->first();
+		}
+	}
+
+	/**
 	 * Return all terms for taxonomy
 	 * @param  string $taxonomyId
 	 * @return TermCollection
@@ -107,6 +123,26 @@ class EntryEntity extends Entity {
 		}
 
 		return implode($separator, $termString);
+	}
+
+	/**
+	 * Return string of term IDs
+	 * @param  string $taxonomyId
+	 * @param  string $separator
+	 * @return string
+	 */
+	public function termIds($taxonomyId = null, $separator = ",")
+	{
+		$termString = array();
+		$terms = $this->terms($taxonomyId);
+
+		foreach ($terms as $term)
+		{
+			$termString[] = (int) $term->id;
+		}
+
+		if ($separator == 'array') return $termString;
+		else                       return implode($separator, $termString);
 	}
 
 	/**

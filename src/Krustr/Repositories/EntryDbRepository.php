@@ -1,6 +1,6 @@
 <?php namespace Krustr\Repositories;
 
-use Auth, Config, Log, Request, Str;
+use Auth, Config, DB, Log, Request, Str;
 use Krustr\Models\Entry;
 use Krustr\Models\Term;
 use Krustr\Repositories\Collections\EntryCollection;
@@ -102,13 +102,22 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		if ($this->channel)
 		{
 			// Start the query
-			$this->query = Entry::with(array('author', 'fields'))->inChannel($this->channel->name)->orderBy('created_at', 'desc');
+			$this->query = Entry::with(array('author', 'fields'))->inChannel($this->channel->name);
+
+			// Order
+			$orderBy = array_get($options, 'order_by', 'created_at');
+			$order   = array_get($options, 'order',    'desc');
+
+			// Run order
+			if ($orderBy == 'rand') $this->query->orderBy(DB::raw('RAND()'), $order);
+			else                    $this->query->orderBy($orderBy, $order);
 
 			// Add options
 			$this->query = $this->options($options);
 
 			// Run query
-			$items            = $this->paginate();
+			$perPage          = array_get($options, 'limit', null);
+			$items            = $this->paginate($perPage);
 			$this->entries    = new EntryCollection(array_get($items, 'data'));
 
 			return $this->entries;
@@ -120,9 +129,11 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 * @param  string $channel
 	 * @return EntryCollection
 	 */
-	public function allPublishedInChannel($channel)
+	public function allPublishedInChannel($channel, $options = array())
 	{
-		return $this->allInChannel($channel, array('status' => 'published'));
+		$options = array_merge(array('status' => 'published'), $options);
+
+		return $this->allInChannel($channel, $options);
 	}
 
 	/**
@@ -130,7 +141,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 * @param  string $term
 	 * @return EntryCollection
 	 */
-	public function allPublishedByTerm($termId, $channel = null, $options = array())
+	public function allPublishedByTerm($termId, $channel = null, $options = array(), $exclude = array())
 	{
 		if ( ! is_array($termId)) $termId = array($termId);
 
@@ -138,7 +149,18 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		if ($channel) $this->channel = $this->channels->find($channel);
 
 		// Start the query
-		$this->query = Entry::with(array('author', 'fields'))->select('entries.*')->orderBy('created_at', 'desc');
+		$this->query = Entry::with(array('author', 'fields'))->select('entries.*')->distinct();
+
+		// Exclude some entries
+		if ($exclude) $this->query->whereNotIn('id', $exclude);
+
+		// Order
+		$orderBy = array_get($options, 'order_by', 'created_at');
+		$order   = array_get($options, 'order',    'desc');
+
+		// Run order
+		if ($orderBy == 'rand') $this->query->orderBy(DB::raw('RAND()'), $order);
+		else                    $this->query->orderBy($orderBy, $order);
 
 		// Filter by term
 		$this->query->join('entry_term', 'entry_term.entry_id', '=', 'entries.id')->whereIn('entry_term.term_id', $termId);
@@ -147,7 +169,8 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$this->query = $this->options($options);
 
 		// Run query
-		$items            = $this->paginate();
+		$perPage          = array_get($options, 'limit', null);
+		$items            = $this->paginate($perPage);
 		$this->entries    = new EntryCollection(array_get($items, 'data'));
 
 		return $this->entries;
@@ -388,13 +411,16 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		{
 			foreach ($options as $key => $value)
 			{
-				if (is_array($value))
+				if ( ! in_array($key, array('limit', 'order_by')))
 				{
-					$this->query->where($key, $value[0], $value[1]);
-				}
-				else
-				{
-					$this->query->where($key, $value);
+					if (is_array($value))
+					{
+						$this->query->where($key, $value[0], $value[1]);
+					}
+					else
+					{
+						$this->query->where($key, $value);
+					}
 				}
 			}
 		}
@@ -422,6 +448,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 			}
 		}
 
+		// Run pagination
 		$perPage          = (int) ($perPage ?: 20);
 		$this->collection = $this->query->paginate($perPage);
 		$items            = $this->collection->toArray();

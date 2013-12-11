@@ -257,6 +257,9 @@ class Finder extends \Illuminate\Routing\Controller {
 		// Share some data with the view
 		View::share('template', $view);
 
+		// Initialize the theme
+		app('krustr.theme.bootstrap')->init();
+
 		Profiler::end('FINDER - RENDER', $view);
 
 		// Render view or abort
