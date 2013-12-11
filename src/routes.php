@@ -55,6 +55,9 @@ if (Request::segment(1) == $backendPrefix)
 			Route::resource('taxonomies/'.$taxonomy->name, $admin.'TermController');
 		}
 
+		// ! ===> Image editor
+		Route::get('field/image/{id}', array('as' => $backendPrefix.'.field.image.edit', 'uses' => $admin.'ImageController@editFieldImage'));
+
 		// ! ===> System
 		Route::resource('system/users', $admin.'UsersController');
 		Route::get('system',            array('as' => $backendPrefix . '.system', 'uses' => $admin.'SystemController@getUsers'));

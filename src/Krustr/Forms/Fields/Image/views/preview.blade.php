@@ -7,7 +7,8 @@
 
 					<div class="actions clearfix">
 						<a href="{{ route('api.media.field.delete', array($entry->id, $field->name)) }}" class="btn btn-danger btn-xs pull-right delete" data-remote="delete" data-confirm="Are you sure?" data-id="{{ $field->id }}" data-after="App.Media.removeImage">{{ admin_icn('remove') }}</a>
-						<a href="{{ asset($field->value) }}" class="btn btn-info btn-xs pull-left zoom lightbox" rel="lighbox-gallery-{{ $field->name }}">{{ admin_icn('zoom-in') }}</a>
+						<a href="{{ asset($field->value) }}" class="btn btn-success btn-xs pull-left zoom lightbox" rel="lighbox-gallery-{{ $field->name }}">{{ admin_icn('zoom-in') }}</a>
+						<a href="{{ route('backend.field.image.edit', $field->id) }}" class="btn btn-info btn-xs editbox">{{ admin_icn('pencil') }}</a>
 					</div>
 				</figure>
 			<?php else : ?>
