@@ -12,9 +12,16 @@ class KrustrServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		\Krustr\Services\Profiler::start("KRUSTR BOOT");
-
 		$this->package('creolab/krustr', 'krustr', __DIR__.'/../');
+
+		// Shortcut so developers don't need to add an Alias in app/config/app.php
+		$loader = \Illuminate\Foundation\AliasLoader::getInstance();
+		$loader->alias('Kprofile', '\Krustr\Services\Profiler');
+
+		// Start
+		\Kprofile::start("KRUSTR BOOT");
+
+		// Boot CLI commands
 		$this->bootCommands();
 
 		// Register the package configuration with the loader.
@@ -45,7 +52,7 @@ class KrustrServiceProvider extends ServiceProvider {
 
 		// Initialize backend
 		$this->registerBackend();
-		\Krustr\Services\Profiler::end("KRUSTR BOOT");
+		\Kprofile::end("KRUSTR BOOT");
 	}
 
 	/**

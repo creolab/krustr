@@ -5,6 +5,12 @@ use Config, File, Input;
 class GalleryField extends \Krustr\Forms\Fields\Field {
 
 	/**
+	 * Media collection for gallery
+	 * @var Collection
+	 */
+	protected $mediaCollection;
+
+	/**
 	 * Save field value and all collection items
 	 * @param  mixed  $data
 	 * @return void
@@ -60,9 +66,12 @@ class GalleryField extends \Krustr\Forms\Fields\Field {
 	 */
 	function value()
 	{
-		$gallery = app('Krustr\Repositories\Interfaces\GalleryRepositoryInterface')->find($this->value);
+		if ( ! $this->mediaCollection)
+		{
+			$this->mediaCollection = app('Krustr\Repositories\Interfaces\GalleryRepositoryInterface')->find($this->value);
+		}
 
-		return $gallery;
+		return $this->mediaCollection;
 	}
 
 	/**
