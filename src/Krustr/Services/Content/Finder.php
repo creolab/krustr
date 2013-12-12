@@ -102,10 +102,10 @@ class Finder extends \Illuminate\Routing\Controller {
 
 		// Views that we need to search for
 		$views = array(
-			$entry->slug, // contact.blade.php
+			str_replace("-", "_", $entry->slug), // contact.blade.php
 			$this->channel->resource . '_entry', // shop.entry.blade.php
 			$this->channel->resource . '_' . $this->channel->resource_singular, // shop.product.blade.php
-			$this->channel->resource_singular . '_' . $entry->slug, // page.contact.blade.php
+			$this->channel->resource_singular . '_' . str_replace("-", "_", $entry->slug), // page.contact.blade.php
 			$this->channel->resource_singular, // page.blade.php
 			'entry',
 			'index',

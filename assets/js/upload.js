@@ -41,7 +41,7 @@ App.Upload = {
 				container       : 'file-upload-' + id,
 				drop_element    : 'file-drop-'   + id,
 				max_file_size   : '10mb',
-				url             : App.Upload.params.uploadAction,
+				url             : App.Upload.params.uploadAction + "?custom=" + id,
 				max_files       : $maxFiles,
 				file_types      : $el.attr('data-file-types'),
 				uploaded_files  : []

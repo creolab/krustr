@@ -33,6 +33,12 @@ class ImageField extends \Krustr\Forms\Fields\Field {
 				// Move the file
 				File::move($path, $target);
 
+				// Delete parent folder if tmp
+				$tmpPath = pathinfo($path, PATHINFO_DIRNAME);
+				$tmpArr  = explode("/", $tmpPath);
+				$tmpDir  = array_pop($tmpArr);
+				if (strpos($tmpDir, 'tmp_') === 0) File::deleteDirectory($tmpPath);
+
 				// Create predefined dimmensions
 				$dimensions = Config::get('krustr::media.image_dimensions');
 				app('krustr.image')->createDimensions($relativePath, $dimensions);

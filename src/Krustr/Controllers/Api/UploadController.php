@@ -29,9 +29,20 @@ class UploadController extends BaseController {
 	 */
 	public function fire()
 	{
-		$reponse = $this->upload->fire(Input::file('file'), Config::get('krustr::media.tmp_path'), array(
-			'tmp_url' => Config::get('krustr::media.tmp_url'),
-		));
+		// Target path
+		$tmpPath = Config::get('krustr::media.tmp_path');
+		$tmpUrl  = Config::get('krustr::media.tmp_url');
+
+		// Custom location
+		if ($custom = Input::get('custom'))
+		{
+			$tmpDir   = 'tmp_' . str_replace("-", "_", $custom) . '_' . uniqid() . '/';
+			$tmpPath .= $tmpDir;
+			$tmpUrl  .= $tmpDir;
+		}
+
+		// Run upload actions
+		$reponse = $this->upload->fire(Input::file('file'), $tmpPath, array('tmp_url' => $tmpUrl));
 
 		return Response::json($reponse);
 	}
