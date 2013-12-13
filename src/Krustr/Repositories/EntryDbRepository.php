@@ -341,6 +341,12 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 				'meta_description' => array_get($data, 'meta_description'),
 			));
 
+			// Slug
+			if ($slug = array_get($data, 'slug') and $slug != $entry->slug) $entry->slug = Str::slug($slug);
+
+			// Template
+			if ($template = array_get($data, 'template')) $entry->template = str_replace("-", "_", Str::slug($slug));
+
 			// Save custom fields
 			$this->fields->saveAllForEntry($id, $data);
 

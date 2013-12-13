@@ -2,8 +2,27 @@
 	<h3 class="field-group-title">Setting<</h3>
 
 	<div class="row">
+		<div class="col-lg-12">
+			<div class="form-group field-type-text" id="field-element--settings-slug">
+				<label for="text" class="control-label">
+					Slug
+					<i class="icn icon icon-cog"></i>
+				</label>
+
+				<div class="inline-form">
+					<div class="control-field">
+						{{ Form::text('slug', ((isset($entry)) ? $entry->slug : null), array('class' => 'form-control')) }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- -->
+
+
 		<div class="col-lg-6">
-			<div class="form-group has-value field-type-text" id="field-element-title">
+			<div class="form-group has-value field-type-text" id="field-element--settings-meta">
 				<label for="text" class="control-label">
 					Meta data
 					<i class="icn icon icon-cog"></i>
@@ -33,7 +52,7 @@
 
 
 		<div class="col-lg-6">
-			<div class="form-group has-value field-type-text" id="field-element-title">
+			<div class="form-group has-value field-type-text" id="field-element--settings-dates">
 				<label for="text" class="control-label">
 					Dates
 					<i class="icn icon icon-calendar"></i>
@@ -63,7 +82,7 @@
 
 
 		<div class="col-lg-6">
-			<div class="form-group has-value field-type-text" id="field-element-title">
+			<div class="form-group has-value field-type-text" id="field-element--settings-people">
 				<label for="text" class="control-label">
 					People
 					<i class="icn icon icon-user"></i>
@@ -73,6 +92,25 @@
 					<div class="control-field">
 						<label for="meta_title">Author</label>
 						{{ Form::text('user', ((isset($entry)) ? $entry->author->full_name : null), array('class' => 'form-control')) }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- -->
+
+
+		<div class="col-lg-12 clear">
+			<div class="form-group field-type-text" id="field-element--settings-template">
+				<label for="text" class="control-label">
+					Template
+					<i class="icn icon icon-cog"></i>
+				</label>
+
+				<div class="inline-form">
+					<div class="control-field">
+						{{ Form::text('template', ((isset($entry)) ? $entry->template : null), array('class' => 'form-control')) }}
 					</div>
 				</div>
 			</div>
