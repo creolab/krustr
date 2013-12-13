@@ -12,6 +12,7 @@
         "php": ">=5.3.0",
         "laravel/framework": "~4",
         "dflydev/markdown": "~1",
+        "thujohn/analytics": "dev-master",
         "creolab/vault": "dev-master",
         "creolab/image": "dev-master",
         "creolab/assets": "dev-master",

@@ -41,6 +41,7 @@ return array(
 			'packages/creolab/krustr/assets/vendor/timepicker/bootstrap-timepicker.min.js',
 			'packages/creolab/krustr/assets/vendor/spin.min.js',
 			'packages/creolab/krustr/assets/vendor/selectize/js/selectize.min.js',
+			'packages/creolab/krustr/assets/vendor/chart.min.js',
 			// 'packages/creolab/krustr/assets/vendor/lepture/editor.js',
 			'packages/creolab/krustr/assets/js/app.js',
 			'packages/creolab/krustr/assets/js/ajax.js',
