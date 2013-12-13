@@ -10,12 +10,12 @@ return array(
 		'items' => array(
 			// ! Dashboard
 			'dashboard' => array(
-				'order' => 100, 'label' => null, 'icon'  => 'home', 'route' => 'backend.dashboard', 'class' => 'home', 'mark'  => 'exact',
+				'order' => 100, 'label' => null, 'icon'  => 'home', 'route' => 'backend.dashboard', 'class' => 'home', 'mark'  => 'exact',  'role' => 'editor',
 			),
 
 			// ! Content
 			'content' => array(
-				'order' => 200, 'label' => 'Content', 'icon'  => 'pencil', 'route' => 'backend.content',
+				'order' => 200, 'label' => 'Content', 'icon'  => 'pencil', 'route' => 'backend.content', 'role' => 'editor',
 
 				// ! ==> Channels (Load from channels configuration)
 				'children' => app('config')->get('krustr::channels'),
@@ -23,7 +23,7 @@ return array(
 
 			// ! Taxonomies
 			'taxonomies' => array(
-				'order' => 300, 'label' => 'Taxonomies', 'icon'  => 'tasks', 'route' => 'backend.taxonomy',
+				'order' => 300, 'label' => 'Taxonomies', 'icon'  => 'tasks', 'route' => 'backend.taxonomy', 'role' => 'admin',
 
 				// ! ==> Channels (Load from channels configuration)
 				'children' => app('config')->get('krustr::taxonomies'),
@@ -31,7 +31,7 @@ return array(
 
 			// ! System
 			'system' => array(
-				'order' => 9999, 'label' => 'System', 'icon'  => 'cog', 'route' => 'backend.system',
+				'order' => 9999, 'label' => 'System', 'icon'  => 'cog', 'route' => 'backend.system', 'role' => 'super',
 
 				'children' => array(
 					// ! ==> Users

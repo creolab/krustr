@@ -56,6 +56,12 @@ class Item {
 	public $class;
 
 	/**
+	 * User role
+	 * @var string
+	 */
+	public $role;
+
+	/**
 	 * Initialize new navigation collection
 	 *
 	 * @param array $items
@@ -71,6 +77,7 @@ class Item {
 		$this->order    = (int) array_get($data, 'order');
 		$this->href     = array_get($data, 'href', $this->contentHref($data));
 		$this->children = $this->setChildren(array_get($data, 'children'));
+		$this->role     = array_get($data, 'role', 'editor');
 	}
 
 	/**
