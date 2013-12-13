@@ -22,6 +22,8 @@ class UsersController extends BaseController {
 	 */
 	public function __construct(UserRepositoryInterface $user)
 	{
+		$this->beforeFilter('krustr.backend.acl.super');
+
 		$this->user = $user;
 
 		View::share('meta_title', 'Users');
