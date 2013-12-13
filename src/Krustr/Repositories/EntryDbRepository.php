@@ -309,6 +309,9 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 			// Also save taxonomies
 			$this->terms->saveAllForEntry($entry->id, $data);
 
+			// Template
+			if ($template = array_get($data, 'template')) $entry->template = str_replace("-", "_", Str::slug($template));
+
 			return $entry->id;
 		}
 
@@ -345,7 +348,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 			if ($slug = array_get($data, 'slug') and $slug != $entry->slug) $entry->slug = Str::slug($slug);
 
 			// Template
-			if ($template = array_get($data, 'template')) $entry->template = str_replace("-", "_", Str::slug($slug));
+			$entry->template = str_replace("-", "_", Str::slug(array_get($data, 'template')));
 
 			// Save custom fields
 			$this->fields->saveAllForEntry($id, $data);

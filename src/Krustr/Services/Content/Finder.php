@@ -111,6 +111,9 @@ class Finder extends \Illuminate\Routing\Controller {
 			'index',
 		);
 
+		// Does the entry have a custom view setup, add as first choice
+		if ($entry->template) array_unshift($views, $entry->template);
+
 		Profiler::end('FINDER - ENTRY');
 
 		// The view
