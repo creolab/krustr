@@ -129,7 +129,6 @@ class EntryForm extends BaseForm implements FormInterface {
 					$fieldInstance = new $class($field, $value);
 					$fieldInstance->set('entry_id',   ($this->entry) ? $this->entry->id : null);
 					$fieldInstance->set('field_data', ($this->entry) ? $this->entry->fieldData($name) : null);
-					//echo '<pre>'; print_r(var_dump($fieldInstance)); echo '</pre>'; die();
 
 					// And fetch HTML for rendering
 					$html .= $fieldInstance->render($value);

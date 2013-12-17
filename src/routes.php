@@ -8,19 +8,6 @@ $admin         = $controller.'Admin\\';
 $channels      = App::make('krustr.channels');
 $taxonomies    = App::make('krustr.taxonomies');
 
-// ! Assets settings
-if (Request::segment(1) == $backendPrefix)
-{
-	Config::set('assets::public_path', 'packages/creolab/krustr/assets');
-	Config::set('assets::cache_path',  'packages/creolab/krustr/assets/cache');
-}
-else
-{
-	Config::set('assets::public_path', 'themes/'.Config::get('krustr::theme').'/assets');
-	Config::set('assets::cache_path',  'themes/'.Config::get('krustr::theme').'/assets/cache');
-}
-app('assets')->configure();
-
 // ! Auth routes
 Route::get($backendPrefix.'/logout',  array('as' => $backendPrefix.'.logout',      'uses' => $admin.'AuthController@getLogout'));
 Route::get($backendPrefix.'/login',   array('as' => $backendPrefix.'.login',       'uses' => $admin.'AuthController@getLogin'));
@@ -57,6 +44,9 @@ if (Request::segment(1) == $backendPrefix)
 
 		// ! ===> Image editor
 		Route::get('field/image/{id}', array('as' => $backendPrefix.'.field.image.edit', 'uses' => $admin.'ImageController@editFieldImage'));
+
+		// ! ===> Fragments
+		Route::resource('fragments', $admin.'FragmentsController');
 
 		// ! ===> System
 		Route::resource('system/users', $admin.'UsersController');

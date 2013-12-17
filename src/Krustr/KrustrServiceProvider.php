@@ -54,6 +54,7 @@ class KrustrServiceProvider extends ServiceProvider {
 
 		// Initialize backend
 		$this->registerBackend();
+		app('assets')->configure();
 		\Kprofile::end("KRUSTR BOOT");
 	}
 
@@ -207,6 +208,10 @@ class KrustrServiceProvider extends ServiceProvider {
 	{
 		if (Request::segment(1) == Config::get('krustr::backend_url'))
 		{
+			// Setup assets for backend
+			Config::set('assets::public_dir',  'packages/creolab/krustr/assets');
+			Config::set('assets::cache_path',  'packages/creolab/krustr/assets/cache');
+
 			// Register backend navigation
 			$this->app['krustr.navigation']->add('backend', $this->app['config']->get('krustr::navigation.backend'));
 		}
@@ -226,6 +231,9 @@ class KrustrServiceProvider extends ServiceProvider {
 		});
 		$this->loader->alias('Theme', '\Krustr\Facades\ThemeFacade');
 
+		// Setup assets for theme
+		Config::set('assets::public_dir',  'themes/'.Config::get('krustr::theme').'/assets');
+		Config::set('assets::cache_path',  'themes/'.Config::get('krustr::theme').'/assets/cache');
 
 		// Register theme bootstrap singleton
 		$this->app->singleton('krustr.theme.bootstrap', function($app)

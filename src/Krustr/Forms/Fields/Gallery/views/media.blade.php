@@ -1,7 +1,7 @@
 <div class="media-collection clearfix">
 	<div class="gallery-manager clearfix">
 		<ul class="clearfix">
-			@if ($field->value and ! $field->value->media->isEmpty())
+			@if ($field->hasMedia())
 				@foreach ($field->value->media as $media)
 					<li id="gallery-list-item-{{ $media->id }}">
 						<figure>

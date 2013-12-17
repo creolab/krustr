@@ -86,4 +86,18 @@ class GalleryField extends \Krustr\Forms\Fields\Field {
 		return parent::render($value, array('gallery' => $gallery, 'media' => $media));
 	}
 
+	/**
+	 * Check if gallery has any media
+	 * @return boolean
+	 */
+	public function hasMedia()
+	{
+		if ($this->value and isset($this->value->data['media']) and $this->value->data['media']->count())
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 }

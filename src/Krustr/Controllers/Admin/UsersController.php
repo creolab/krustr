@@ -48,7 +48,10 @@ class UsersController extends BaseController {
 	 */
 	public function create()
 	{
-		return View::make('krustr::users.create');
+		// Prepare the form
+		$form = new UserForm(null, array('url' => admin_route('system.users.update', $id)));
+
+		return View::make('krustr::users.create')->withForm($form);
 	}
 
 	/**

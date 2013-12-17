@@ -1,5 +1,5 @@
 <div class="{{ $field->css_box_class }}">
-	<div class="form-group {{ ($field->value and ! $field->value->media->isEmpty()) ? 'has-value' : 'no-value' }} field-type-{{ $field->type }} field-type-image" id="field-element-{{ $field->name }}" data-field-type="{{ $field->type }}">
+	<div class="form-group {{ ($field->hasMedia()) ? 'has-value' : 'no-value' }} field-type-{{ $field->type }} field-type-image" id="field-element-{{ $field->name }}" data-field-type="{{ $field->type }}">
 		<label for="text" class="control-label">
 			{{ $field->label }}
 			<i class="glyphicon glyphicon-{{ $field->icon }}"></i>
@@ -10,6 +10,5 @@
 		@include("krustr_fields::Gallery.views.media")
 
 		@include("krustr_fields::_default.upload")
-
 	</div>
 </div>
