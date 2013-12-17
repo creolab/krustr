@@ -18,7 +18,13 @@ return array(
 				'order' => 200, 'label' => 'Content', 'icon'  => 'pencil', 'route' => 'backend.content', 'role' => 'editor',
 
 				// ! ==> Channels (Load from channels configuration)
-				'children' => app('config')->get('krustr::channels'),
+				'children' => array_merge(app('config')->get('krustr::channels'), array(
+
+					// ! ==> Fragments
+					'fragments' => array(
+						'order' => 9000, 'label' => 'Fragments', 'icon'  => 'pencil', 'route' => 'backend.content.fragments.index', 'role' => 'editor', 'li_class' => 'pull-right',
+					),
+				)),
 			),
 
 			// ! Taxonomies

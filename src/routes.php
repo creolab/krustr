@@ -46,7 +46,7 @@ if (Request::segment(1) == $backendPrefix)
 		Route::get('field/image/{id}', array('as' => $backendPrefix.'.field.image.edit', 'uses' => $admin.'ImageController@editFieldImage'));
 
 		// ! ===> Fragments
-		Route::resource('fragments', $admin.'FragmentsController');
+		Route::resource('content/fragments', $admin.'FragmentsController');
 
 		// ! ===> System
 		Route::resource('system/users', $admin.'UsersController');

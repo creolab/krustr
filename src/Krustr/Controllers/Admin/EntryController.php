@@ -7,30 +7,22 @@ use Krustr\Repositories\Interfaces\EntryRepositoryInterface;
 use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
 use Krustr\Services\Validation\EntryValidator;
 
-/**
- * Content entries management
- *
- * @author Boris Strahija <bstrahija@gmail.com>
- */
 class EntryController extends BaseController {
 
 	/**
 	 * Data repository
-	 *
 	 * @var EntryRepository
 	 */
 	protected $repository;
 
 	/**
 	 * Current channel
-	 *
 	 * @var ChannelEntity
 	 */
 	protected $channel;
 
 	/**
 	 * Initialize the content section with dependencies
-	 *
 	 * @param EntryRepositoryInterface    $repository
 	 * @param ChannelRepositoryInterface  $channelRepository
 	 */
@@ -46,7 +38,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * List all entries
-	 *
 	 * @return View
 	 */
 	public function index()
@@ -62,7 +53,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Display form for creating a new entry
-	 *
 	 * @return View
 	 */
 	public function create()
@@ -74,7 +64,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Store a new entry to the DB
-	 *
 	 * @return Redirect
 	 */
 	public function store()
@@ -91,7 +80,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Preview single entry
-	 *
 	 * @param  integer $id
 	 * @return View
 	 */
@@ -105,7 +93,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Display a form for entry editing
-	 *
 	 * @param  integer $id
 	 * @return View
 	 */
@@ -120,7 +107,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Update an entry via a PUT request
-	 *
 	 * @param  integer $id
 	 * @return Redirect
 	 */
@@ -138,7 +124,6 @@ class EntryController extends BaseController {
 
 	/**
 	 * Delete the entry
-	 *
 	 * @param  integer $id
 	 * @return Redirect
 	 */
