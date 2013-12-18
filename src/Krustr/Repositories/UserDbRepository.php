@@ -4,7 +4,7 @@ use Krustr\Models\User;
 use Krustr\Repositories\Collections\UserCollection;
 use Krustr\Repositories\Entities\UserEntity;
 
-class UserDbRepository implements Interfaces\UserRepositoryInterface{
+class UserDbRepository extends DbRepository implements Interfaces\UserRepositoryInterface{
 
 	/**
 	 * Get all users

@@ -6,7 +6,7 @@ use Krustr\Repositories\Collections\FragmentCollection;
 use Krustr\Repositories\Entities\FragmentEntity;
 use Krustr\Services\Validation\FragmentValidator;
 
-class FragmentDbRepository implements Interfaces\FragmentRepositoryInterface {
+class FragmentDbRepository extends DbRepository implements Interfaces\FragmentRepositoryInterface {
 
 	/**
 	 * Initialize dependencies

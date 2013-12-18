@@ -7,7 +7,7 @@ use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
 use Krustr\Repositories\Collections\FieldCollection;
 use Krustr\Repositories\Entities\FieldEntity;
 
-class FieldDbRepository implements Interfaces\FieldRepositoryInterface {
+class FieldDbRepository extends DbRepository implements Interfaces\FieldRepositoryInterface {
 
 	/**
 	 * Channels repo

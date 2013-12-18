@@ -4,7 +4,7 @@ use Config;
 use Krustr\Repositories\Collections\TaxonomyCollection;
 use Krustr\Repositories\Entities\TaxonomyEntity;
 
-class TaxonomyConfigRepository implements Interfaces\TaxonomyRepositoryInterface {
+class TaxonomyConfigRepository extends Repository implements Interfaces\TaxonomyRepositoryInterface {
 
 	/**
 	 * Get all taxonomies

@@ -7,7 +7,7 @@ use Config;
  *
  * @author Boris Strahija <bstrahija@gmail.com>
  */
-class ChannelConfigRepository implements Interfaces\ChannelRepositoryInterface {
+class ChannelConfigRepository extends Repository implements Interfaces\ChannelRepositoryInterface {
 
 	/**
 	 * Initialize the channel repository

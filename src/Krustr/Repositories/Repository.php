@@ -19,6 +19,12 @@ abstract class Repository {
 	protected $validation;
 
 	/**
+	 * The current collection of items
+	 * @var Collection
+	 */
+	protected $collection;
+
+	/**
 	 * Return validation errors
 	 *
 	 * @return Illuminate\Support\MessageBag

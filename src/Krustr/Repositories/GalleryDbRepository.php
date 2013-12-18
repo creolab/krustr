@@ -4,7 +4,7 @@ use Krustr\Models\Media;
 use Krustr\Repositories\Entities\GalleryEntity;
 use Krustr\Repositories\Collections\MediaCollection;
 
-class GalleryDbRepository implements Interfaces\GalleryRepositoryInterface {
+class GalleryDbRepository extends DbRepository implements Interfaces\GalleryRepositoryInterface {
 
 	/**
 	 * Find media item

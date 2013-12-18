@@ -6,7 +6,7 @@ use Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface;
 use Krustr\Repositories\Collections\TermCollection;
 use Krustr\Repositories\Entities\TermEntity;
 
-class TermDbRepository implements Interfaces\TermRepositoryInterface {
+class TermDbRepository extends DbRepository implements Interfaces\TermRepositoryInterface {
 
 	/**
 	 * Taxonomies repo

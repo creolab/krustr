@@ -5,7 +5,7 @@ use Krustr\Models\Media;
 use Krustr\Repositories\Entities\MediaEntity;
 use Krustr\Repositories\Collections\MediaCollection;
 
-class MediaDbRepository implements Interfaces\MediaRepositoryInterface {
+class MediaDbRepository extends DbRepository implements Interfaces\MediaRepositoryInterface {
 
 	/**
 	 * Find media item

@@ -3,8 +3,6 @@
 use Auth, Config, DB, Log, Request, Str;
 use Krustr\Models\Entry;
 use Krustr\Models\Term;
-use Krustr\Repositories\Collections\EntryCollection;
-use Krustr\Repositories\Entities\EntryEntity;
 use Krustr\Repositories\Collections\TermCollection;
 use Krustr\Repositories\Interfaces\FieldRepositoryInterface;
 use Krustr\Repositories\Interfaces\ChannelRepositoryInterface;
@@ -12,7 +10,7 @@ use Krustr\Repositories\Interfaces\TermRepositoryInterface;
 use Krustr\Services\Validation\EntryValidator;
 use Illuminate\Database\Eloquent\Builder;
 
-class EntryDbRepository extends Repository implements Interfaces\EntryRepositoryInterface {
+class EntryDbRepository extends DbRepository implements Interfaces\EntryRepositoryInterface {
 
 	/**
 	 * Repository for saving field data
@@ -39,22 +37,16 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	protected $channel;
 
 	/**
-	 * The current collection of entries
-	 * @var EntryCollection
+	 * Class for collections
+	 * @var string
 	 */
-	protected $collection;
+	protected $collectionClass = 'Krustr\Repositories\Collections\EntryCollection';
 
 	/**
-	 * Collections of entries returned to the View
-	 * @var EntryCollection
+	 * Entity for single item
+	 * @var string
 	 */
-	protected $entries;
-
-	/**
-	 * Eloquent query builder
-	 * @var Builder
-	 */
-	protected $query;
+	protected $entityClass = 'Krustr\Repositories\Entities\EntryEntity';
 
 	/**
 	 * Initialize dependencies
@@ -83,10 +75,9 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$this->query = $this->options($options);
 
 		// Run query
-		$items            = $this->paginate();
-		$this->entries    = new EntryCollection(array_get($items, 'data'));
+		$this->collection = $this->paginate();
 
-		return $this->entries;
+		return $this->collection;
 	}
 
 	/**
@@ -104,23 +95,13 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 			// Start the query
 			$this->query = Entry::with(array('author', 'fields'))->inChannel($this->channel->name);
 
-			// Order
-			$orderBy = array_get($options, 'order_by', 'created_at');
-			$order   = array_get($options, 'order',    'desc');
-
-			// Run order
-			if ($orderBy == 'rand') $this->query->orderBy(DB::raw('RAND()'), $order);
-			else                    $this->query->orderBy($orderBy, $order);
-
-			// Add options
+			// Options
 			$this->query = $this->options($options);
 
 			// Run query
-			$perPage          = array_get($options, 'limit', null);
-			$items            = $this->paginate($perPage);
-			$this->entries    = new EntryCollection(array_get($items, 'data'));
+			$this->collection = $this->paginate();
 
-			return $this->entries;
+			return $this->collection;
 		}
 	}
 
@@ -171,9 +152,9 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		// Run query
 		$perPage          = array_get($options, 'limit', null);
 		$items            = $this->paginate($perPage);
-		$this->entries    = new EntryCollection(array_get($items, 'data'));
+		$this->collection = new EntryCollection(array_get($items, 'data'));
 
-		return $this->entries;
+		return $this->collection;
 	}
 
 	/**
@@ -182,9 +163,9 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 */
 	public function home()
 	{
-		$entry = Entry::with(array('author', 'fields'))->where('home', 1)->published()->first();
+		$this->query = Entry::with(array('author', 'fields'))->where('home', 1)->published();
 
-		if ($entry) return new EntryEntity($entry->toArray());
+		return $this->item();
 	}
 
 	/**
@@ -201,9 +182,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$this->options($options);
 
 		// Run query
-		$entry = $this->query->first();
-
-		if ($entry) return new EntryEntity($entry->toArray());
+		return $this->item();
 	}
 
 	/**
@@ -225,9 +204,7 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$this->options($options);
 
 		// Run query
-		$entry = $this->query->first();
-
-		if ($entry) return new EntryEntity($entry->toArray());
+		return $this->item();
 	}
 
 	/**
@@ -248,26 +225,23 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	 */
 	public function findBySlug($slug, $channel = null, $options = array())
 	{
+		// Start query
+		$this->query = Entry::with(array('author', 'fields'))->where('slug', $slug);
+
+		// Channel
 		if ($channel)
 		{
 			// Get channel config
 			$this->channel = $this->channels->find($channel);
 
-			// Start query
-			$this->query = Entry::with(array('author', 'fields'))->where('slug', $slug)->inChannel($this->channel->name);
-		}
-		else
-		{
-			$this->query = Entry::with(array('author', 'fields'))->where('slug', $slug);
+			$this->query->inChannel($this->channel->name);
 		}
 
 		// Status
 		$this->query = $this->options($options);
 
 		// Run query
-		$entry = $this->query->first();
-
-		if ($entry) return new EntryEntity($entry->toArray());
+		return $this->item();
 	}
 
 	/**
@@ -410,71 +384,6 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 	}
 
 	/**
-	 * Set query options and params
-	 * @param  array  $options
-	 * @return Builder
-	 */
-	public function options($options = array())
-	{
-		if (is_array($options))
-		{
-			foreach ($options as $key => $value)
-			{
-				if ( ! in_array($key, array('limit', 'order_by')))
-				{
-					if (is_array($value))
-					{
-						$this->query->where($key, $value[0], $value[1]);
-					}
-					else
-					{
-						$this->query->where($key, $value);
-					}
-				}
-			}
-		}
-
-		return $this->query;
-	}
-
-	/**
-	 * Paginate query results
-	 * @param  Builder $query
-	 * @param  integer $perPage
-	 * @return array
-	 */
-	public function paginate($perPage = null)
-	{
-		if ( ! $perPage)
-		{
-			if (Request::segment(1) == Config::get('krustr::backend_url'))
-			{
-				$perPage = $this->channel->per_page_admin ?: 10;
-			}
-			else
-			{
-				$perPage = $this->channel ? $this->channel->per_page : 10;
-			}
-		}
-
-		// Run pagination
-		$perPage          = (int) ($perPage ?: 20);
-		$this->collection = $this->query->paginate($perPage);
-		$items            = $this->collection->toArray();
-
-		return $items;
-	}
-
-	/**
-	 * Return entry pagination
-	 * @return Paginator
-	 */
-	public function pagination()
-	{
-		return $this->collection;
-	}
-
-	/**
 	 * Return current query channel
 	 * @return ChannelEntity
 	 */
@@ -499,6 +408,32 @@ class EntryDbRepository extends Repository implements Interfaces\EntryRepository
 		$terms = $query->get();
 
 		return new TermCollection($terms->toArray());
+	}
+
+	/**
+	 * Override the default pagination limit
+	 * @param  integer $limit
+	 * @return integer
+	 */
+	public function limit($limit = null)
+	{
+		if ( ! $limit)
+		{
+			if (Request::segment(1) == Config::get('krustr::backend_url') and $this->channel and $this->channel->per_page_admin)
+			{
+				$limit = $this->channel->per_page_admin ?: $this->defaultLimit;
+			}
+			elseif ($this->channel and isset($this->channel->per_page))
+			{
+				$limit = $this->channel ? $this->channel->per_page : $this->defaultLimit;
+			}
+			else
+			{
+				$limit = $this->defaultLimit;
+			}
+		}
+
+		return $limit;
 	}
 
 }
