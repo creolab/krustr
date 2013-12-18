@@ -9,7 +9,6 @@ class KrustrServiceProvider extends ServiceProvider {
 
 	/**
 	 * Bootstrap the application events.
-	 *
 	 * @return void
 	 */
 	public function boot()
@@ -60,7 +59,6 @@ class KrustrServiceProvider extends ServiceProvider {
 
 	/**
 	 * Register the service provider
-	 *
 	 * @return void
 	 */
 	public function register()
@@ -69,7 +67,6 @@ class KrustrServiceProvider extends ServiceProvider {
 
 	/**
 	 * Register all available commands
-	 *
 	 * @return void
 	 */
 	public function bootCommands()
@@ -94,7 +91,7 @@ class KrustrServiceProvider extends ServiceProvider {
 	}
 
 	/**
-	 * Register all contentn channels with fields
+	 * Register all content channels with fields
 	 * @return void
 	 */
 	public function registerChannels()
@@ -103,6 +100,10 @@ class KrustrServiceProvider extends ServiceProvider {
 		$this->app['krustr.channels'] = new Repositories\Collections\ChannelCollection($channelRepository->all());
 	}
 
+	/**
+	 * Register taxonomies
+	 * @return void
+	 */
 	public function registerTaxonomies()
 	{
 		$taxonomyRepository = $this->app->make('Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface');
@@ -119,8 +120,7 @@ class KrustrServiceProvider extends ServiceProvider {
 	}
 
 	/**
-	 * Register all bindings
-	 *
+	 * Register all IoC bindings
 	 * @return void
 	 */
 	public function registerBindings()
@@ -159,58 +159,38 @@ class KrustrServiceProvider extends ServiceProvider {
 	}
 
 	/**
-	 * Register the Blade extensions for the views
-	 *
+	 * Register Blade extensions for the views
 	 * @return void
 	 */
 	protected function registerBladeExtensions()
 	{
+		$this->registerBladeExtension('theme_asset',  '$1<?php echo theme_asset_tag$2; ?>');
+		$this->registerBladeExtension('theme_assets', '$1<?php echo theme_assets$2; ?>');
+		$this->registerBladeExtension('image',        '$1<?php echo app("krustr.image")->resize$2; ?>');
+		$this->registerBladeExtension('thumb',        '$1<?php echo app("krustr.image")->thumb$2; ?>');
+		$this->registerBladeExtension('frag',         '$1<?php echo frag$2; ?>');
+	}
+
+	/**
+	 * Register a new blade extension
+	 * @param  string $match
+	 * @param  string $action
+	 * @return void
+	 */
+	public function registerBladeExtension($match, $action)
+	{
 		$blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
 
-		// Single asset
-		$blade->extend(function($value, $compiler)
+		$blade->extend(function($value, $compiler) use ($match, $action)
 		{
-			$matcher = $compiler->createMatcher('theme_asset');
+			$matcher = $compiler->createMatcher($match);
 
-			return preg_replace($matcher, '$1<?php echo theme_asset_tag$2; ?>', $value);
-		});
-
-		// Asset collection
-		$blade->extend(function($value, $compiler)
-		{
-			$matcher = $compiler->createMatcher('theme_assets');
-
-			return preg_replace($matcher, '$1<?php echo theme_assets$2; ?>', $value);
-		});
-
-		// Resize an image
-		$blade->extend(function($value, $compiler)
-		{
-			$matcher = $compiler->createMatcher('image');
-
-			return preg_replace($matcher, '$1<?php echo app("krustr.image")->resize$2; ?>', $value);
-		});
-
-		// Create image thumb
-		$blade->extend(function($value, $compiler)
-		{
-			$matcher = $compiler->createMatcher('thumb');
-
-			return preg_replace($matcher, '$1<?php echo app("krustr.image")->thumb$2; ?>', $value);
-		});
-
-		// Display content fragment
-		$blade->extend(function($value, $compiler)
-		{
-			$matcher = $compiler->createMatcher('frag');
-
-			return preg_replace($matcher, '$1<?php echo frag$2; ?>', $value);
+			return preg_replace($matcher, $action, $value);
 		});
 	}
 
 	/**
 	 * Register various backend services
-	 *
 	 * @return void
 	 */
 	public function registerBackend()
@@ -228,7 +208,6 @@ class KrustrServiceProvider extends ServiceProvider {
 
 	/**
 	 * Register the theme and initialize it
-	 *
 	 * @return void
 	 */
 	public function registerTheme()
