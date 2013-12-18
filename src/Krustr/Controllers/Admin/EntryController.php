@@ -88,10 +88,6 @@ class EntryController extends BaseController {
 		// Get requested entry
 		$entry = $this->repository->find($id, $this->channel->name);
 
-		echo '<pre>'; print_r(var_dump($entry)); echo '</pre>';
-
-		die();
-
 		return View::make('krustr::entries.show')->withEntry($entry);
 	}
 

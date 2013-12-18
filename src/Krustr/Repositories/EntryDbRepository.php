@@ -135,14 +135,6 @@ class EntryDbRepository extends DbRepository implements Interfaces\EntryReposito
 		// Exclude some entries
 		// if ($exclude) $this->query->whereNotIn('entries.id', $exclude);
 
-		// Order
-		$orderBy = array_get($options, 'order_by', 'created_at');
-		$order   = array_get($options, 'order',    'desc');
-
-		// Run order
-		if ($orderBy == 'rand') $this->query->orderBy(DB::raw('RAND()'), $order);
-		else                    $this->query->orderBy($orderBy, $order);
-
 		// Filter by term
 		$this->query->join('entry_term', 'entry_term.entry_id', '=', 'entries.id')->whereIn('entry_term.term_id', $termId);
 
@@ -150,9 +142,7 @@ class EntryDbRepository extends DbRepository implements Interfaces\EntryReposito
 		$this->query = $this->options($options);
 
 		// Run query
-		$perPage          = array_get($options, 'limit', null);
-		$items            = $this->paginate($perPage);
-		$this->collection = new EntryCollection(array_get($items, 'data'));
+		$this->collection = $this->paginate();
 
 		return $this->collection;
 	}
@@ -423,7 +413,7 @@ class EntryDbRepository extends DbRepository implements Interfaces\EntryReposito
 			{
 				$limit = $this->channel->per_page_admin ?: $this->defaultLimit;
 			}
-			elseif ($this->channel and isset($this->channel->per_page))
+			elseif ($this->channel and $this->channel->per_page)
 			{
 				$limit = $this->channel ? $this->channel->per_page : $this->defaultLimit;
 			}

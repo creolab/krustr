@@ -1,6 +1,6 @@
 <?php namespace Krustr\Repositories;
 
-use Validator;
+use DB, Validator;
 
 abstract class DbRepository extends Repository {
 
@@ -99,6 +99,9 @@ abstract class DbRepository extends Repository {
 		// Run order
 		if ($orderBy == 'rand') $this->query->orderBy(DB::raw('RAND()'), $order);
 		else                    $this->query->orderBy($orderBy, $order);
+
+		// Also the limit
+		if ($limit = array_get($options, 'limit')) $this->defaultLimit = (int) $limit;
 
 		if (is_array($options))
 		{
