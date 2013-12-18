@@ -22,7 +22,7 @@ return array(
 
 					// ! ==> Fragments
 					'fragments' => array(
-						'order' => 9000, 'label' => 'Fragments', 'icon'  => 'pencil', 'route' => 'backend.content.fragments.index', 'role' => 'editor', 'li_class' => 'pull-right',
+						'order' => 9000, 'label' => 'Fragments', 'icon'  => 'pencil', 'route' => 'backend.content.fragments.index', 'role' => 'editor', 'li_class' => 'pull-right', 'separated' => true,
 					),
 				)),
 			),

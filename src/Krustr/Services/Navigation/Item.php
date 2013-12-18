@@ -68,16 +68,17 @@ class Item {
 	 */
 	public function __construct($data)
 	{
-		$this->label    = array_get($data, 'label', array_get($data, 'headline', array_get($data, 'title')));
-		$this->icon     = array_get($data, 'icon');
-		$this->class    = array_get($data, 'class');
-		$this->li_class = array_get($data, 'li_class');
-		$this->route    = array_get($data, 'route');
-		$this->mark     = array_get($data, 'mark', $this->mark);
-		$this->order    = (int) array_get($data, 'order');
-		$this->href     = array_get($data, 'href', $this->contentHref($data));
-		$this->children = $this->setChildren(array_get($data, 'children'));
-		$this->role     = array_get($data, 'role', 'editor');
+		$this->label     = array_get($data, 'label', array_get($data, 'headline', array_get($data, 'title')));
+		$this->icon      = array_get($data, 'icon');
+		$this->class     = array_get($data, 'class');
+		$this->li_class  = array_get($data, 'li_class');
+		$this->route     = array_get($data, 'route');
+		$this->mark      = array_get($data, 'mark', $this->mark);
+		$this->order     = (int) array_get($data, 'order');
+		$this->href      = array_get($data, 'href', $this->contentHref($data));
+		$this->children  = $this->setChildren(array_get($data, 'children'));
+		$this->role      = array_get($data, 'role', 'editor');
+		$this->separated = (bool) array_get($data, 'separated', false);
 	}
 
 	/**

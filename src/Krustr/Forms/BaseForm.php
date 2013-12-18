@@ -49,7 +49,10 @@ class BaseForm implements FormInterface {
 		$this->item = $item;
 
 		// Options
-		$this->url = array_get($options, 'url');
+		$route = array_get($options, 'route');
+		if (is_array($route)) $route = route(Config::get('krustr::backend_url') . '.' . $route[0], array_get($route, 1));
+		else                  $route = route(Config::get('krustr::backend_url') . '.' . $route);
+		$this->url = $route ? $route : array_get($options, 'url');
 	}
 
 	/**

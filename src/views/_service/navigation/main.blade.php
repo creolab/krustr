@@ -15,6 +15,10 @@
 					@if ($item->dropdown())
 						<ul class="dropdown-menu">
 							@foreach ($item->children as $child)
+								@if ($item->separated)
+									<li role="presentation" class="divider"></li>
+								@endif
+
 								<li>
 									<a href="{{ $child->href }}" title="{{ $child->label }}">
 										{{ admin_icn($child->icon) }}
