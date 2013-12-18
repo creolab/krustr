@@ -233,3 +233,22 @@ if ( ! function_exists('thumb'))
 		return Creolab\Image\ImageFacade::thumb($url, $width, $height);
 	}
 }
+
+if ( ! function_exists('frag'))
+{
+	/**
+	 * Display content fragment
+	 * @param  string  $slug
+	 * @param  string  $default
+	 * @return string
+	 */
+	function frag($slug, $default = null)
+	{
+		$repo = app('Krustr\Repositories\Interfaces\FragmentRepositoryInterface');
+		$frag = $repo->findBySlug($slug);
+
+		if ($frag) return $frag->body;
+
+		return $default;
+	}
+}

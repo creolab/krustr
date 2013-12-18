@@ -198,6 +198,14 @@ class KrustrServiceProvider extends ServiceProvider {
 
 			return preg_replace($matcher, '$1<?php echo app("krustr.image")->thumb$2; ?>', $value);
 		});
+
+		// Display content fragment
+		$blade->extend(function($value, $compiler)
+		{
+			$matcher = $compiler->createMatcher('frag');
+
+			return preg_replace($matcher, '$1<?php echo frag$2; ?>', $value);
+		});
 	}
 
 	/**
