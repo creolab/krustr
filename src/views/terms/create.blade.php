@@ -5,7 +5,7 @@
 		<h2 class="status-draft">
 			{{ admin_icn($taxonomy->icon) }}
 
-			New {{ $taxonomy->title_singular }}</em>
+			New entry in <em>"{{ $taxonomy->title }}"</em>
 		</h2>
 
 		<div class="tools">
@@ -14,6 +14,6 @@
 	</div>
 
 	<div id="entry-form" class="entry-form entry-form-create boxed">
-		<?php /*{{ $form->render() }}*/ ?>
+		{{ $form->render() }}
 	</div>
 @stop

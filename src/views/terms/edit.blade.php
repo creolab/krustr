@@ -15,6 +15,6 @@
 	</div>
 
 	<div id="entry-form" class="entry-form entry-form-edit boxed">
-		<?php /*{{ $form->render() }}*/ ?>
+		{{ $form->render() }}
 	</div>
 @stop

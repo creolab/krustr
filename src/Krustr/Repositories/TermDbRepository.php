@@ -5,6 +5,7 @@ use Krustr\Models\Term;
 use Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface;
 use Krustr\Repositories\Collections\TermCollection;
 use Krustr\Repositories\Entities\TermEntity;
+use Krustr\Services\Validation\TermValidator;
 
 class TermDbRepository extends DbRepository implements Interfaces\TermRepositoryInterface {
 
@@ -18,9 +19,10 @@ class TermDbRepository extends DbRepository implements Interfaces\TermRepository
 	 * Init dependencies
 	 * @param TaxonomyRepositoryInterface $channels
 	 */
-	public function __construct(TaxonomyRepositoryInterface $taxonomies)
+	public function __construct(TaxonomyRepositoryInterface $taxonomies, TermValidator $validation)
 	{
 		$this->taxonomies = $taxonomies;
+		$this->validation = $validation;
 	}
 
 	/**
@@ -84,24 +86,66 @@ class TermDbRepository extends DbRepository implements Interfaces\TermRepository
 
 	/**
 	 * Create new field value
+	 * @param  array $data
+	 * @return mixed
 	 */
 	public function create($data)
 	{
-		$term = new Term;
-		$term->title       = array_get($data, 'title');
-		$term->slug        = Str::slug($term->title);
-		$term->taxonomy_id = array_get($data, 'taxonomy_id');
-		$term->save();
+		// First validate the input
+		if ($this->validation->passes($data))
+		{
+			// Prepare slug
+			$slug = Str::slug(array_get($data, 'slug'));
+			if ( ! $slug) $slug = Str::slug(array_get($data, 'title'));
 
-		return $term->id;
+			// Save term
+			$term = new Term(array(
+				'title'       => array_get($data, 'title'),
+				'slug'        => $slug,
+				'taxonomy_id' => array_get($data, 'taxonomy_id'),
+				'body'        => array_get($data, 'body'),
+				'image'       => array_get($data, 'image'),
+			));
+			$term->save();
+
+			return $term->id;
+		}
+
+		// Set errors
+		$this->errors = $this->validation->errors();
+
+		return false;
 	}
 
 	/**
 	 * Update field value
+	 * @param  integer $id
+	 * @param  array   $data
+	 * @return boolean
 	 */
-	public function update($id)
+	public function update($id, $data)
 	{
+		// First validate the input
+		if ($this->validation->passes($data))
+		{
+			// Set the data
+			$term = Term::find($id);
+			$term->fill(array(
+				'title' => array_get($data, 'title'),
+				'body'  => array_get($data, 'body'),
+				'image' => array_get($data, 'image'),
+			));
 
+			// Slug
+			if ($slug = array_get($data, 'slug') and $slug != $term->slug) $term->slug = Str::slug($slug);
+
+			return $term->save();
+		}
+
+		// Set errors
+		$this->errors = $this->validation->errors();
+
+		return false;
 	}
 
 	/**

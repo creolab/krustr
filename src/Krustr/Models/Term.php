@@ -8,4 +8,6 @@ class Term extends Base {
 
 	protected $table = 'terms';
 
+	protected $guarded = array('id');
+
 }

@@ -31,7 +31,7 @@ return array(
 			'taxonomies' => array(
 				'order' => 300, 'label' => 'Taxonomies', 'icon'  => 'tasks', 'route' => 'backend.taxonomy', 'role' => 'admin',
 
-				// ! ==> Channels (Load from channels configuration)
+				// ! ==> Taxonomies (Load from taxonomy configuration)
 				'children' => app('config')->get('krustr::taxonomies'),
 			),
 

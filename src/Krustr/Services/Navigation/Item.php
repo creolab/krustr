@@ -108,9 +108,18 @@ class Item {
 	 */
 	public function contentHref($data)
 	{
+		// Content channel
 		if ($res = array_get($data, 'resource'))
 		{
 			$this->route = 'backend.content.'.$res.'.index';
+
+			return route($this->route);
+		}
+		// Taxonomy
+		elseif (array_get($data, 'type') == 'categories' or array_get($data, 'type') == 'tags')
+		{
+			$res = array_get($data, 'name');
+			$this->route = 'backend.taxonomies.'.$res.'.index';
 
 			return route($this->route);
 		}

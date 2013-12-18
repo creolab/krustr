@@ -7,21 +7,24 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 
 	/**
 	 * The database table used by the model.
-	 *
 	 * @var string
 	 */
 	protected $table = 'users';
 
 	/**
 	 * The attributes excluded from the model's JSON form.
-	 *
 	 * @var array
 	 */
 	protected $hidden = array('password');
 
 	/**
+	 * Guarded attributes
+	 * @var array
+	 */
+	protected $guarded = array('id', 'role');
+
+	/**
 	 * Get the unique identifier for the user.
-	 *
 	 * @return mixed
 	 */
 	public function getAuthIdentifier()
@@ -31,7 +34,6 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 
 	/**
 	 * Get the password for the user.
-	 *
 	 * @return string
 	 */
 	public function getAuthPassword()
@@ -41,7 +43,6 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 
 	/**
 	 * Get the e-mail address where password reminders are sent.
-	 *
 	 * @return string
 	 */
 	public function getReminderEmail()

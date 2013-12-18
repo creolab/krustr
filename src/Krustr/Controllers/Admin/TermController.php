@@ -2,10 +2,10 @@
 
 use Alert, Input, Redirect, Request, View;
 use Krustr\Helpers\Route;
-use Krustr\Forms\EntryForm;
+use Krustr\Forms\TermForm;
 use Krustr\Repositories\Interfaces\TermRepositoryInterface;
 use Krustr\Repositories\Interfaces\TaxonomyRepositoryInterface;
-use Krustr\Services\Validation\EntryValidator;
+use Krustr\Services\Validation\TermValidator;
 
 class TermController extends BaseController {
 
@@ -20,6 +20,12 @@ class TermController extends BaseController {
 	 * @var TaxonomyRepositoryInterface
 	 */
 	protected $taxonomyRepository;
+
+	/**
+	 * Current taxonomy
+	 * @var TaxonomyEntity
+	 */
+	protected $taxonomy;
 
 	/**
 	 * Initialize dependencies
@@ -52,7 +58,10 @@ class TermController extends BaseController {
 	 */
 	public function create()
 	{
-		return View::make('krustr::terms.create');
+		// Setup form
+		$form = new TermForm(null, array('route' => 'taxonomies.'.$this->taxonomy->name.'.store'));
+
+		return View::make('krustr::terms.create', array('form' => $form));
 	}
 
 	/**
@@ -61,7 +70,14 @@ class TermController extends BaseController {
 	 */
 	public function store()
 	{
+		$data = array_merge(array('taxonomy_id' => $this->taxonomy->name), Input::all());
 
+		if ($id = $this->termRepository->create($data))
+		{
+			return Redirect::route('backend.taxonomies.'.$this->taxonomy->name.'.edit', $id)->withAlertSuccess("Saved.");
+		}
+
+		return Redirect::back()->withInput()->withErrors($this->termRepository->errors());
 	}
 
 	/**
@@ -70,9 +86,26 @@ class TermController extends BaseController {
 	 */
 	public function edit($id)
 	{
+		// Find term and setup form
 		$term = $this->termRepository->find($id);
+		$form = new TermForm($term, array('route' => array('taxonomies.'.$this->taxonomy->name.'.update', $term->id)));
 
-		return View::make('krustr::terms.edit', array('term' => $term));
+		return View::make('krustr::terms.edit', array('term' => $term, 'form' => $form));
+	}
+
+	/**
+	 * Update taxonomy term
+	 * @param  integer $id
+	 * @return Redirect
+	 */
+	public function update($id)
+	{
+		if ($this->termRepository->update($id, Input::all()))
+		{
+			return Redirect::back()->withAlertSuccess('Saved.');
+		}
+
+		return Redirect::back()->withInput()->withErrors($this->termRepository->errors());
 	}
 
 }
