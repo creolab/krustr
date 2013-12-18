@@ -18,6 +18,7 @@
 .dropdown-menu > li:last-child { border-bottom: none; }
 .dropdown-menu > li > a        { padding: 5px 15px; color: #eee; text-shadow: 0 1px 0 #000; }
 .dropdown-menu > li > a:hover  { background-color: #5ba3b3; text-shadow: 0 1px 1px rgba(0,0,0,.4); }
+.dropdown-menu > li .icn       { min-width: 14px; margin-right: 1px; display: inline-block; }
 
 /* ! Subnav */
 .subnav                     { background: #84c2d0; border-bottom: 3px solid #5ba4b3; font-size: 11px; padding: 6px 20px 5px 20px; }
