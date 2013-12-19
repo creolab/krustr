@@ -47,7 +47,7 @@ return array(
 
 					// ! ==> Settings
 					'settings' => array(
-						'order' => 500, 'label' => 'Settings', 'icon'  => 'wrench', 'href' => '#',
+						'order' => 500, 'label' => 'Settings', 'icon'  => 'wrench', 'route' => 'backend.system.settings.index',
 					),
 
 					// ! ==> Cache

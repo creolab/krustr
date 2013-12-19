@@ -6,5 +6,6 @@ interface FormInterface {
 	public function hiddenFields();
 	public function closeForm();
 	public function render();
+	public function renderField($field, $name);
 
 }

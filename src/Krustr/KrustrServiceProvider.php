@@ -135,6 +135,7 @@ class KrustrServiceProvider extends ServiceProvider {
 		$this->app->bind('Krustr\Repositories\Interfaces\MediaRepositoryInterface',        'Krustr\Repositories\MediaDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\GalleryRepositoryInterface',      'Krustr\Repositories\GalleryDbRepository');
 		$this->app->bind('Krustr\Repositories\Interfaces\FragmentRepositoryInterface',     'Krustr\Repositories\FragmentDbRepository');
+		$this->app->bind('Krustr\Repositories\Interfaces\SettingRepositoryInterface',      'Krustr\Repositories\SettingDbRepository');
 
 		// Register the content router
 		$this->app->singleton('krustr.router', function($app)

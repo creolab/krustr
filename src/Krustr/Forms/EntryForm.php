@@ -117,26 +117,7 @@ class EntryForm extends BaseForm implements FormInterface {
 
 			foreach ($group->fields as $name => $field)
 			{
-				// Get value
-				$value = $this->entry ? $this->entry->$name : null;
-				$class = $field->class;
-				if ( ! $value and $this->entry) $value = $this->entry->field($name);
-
-				// Instance of field object
-				if (class_exists($class))
-				{
-					// Create instance and pass some data
-					$fieldInstance = new $class($field, $value);
-					$fieldInstance->set('entry_id',   ($this->entry) ? $this->entry->id : null);
-					$fieldInstance->set('field_data', ($this->entry) ? $this->entry->fieldData($name) : null);
-
-					// And fetch HTML for rendering
-					$html .= $fieldInstance->render($value);
-				}
-				else
-				{
-					Log::error('[KRUSTR] [ENTRYFORM] Error when rendering form. Class by the name of "'.$class.'" for "'.$field->type.'" field type could not be found.');
-				}
+				$html .= $this->renderField($field, $name);
 			}
 
 			// Close the fieldset
@@ -153,6 +134,40 @@ class EntryForm extends BaseForm implements FormInterface {
 
 		// Close the form
 		$html .= $this->closeForm();
+
+		return $html;
+	}
+
+	/**
+	 * Render a single field
+	 * @param  FieldEntity $field
+	 * @param  string      $name
+	 * @return string
+	 */
+	public function renderField($field, $name)
+	{
+		$html  = '';
+
+		// Get value
+		$value = $this->entry ? $this->entry->$name : null;
+		$class = $field->class;
+		if ( ! $value and $this->entry) $value = $this->entry->field($name);
+
+		// Instance of field object
+		if (class_exists($class))
+		{
+			// Create instance and pass some data
+			$fieldInstance = new $class($field, $value);
+			$fieldInstance->set('entry_id',   ($this->entry) ? $this->entry->id : null);
+			$fieldInstance->set('field_data', ($this->entry) ? $this->entry->fieldData($name) : null);
+
+			// And fetch HTML for rendering
+			$html .= $fieldInstance->render($value);
+		}
+		else
+		{
+			Log::error('[KRUSTR] [ENTRYFORM] Error when rendering form. Class by the name of "'.$class.'" for "'.$field->type.'" field type could not be found.');
+		}
 
 		return $html;
 	}

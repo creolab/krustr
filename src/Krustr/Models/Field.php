@@ -1,15 +1,11 @@
 <?php namespace Krustr\Models;
 
-/**
- * Field content
- * @author Boris Strahija <bstrahija@gmail.com>
- */
 class Field extends Base {
 
 	protected $table = 'fields';
 
 	/**
-	 * User relationship
+	 * Entry relationship
 	 * @return Eloquent
 	 */
 	public function entry()

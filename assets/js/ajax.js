@@ -1,5 +1,10 @@
 App.Ajax = {
 
+	params: {
+		simDelete: true,
+		simPut:    true,
+	},
+
 	/**
 	 * Initialize ajax component
 	 * @return {void}
@@ -44,6 +49,19 @@ App.Ajax = {
 			}
 		}
 
+		// Delete request setup
+		if (method.toLowerCase() == "delete") {
+			sendData["_method"] = "delete";
+			method = 'post';
+		}
+
+		// Put request setup
+		if (method.toLowerCase() == "put") {
+			sendData["_method"] = "put";
+			method = 'post';
+		}
+
+		// Now run the request
 		if (href && method) {
 			$.ajax({
 				url:      href,

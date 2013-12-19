@@ -71,27 +71,39 @@ class BaseForm implements FormInterface {
 		// Render each field
 		foreach ($this->fields as $name => $field)
 		{
-			// Get value
-			$value = $this->item ? $this->item->$name : null;
-			$type  = app('krustr.fields')->get($field['type']);
-
-
-			if ($type)
-			{
-				// Field entity
-				$field = new FieldEntity(array_merge($field, $type->data));
-				$class = $field->class;
-
-				// Instance of field object
-				$fieldInstance = new $class($field, $value);
-
-				// // And fetch HTML for rendering
-				$html .= $fieldInstance->render($value);
-			}
+			$html .= $this->renderField($field, $name);
 		}
 
 		// Close the form
 		$html .= $this->closeForm();
+
+		return $html;
+	}
+
+	/**
+	 * Render a single field
+	 * @param  string $type
+	 * @param  mixed $value
+	 * @return string
+	 */
+	public function renderField($field, $name)
+	{
+		$html  = '';
+		$value = $this->item ? $this->item->$name : null;
+		$type  = app('krustr.fields')->get($field['type']);
+
+		if ($type)
+		{
+			// Field entity
+			$field = new FieldEntity(array_merge($field, $type->data));
+			$class = $field->class;
+
+			// Instance of field object
+			$fieldInstance = new $class($field, $value);
+
+			// // And fetch HTML for rendering
+			$html .= $fieldInstance->render($value);
+		}
 
 		return $html;
 	}

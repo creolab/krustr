@@ -49,8 +49,10 @@ if (Request::segment(1) == $backendPrefix)
 		Route::resource('content/fragments', $admin.'FragmentsController');
 
 		// ! ===> System
-		Route::resource('system/users', $admin.'UsersController');
-		Route::get('system',            array('as' => $backendPrefix . '.system', 'uses' => $admin.'SystemController@getUsers'));
+		Route::resource('system/users',    $admin.'UsersController');
+		Route::resource('system/settings', $admin.'SettingsController');
+		Route::put('system/settings/all',  array('as' => $backendPrefix . '.settings.update_all', 'uses' => $admin.'SettingsController@updateAll'));
+		Route::get('system',               array('as' => $backendPrefix . '.system',              'uses' => $admin.'SystemController@getUsers'));
 
 	});
 }

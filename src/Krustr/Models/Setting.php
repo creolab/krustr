@@ -1,8 +1,8 @@
 <?php namespace Krustr\Models;
 
-class Term extends Base {
+class Setting extends Base {
 
-	protected $table = 'terms';
+	protected $table = 'settings';
 
 	protected $guarded = array('id');
 
