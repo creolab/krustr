@@ -2,44 +2,35 @@
 
 use Config, Form, View;
 use Krustr\Repositories\Entities\FieldEntity;
-/**
- * Base form class for content entries
- *
- * @author Boris Strahija <bstrahija@gmail.com>
- */
+
 class BaseForm implements FormInterface {
 
 	/**
-	 * Content entry object
-	 *
+	 * Item for editing
 	 * @var array
 	 */
 	protected $item;
 
 	/**
 	 * Action URL
-	 *
 	 * @var string
 	 */
 	protected $url;
 
 	/**
 	 * Container holding all field objects
-	 *
 	 * @var array
 	 */
 	protected $fields = array();
 
 	/**
 	 * Container holding all field groups
-	 *
 	 * @var array
 	 */
 	protected $groups = array();
 
 	/**
 	 * Initialize new form object
-	 *
 	 * @param array  $fields
 	 * @param mixed  $item
 	 */
@@ -57,7 +48,6 @@ class BaseForm implements FormInterface {
 
 	/**
 	 * Renders the form
-	 *
 	 * @return string
 	 */
 	public function render()
@@ -110,7 +100,6 @@ class BaseForm implements FormInterface {
 
 	/**
 	 * Open the form tag with proper URL and method
-	 *
 	 * @return string
 	 */
 	public function openForm()
@@ -126,7 +115,6 @@ class BaseForm implements FormInterface {
 
 	/**
 	 * Add hidden fields to form
-	 *
 	 * @return string
 	 */
 	public function hiddenFields()
@@ -136,12 +124,12 @@ class BaseForm implements FormInterface {
 
 	/**
 	 * Close the form HTML and add actions
-	 *
 	 * @return string
 	 */
 	public function closeForm()
 	{
-		$html = '<div>' . Form::submit('Save', array('class' => 'btn btn-primary')) . '</div>';
+		// Default toolbar
+		$html = View::make('krustr_fields::_default.toolbar', array('button_text' => 'Save'));
 
 		// Close the form
 		$html .= Form::close();

@@ -52,7 +52,7 @@ return array(
 
 					// ! ==> Cache
 					'cache' => array(
-						'order' => 9999, 'label' => 'Clear cache', 'icon'  => 'trash', 'href' => '#',
+						'order' => 9999, 'label' => 'Clear cache', 'icon'  => 'trash', 'route' => 'backend.system.clear_cache',
 					),
 				),
 			),

@@ -52,7 +52,8 @@ if (Request::segment(1) == $backendPrefix)
 		Route::resource('system/users',    $admin.'UsersController');
 		Route::resource('system/settings', $admin.'SettingsController');
 		Route::put('system/settings/all',  array('as' => $backendPrefix . '.settings.update_all', 'uses' => $admin.'SettingsController@updateAll'));
-		Route::get('system',               array('as' => $backendPrefix . '.system',              'uses' => $admin.'SystemController@getUsers'));
+		Route::get('system',               array('as' => $backendPrefix . '.system',              'uses' => $admin.'SystemController@users'));
+		Route::get('system/cache/clear',   array('as' => $backendPrefix . '.system.clear_cache',  'uses' => $admin.'SystemController@clearCache'));
 
 	});
 }

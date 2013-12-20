@@ -49,7 +49,7 @@ class UsersController extends BaseController {
 	public function create()
 	{
 		// Prepare the form
-		$form = new UserForm(null, array('url' => admin_route('system.users.update', $id)));
+		$form = new UserForm(null, array('route' => 'system.users.store'));
 
 		return View::make('krustr::users.create')->withForm($form);
 	}
@@ -74,7 +74,7 @@ class UsersController extends BaseController {
 	{
 		// Get user and prepare the form
 		$user = $this->user->find($id);
-		$form  = new UserForm($user, array('url' => admin_route('system.users.update', $id)));
+		$form  = new UserForm($user, array('route' => array('system.users.update', $id)));
 
 		return View::make('krustr::users.edit')->withUser($user)->withForm($form);
 	}

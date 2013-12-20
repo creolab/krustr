@@ -34,7 +34,7 @@ body { background: #f6f6f6 url(../images/bg_light_alu.png); padding-top: 43px; p
 	.pg .tools .btn { font-size: 11px; -webkit-border-radius: 15px; -moz-border-radius: 15px; border-radius: 15px; padding: 1px 12px; }
 
 /* ! Boxed */
-.boxed { background: #fafafa; padding: 20px; border: 1px solid #f6f6f6; border-radius: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.1); }
+.boxed { background: #fafafa; padding: 20px; border: 1px solid #f6f6f6; border-radius: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.1); min-height: 250px; }
 
 /* ! Loading / Spinner */
 #loading-overlay { position: fixed; top: 0; left: 0; z-index: 99999; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; }
